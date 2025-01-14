@@ -44,6 +44,17 @@ public class ChessMove {
        return endPos;
     }
 
+    /**
+     * Gets the type of piece to promote a pawn to if pawn promotion is part of this
+     * chess move
+     *
+     * @return Type of piece to promote a pawn to, or null if no promotion
+     */
+    public ChessPiece.PieceType getPromotionPiece()
+    {
+        return promotion;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
@@ -56,16 +67,5 @@ public class ChessMove {
     @Override
     public int hashCode() {
         return Objects.hash(startPos, endPos, promotion);
-    }
-
-    /**
-     * Gets the type of piece to promote a pawn to if pawn promotion is part of this
-     * chess move
-     *
-     * @return Type of piece to promote a pawn to, or null if no promotion
-     */
-    public ChessPiece.PieceType getPromotionPiece()
-    {
-        return promotion;
     }
 }
