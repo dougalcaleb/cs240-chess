@@ -12,7 +12,7 @@ public class ChessMove {
 
     private ChessPosition startPos;
     private ChessPosition endPos;
-    private ChessPiece.PieceType promotion = null;
+    private ChessPiece.PieceType promotion;
 
     public ChessMove( ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece )
     {
