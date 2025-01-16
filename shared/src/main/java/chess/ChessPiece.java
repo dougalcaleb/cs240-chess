@@ -1,5 +1,7 @@
 package chess;
 
+import chess.MoveCalculator.*;
+
 import java.util.Collection;
 import java.util.Objects;
 
@@ -13,6 +15,7 @@ public class ChessPiece {
 
     private ChessGame.TeamColor teamColor;
     private ChessPiece.PieceType type;
+    private ChessPosition currentPosition;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type)
     {
@@ -56,7 +59,33 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        throw new RuntimeException("Not implemented");
+        PieceMovesCalculator calc;
+
+        switch (type)
+        {
+            case PieceType.ROOK:
+                calc = new RookMovesCalculator(board, currentPosition);
+                break;
+            case PieceType.QUEEN:
+                calc = new QueenMovesCalculator(board, currentPosition);
+                break;
+            case PieceType.BISHOP:
+                calc = new BishopMovesCalculator(board, currentPosition);
+                break;
+            case PieceType.KNIGHT:
+                calc = new KnightMovesCalculator(board, currentPosition);
+                break;
+            case PieceType.KING:
+                calc = new KingMovesCalculator(board, currentPosition);
+                break;
+            case PieceType.PAWN:
+                calc = new PawnMovesCalculator(board, currentPosition, teamColor, ChessGame.TeamColor.BLACK);
+                break;
+            default:
+                throw new RuntimeException("Unrecognized piece type: " + type.toString());
+        }
+
+        return calc.getMoves();
     }
 
     @Override
