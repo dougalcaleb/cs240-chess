@@ -3,6 +3,7 @@ package chess.MoveCalculator;
 import chess.ChessBoard;
 import chess.ChessGame.TeamColor;
 import chess.ChessMove;
+import chess.ChessPiece.PieceType;
 import chess.ChessPosition;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class PawnMovesCalculator extends PieceMovesCalculator
             TeamColor teamColor,
             TeamColor topColor
     ) {
-        super(board, position);
+        super(board, position, PieceType.PAWN, teamColor);
         this.teamColor = teamColor;
         this.topColor = topColor;
     }

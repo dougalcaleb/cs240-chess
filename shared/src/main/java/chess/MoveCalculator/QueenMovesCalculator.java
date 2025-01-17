@@ -1,15 +1,17 @@
 package chess.MoveCalculator;
 
 import chess.ChessBoard;
+import chess.ChessGame.TeamColor;
 import chess.ChessMove;
+import chess.ChessPiece.PieceType;
 import chess.ChessPosition;
 
 import java.util.List;
 
 public class QueenMovesCalculator extends PieceMovesCalculator
 {
-    public QueenMovesCalculator(ChessBoard board, ChessPosition position) {
-        super(board, position);
+    public QueenMovesCalculator(ChessBoard board, ChessPosition position, TeamColor teamColor) {
+        super(board, position, PieceType.QUEEN, teamColor);
     }
 
     @Override

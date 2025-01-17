@@ -1,7 +1,9 @@
 package chess.MoveCalculator;
 
 import chess.ChessBoard;
+import chess.ChessGame.TeamColor;
 import chess.ChessMove;
+import chess.ChessPiece.PieceType;
 import chess.ChessPosition;
 
 import java.util.ArrayList;
@@ -12,11 +14,15 @@ public class PieceMovesCalculator
     protected final ChessBoard currentBoard;
     protected final ChessPosition currentPosition;
     protected List<ChessPosition> moves;
+    protected final PieceType type;
+    protected final TeamColor teamColor;
 
-    public PieceMovesCalculator(ChessBoard board, ChessPosition position)
+    public PieceMovesCalculator(ChessBoard board, ChessPosition position, PieceType type, TeamColor teamColor)
     {
         currentBoard = board;
         currentPosition = position;
+        this.type = type;
+        this.teamColor = teamColor;
     }
 
     // To be overridden
