@@ -21,15 +21,15 @@ public class KnightMovesCalculator extends PieceMovesCalculator
         int col = currentPosition.getColumn();
 
         // upper half
-        addIfValid(new ChessPosition(row - 2, col + 1));
-        addIfValid(new ChessPosition(row - 2, col - 1));
-        addIfValid(new ChessPosition(row - 1, col - 2));
-        addIfValid(new ChessPosition(row - 1, col + 2));
+        addIfValidAndNotOwnTeam(new ChessPosition(row - 2, col + 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row - 2, col - 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row - 1, col - 2));
+        addIfValidAndNotOwnTeam(new ChessPosition(row - 1, col + 2));
         // lower half
-        addIfValid(new ChessPosition(row + 2, col + 1));
-        addIfValid(new ChessPosition(row + 2, col - 1));
-        addIfValid(new ChessPosition(row + 1, col - 2));
-        addIfValid(new ChessPosition(row + 1, col + 2));
+        addIfValidAndNotOwnTeam(new ChessPosition(row + 2, col + 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row + 2, col - 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row + 1, col - 2));
+        addIfValidAndNotOwnTeam(new ChessPosition(row + 1, col + 2));
 
         return convert(moves);
     }

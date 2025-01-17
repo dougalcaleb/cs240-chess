@@ -21,6 +21,7 @@ public class PieceMovesCalculator
     {
         currentBoard = board;
         currentPosition = position;
+        moves = new ArrayList<>();
         this.type = type;
         this.teamColor = teamColor;
     }
@@ -34,14 +35,27 @@ public class PieceMovesCalculator
     // Converts from a list of ChessPositions to ChessMoves
     protected List<ChessMove> convert(List<ChessPosition> positions)
     {
-        List<ChessMove> moves = new ArrayList<>();
+        List<ChessMove> fullMoves = new ArrayList<>();
 
-        for (ChessPosition pos : positions)
+        if (positions != null)
         {
-            moves.add(new ChessMove(currentPosition, pos));
+            for (ChessPosition pos : positions)
+            {
+                if (this.type == PieceType.PAWN && (pos.getRow() == 1 || pos.getRow() == 8))
+                {
+                    fullMoves.add(new ChessMove(currentPosition, pos, PieceType.QUEEN));
+                    fullMoves.add(new ChessMove(currentPosition, pos, PieceType.ROOK));
+                    fullMoves.add(new ChessMove(currentPosition, pos, PieceType.KNIGHT));
+                    fullMoves.add(new ChessMove(currentPosition, pos, PieceType.BISHOP));
+                }
+                else
+                {
+                    fullMoves.add(new ChessMove(currentPosition, pos));
+                }
+            }
         }
 
-        return moves;
+        return fullMoves;
     }
 
     // Get valid moves in a straight line as far as possible, including any captured piece at the end
@@ -55,11 +69,15 @@ public class PieceMovesCalculator
         while (currentCheck.isValid() && board.getPiece(currentCheck) == null)
         {
             validSquares.add(new ChessPosition(currentCheck));
-            currentCheck = new ChessPosition(currentCheck.getRow() + xOffset, currentCheck.getColumn() + yOffset);
+            currentCheck = new ChessPosition(currentCheck.getRow() + yOffset, currentCheck.getColumn() + xOffset);
         }
 
         // get capturing square
-        if (board.getPiece(currentCheck) != null && currentCheck.isValid())
+        if (
+            currentCheck.isValid() &&
+            board.getPiece(currentCheck) != null &&
+            board.getPiece(currentCheck).getTeamColor() != teamColor
+        )
         {
             validSquares.add(new ChessPosition(currentCheck));
         }
@@ -71,6 +89,17 @@ public class PieceMovesCalculator
     protected void addIfValid(ChessPosition position)
     {
         if (position.isValid()) {
+            moves.add(position);
+        }
+    }
+
+    protected void addIfValidAndNotOwnTeam(ChessPosition position)
+    {
+        if (
+            position.isValid() &&
+            (currentBoard.getPiece(position) == null || currentBoard.getPiece(position).getTeamColor() != teamColor)
+        )
+        {
             moves.add(position);
         }
     }

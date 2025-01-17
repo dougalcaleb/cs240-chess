@@ -20,15 +20,15 @@ public class KingMovesCalculator extends PieceMovesCalculator
         int col = currentPosition.getColumn();
 
         // cardinals
-        addIfValid(new ChessPosition(row, col + 1));
-        addIfValid(new ChessPosition(row + 1, col));
-        addIfValid(new ChessPosition(row, col - 1));
-        addIfValid(new ChessPosition(row - 1, col));
+        addIfValidAndNotOwnTeam(new ChessPosition(row, col + 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row + 1, col));
+        addIfValidAndNotOwnTeam(new ChessPosition(row, col - 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row - 1, col));
         // diagonals
-        addIfValid(new ChessPosition(row + 1, col + 1));
-        addIfValid(new ChessPosition(row + 1, col - 1));
-        addIfValid(new ChessPosition(row - 1, col - 1));
-        addIfValid(new ChessPosition(row - 1, col + 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row + 1, col + 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row + 1, col - 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row - 1, col - 1));
+        addIfValidAndNotOwnTeam(new ChessPosition(row - 1, col + 1));
 
         return convert(moves);
     }

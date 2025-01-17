@@ -31,31 +31,32 @@ public class PawnMovesCalculator extends PieceMovesCalculator
 
         if (teamColor == topColor) {
             dir = -1;
-            homeRow = 6;
+            homeRow = 7;
         }
 
+        ChessPosition inFrontOfHome = new ChessPosition(homeRow + dir, currentPosition.getColumn());
         // initial move
-        if (currentPosition.getRow() == homeRow)
+        if (currentPosition.getRow() == homeRow && currentBoard.getPiece(inFrontOfHome) == null)
         {
             addIfValidAndFree(new ChessPosition(homeRow + dir, currentPosition.getColumn()));
             addIfValidAndFree(new ChessPosition(homeRow + (dir*2), currentPosition.getColumn()));
         }
         else // moves past initial
         {
-            addIfValidAndFree(new ChessPosition(homeRow + dir, currentPosition.getColumn()));
+            addIfValidAndFree(new ChessPosition(currentPosition.getRow() + dir, currentPosition.getColumn()));
         }
 
         // capture
         ChessPosition frontL = new ChessPosition(currentPosition.getRow() + dir, currentPosition.getColumn() - 1);
         ChessPosition frontR = new ChessPosition(currentPosition.getRow() + dir, currentPosition.getColumn() + 1);
 
-        if (frontL.isValid() && currentBoard.getPiece(frontL) != null)
+        if ( frontL.isValid() && currentBoard.getPiece(frontL) != null )
         {
-            moves.add(frontL);
+            addIfValidAndNotOwnTeam(frontL);
         }
-        if (frontR.isValid() && currentBoard.getPiece(frontR) != null)
+        if ( frontR.isValid() && currentBoard.getPiece(frontR) != null )
         {
-            moves.add(frontR);
+            addIfValidAndNotOwnTeam(frontR);
         }
 
         return convert(moves);
