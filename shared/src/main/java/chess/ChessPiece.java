@@ -35,6 +35,11 @@ public class ChessPiece {
         PAWN
     }
 
+    public void setCurrentPosition(ChessPosition position)
+    {
+        this.currentPosition = position;
+    }
+
     /**
      * @return Which team this chess piece belongs to
      */
