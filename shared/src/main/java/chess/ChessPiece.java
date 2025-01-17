@@ -64,31 +64,15 @@ public class ChessPiece {
      * @return Collection of valid moves
      */
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        PieceMovesCalculator calc;
-
-        switch (type)
-        {
-            case PieceType.ROOK:
-                calc = new RookMovesCalculator(board, currentPosition);
-                break;
-            case PieceType.QUEEN:
-                calc = new QueenMovesCalculator(board, currentPosition);
-                break;
-            case PieceType.BISHOP:
-                calc = new BishopMovesCalculator(board, currentPosition);
-                break;
-            case PieceType.KNIGHT:
-                calc = new KnightMovesCalculator(board, currentPosition);
-                break;
-            case PieceType.KING:
-                calc = new KingMovesCalculator(board, currentPosition);
-                break;
-            case PieceType.PAWN:
-                calc = new PawnMovesCalculator(board, currentPosition, teamColor, ChessGame.TeamColor.BLACK);
-                break;
-            default:
-                throw new RuntimeException("Unrecognized piece type: " + type.toString());
-        }
+        PieceMovesCalculator calc = switch (type) {
+            case PieceType.ROOK -> new RookMovesCalculator(board, currentPosition, teamColor);
+            case PieceType.QUEEN -> new QueenMovesCalculator(board, currentPosition, teamColor);
+            case PieceType.BISHOP -> new BishopMovesCalculator(board, currentPosition, teamColor);
+            case PieceType.KNIGHT -> new KnightMovesCalculator(board, currentPosition, teamColor);
+            case PieceType.KING -> new KingMovesCalculator(board, currentPosition, teamColor);
+            case PieceType.PAWN -> new PawnMovesCalculator(board, currentPosition, teamColor, ChessGame.TeamColor.BLACK);
+            default -> throw new RuntimeException("Unrecognized piece type: " + type.toString());
+        };
 
         return calc.getMoves();
     }
