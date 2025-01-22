@@ -1,6 +1,9 @@
 package chess;
 
+import chess.movecalculators.KingInCheckCalculator;
+
 import java.util.Collection;
+import java.util.List;
 
 /**
  * For a class that can manage a chess game, making moves on a board
@@ -9,6 +12,8 @@ import java.util.Collection;
  * signature of the existing methods.
  */
 public class ChessGame {
+
+    private ChessBoard board;
 
     public ChessGame() {
 
@@ -45,8 +50,20 @@ public class ChessGame {
      * @return Set of valid moves for requested piece, or null if no piece at
      * startPosition
      */
-    public Collection<ChessMove> validMoves(ChessPosition startPosition) {
-        throw new RuntimeException("Not implemented");
+    public Collection<ChessMove> validMoves(ChessPosition startPosition)
+    {
+        ChessPiece piece = board.getPiece(startPosition);
+
+        if (piece == null)
+        {
+            return null;
+        }
+
+        List<ChessMove> allMoves = piece.pieceMoves(board);
+
+        KingInCheckCalculator checkCalc = new KingInCheckCalculator(board, allMoves, piece.getTeamColor());
+
+        return checkCalc.getSafeMoves();
     }
 
     /**
@@ -95,8 +112,9 @@ public class ChessGame {
      *
      * @param board the new board to use
      */
-    public void setBoard(ChessBoard board) {
-        throw new RuntimeException("Not implemented");
+    public void setBoard(ChessBoard board)
+    {
+        this.board = board;
     }
 
     /**
@@ -104,7 +122,8 @@ public class ChessGame {
      *
      * @return the chessboard
      */
-    public ChessBoard getBoard() {
-        throw new RuntimeException("Not implemented");
+    public ChessBoard getBoard()
+    {
+        return board;
     }
 }

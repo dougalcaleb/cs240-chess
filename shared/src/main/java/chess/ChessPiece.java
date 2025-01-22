@@ -1,8 +1,8 @@
 package chess;
 
-import chess.MoveCalculator.*;
+import chess.movecalculators.*;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -63,7 +63,12 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+    public List<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+        if (myPosition != null)
+        {
+            currentPosition = myPosition;
+        }
+
         PieceMovesCalculator calc = switch (type) {
             case PieceType.ROOK -> new RookMovesCalculator(board, currentPosition, teamColor);
             case PieceType.QUEEN -> new QueenMovesCalculator(board, currentPosition, teamColor);
@@ -75,6 +80,11 @@ public class ChessPiece {
         };
 
         return calc.getMoves();
+    }
+
+    public List<ChessMove> pieceMoves(ChessBoard board)
+    {
+        return pieceMoves(board, currentPosition);
     }
 
     @Override

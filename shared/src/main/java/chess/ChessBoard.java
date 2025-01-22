@@ -1,8 +1,8 @@
 package chess;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Objects;
+import chess.ChessGame.TeamColor;
+
+import java.util.*;
 
 /**
  * A chessboard that can hold and rearrange chess pieces.
@@ -17,6 +17,11 @@ public class ChessBoard {
     public ChessBoard()
     {
         board = new ChessPiece[8][8];
+    }
+
+    public ChessBoard(ChessBoard copySource)
+    {
+        this.board = copySource.board.clone();
     }
 
     /**
@@ -49,6 +54,26 @@ public class ChessBoard {
             piece.setCurrentPosition(position);
         }
         return piece;
+    }
+
+    public List<ChessPosition> findPiece(ChessPiece.PieceType piece)
+    {
+        List<ChessPosition> pieces = new ArrayList<>();
+        for (int row = 1; row <= 8; row++)
+        {
+            for (int col = 1; col <= 8; col++)
+            {
+                ChessPosition pos = new ChessPosition(row, col);
+                ChessPiece pieceAtPos = getPiece(pos);
+
+                if (pieceAtPos != null && pieceAtPos.getPieceType() == piece)
+                {
+                    pieces.add(pos);
+                }
+            }
+        }
+
+        return pieces;
     }
 
     /**
@@ -94,7 +119,7 @@ public class ChessBoard {
 
                 if (current != ' ') {
                     piece = new ChessPiece(
-                        Character.isLowerCase(current) ? ChessGame.TeamColor.WHITE : ChessGame.TeamColor.BLACK,
+                        Character.isLowerCase(current) ? TeamColor.WHITE : TeamColor.BLACK,
                         charmap.get(Character.toLowerCase(current))
                     );
                 }
@@ -102,6 +127,35 @@ public class ChessBoard {
                 addPiece(pos, piece);
             }
         }
+    }
+
+    public ChessBoard withMove(ChessMove move)
+    {
+        ChessBoard modifiedBoard = new ChessBoard(this);
+        ChessPiece pieceMoved = modifiedBoard.getPiece(move.getStartPosition());
+        modifiedBoard.addPiece(move.getStartPosition(), null);
+        modifiedBoard.addPiece(move.getEndPosition(), pieceMoved);
+        return modifiedBoard;
+    }
+
+    public List<ChessPiece> getAllOfColor(TeamColor color)
+    {
+        List<ChessPiece> pieces = new ArrayList<>();
+        for (int row = 1; row <= 8; row++)
+        {
+            for (int col = 1; col <= 8; col++)
+            {
+                ChessPosition pos = new ChessPosition(row, col);
+                ChessPiece pieceAtPos = getPiece(pos);
+
+                if (pieceAtPos != null && pieceAtPos.getTeamColor() == color)
+                {
+                    pieces.add(pieceAtPos);
+                }
+            }
+        }
+
+        return pieces;
     }
 
     @Override
