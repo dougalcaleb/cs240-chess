@@ -1,4 +1,4 @@
-package chess.MoveCalculator;
+package chess.movecalculators;
 
 import chess.ChessBoard;
 import chess.ChessGame.TeamColor;
