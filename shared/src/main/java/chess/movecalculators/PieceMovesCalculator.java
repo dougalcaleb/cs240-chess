@@ -85,14 +85,6 @@ public class PieceMovesCalculator
         return validSquares;
     }
 
-    // Add the position if it is on the chessboard
-    protected void addIfValid(ChessPosition position)
-    {
-        if (position.isValid()) {
-            moves.add(position);
-        }
-    }
-
     protected void addIfValidAndNotOwnTeam(ChessPosition position)
     {
         if (
