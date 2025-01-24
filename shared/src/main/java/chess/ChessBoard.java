@@ -159,6 +159,44 @@ public class ChessBoard {
     }
 
     @Override
+    public String toString()
+    {
+        Map<ChessPiece.PieceType, Character> charmap = Map.of(
+            ChessPiece.PieceType.PAWN, 'p',
+            ChessPiece.PieceType.KNIGHT, 'n',
+            ChessPiece.PieceType.ROOK, 'r',
+            ChessPiece.PieceType.QUEEN, 'q',
+            ChessPiece.PieceType.KING, 'k',
+            ChessPiece.PieceType.BISHOP, 'b'
+        );
+
+        StringBuilder output = new StringBuilder("+-+-+-+-+-+-+-+-+");
+
+        for (int row = 1; row <= 8; row++)
+        {
+            output.append("\n|");
+            for (int col = 1; col <= 8; col++)
+            {
+                ChessPiece piece = getPiece(new ChessPosition(row, col));
+                Character pieceRep = ' ';
+
+                if (piece != null) {
+                    pieceRep = charmap.get(piece.getPieceType());
+                    if (piece.getTeamColor() == TeamColor.WHITE) {
+                        pieceRep = Character.toUpperCase(pieceRep);
+                    }
+                }
+
+                output.append(pieceRep);
+                output.append("|");
+            }
+        }
+
+        output.append("\n+-+-+-+-+-+-+-+-+");
+        return output.toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
             return false;
