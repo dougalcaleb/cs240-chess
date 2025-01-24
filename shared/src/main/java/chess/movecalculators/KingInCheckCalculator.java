@@ -56,4 +56,19 @@ public class KingInCheckCalculator
 
         return safeMoves;
     }
+
+    public boolean isSafeMove(ChessMove move)
+    {
+        List<ChessMove> safe = getSafeMoves();
+
+        for (ChessMove safeMove : safe)
+        {
+            if (safeMove.equals(move))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
