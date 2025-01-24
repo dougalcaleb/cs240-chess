@@ -10,9 +10,9 @@ import java.util.Objects;
  */
 public class ChessMove {
 
-    private ChessPosition startPos;
-    private ChessPosition endPos;
-    private ChessPiece.PieceType promotion;
+    private final ChessPosition startPos;
+    private final ChessPosition endPos;
+    private final ChessPiece.PieceType promotion;
 
     public ChessMove( ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece )
     {
@@ -53,6 +53,24 @@ public class ChessMove {
     public ChessPiece.PieceType getPromotionPiece()
     {
         return promotion;
+    }
+
+    // assumes that this is being called on a king's move
+    public boolean isCastling()
+    {
+        return Math.abs(startPos.getColumn() - endPos.getColumn()) == 2;
+    }
+
+    public ChessMove getCastlingRookMove()
+    {
+        int startCol = (endPos.getColumn() - startPos.getColumn() > 0)
+                ? 8
+                : 1;
+        int endCol = (endPos.getColumn() - startPos.getColumn() > 0)
+                ? 6
+                : 4;
+
+        return new ChessMove(new ChessPosition(startPos.getRow(), startCol), new ChessPosition(startPos.getRow(), endCol));
     }
 
     @Override

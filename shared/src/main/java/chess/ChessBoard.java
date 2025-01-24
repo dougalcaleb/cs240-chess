@@ -95,15 +95,37 @@ public class ChessBoard {
     public void applyMove(ChessMove move)
     {
         ChessPiece pieceMoved = getPiece(move.getStartPosition());
+
+        if (pieceMoved == null)
+        {
+            return;
+        }
+
         setPiece(move.getStartPosition(), null);
 
         if (move.getPromotionPiece() != null)
         {
+            // pawn promotion movement
             setPiece(move.getEndPosition(), new ChessPiece(pieceMoved.getTeamColor(), move.getPromotionPiece()));
         }
         else
         {
-            setPiece(move.getEndPosition(), pieceMoved);
+            // king castling movement
+            if ( pieceMoved.getPieceType() == ChessPiece.PieceType.KING && move.isCastling() )
+            {
+                // king
+                setPiece(move.getEndPosition(), pieceMoved);
+                // rook
+                ChessPiece rookMoved = getPiece(move.getCastlingRookMove().getStartPosition());
+                setPiece(move.getCastlingRookMove().getStartPosition(), null);
+                setPiece(move.getCastlingRookMove().getEndPosition(), rookMoved);
+            }
+            else
+            {
+                // normal movement
+                setPiece(move.getEndPosition(), pieceMoved);
+                pieceMoved.hasBeenMoved = true;
+            }
         }
     }
 

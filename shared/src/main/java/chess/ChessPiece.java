@@ -18,6 +18,8 @@ public class ChessPiece {
     private ChessPosition currentPosition;
     private ChessBoard board;
 
+    public boolean hasBeenMoved = false;
+
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type, ChessBoard parentBoard)
     {
         board = parentBoard;
@@ -125,7 +127,7 @@ public class ChessPiece {
             case PieceType.QUEEN -> new QueenMovesCalculator(board, currentPosition, teamColor);
             case PieceType.BISHOP -> new BishopMovesCalculator(board, currentPosition, teamColor);
             case PieceType.KNIGHT -> new KnightMovesCalculator(board, currentPosition, teamColor);
-            case PieceType.KING -> new KingMovesCalculator(board, currentPosition, teamColor);
+            case PieceType.KING -> new KingMovesCalculator(board, currentPosition, teamColor, hasBeenMoved);
             case PieceType.PAWN -> new PawnMovesCalculator(board, currentPosition, teamColor, ChessGame.TeamColor.BLACK);
             default -> throw new RuntimeException("Unrecognized piece type: " + type.toString());
         };
