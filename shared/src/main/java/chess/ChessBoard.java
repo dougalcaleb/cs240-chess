@@ -21,7 +21,17 @@ public class ChessBoard {
 
     public ChessBoard(ChessBoard copySource)
     {
-        this.board = copySource.board.clone();
+        board = new ChessPiece[8][8];
+        for (int rowIdx = 0; rowIdx < 8; rowIdx++) {
+            for (int colIdx = 0; colIdx < 8; colIdx++) {
+                if ( copySource.board[rowIdx][colIdx] != null )
+                {
+                    board[rowIdx][colIdx] = new ChessPiece(copySource.board[rowIdx][colIdx]);
+                } else {
+                    board[rowIdx][colIdx] = null;
+                }
+            }
+        }
     }
 
     /**
@@ -37,6 +47,13 @@ public class ChessBoard {
             piece.setCurrentPosition(new ChessPosition(position.getRow(), position.getColumn()));
         }
         board[position.getRow() - 1][position.getColumn() - 1] = piece;
+    }
+
+    public void applyMove(ChessMove move)
+    {
+        ChessPiece pieceMoved = getPiece(move.getStartPosition());
+        addPiece(move.getStartPosition(), null);
+        addPiece(move.getEndPosition(), pieceMoved);
     }
 
     /**
@@ -132,9 +149,7 @@ public class ChessBoard {
     public ChessBoard withMove(ChessMove move)
     {
         ChessBoard modifiedBoard = new ChessBoard(this);
-        ChessPiece pieceMoved = modifiedBoard.getPiece(move.getStartPosition());
-        modifiedBoard.addPiece(move.getStartPosition(), null);
-        modifiedBoard.addPiece(move.getEndPosition(), pieceMoved);
+        modifiedBoard.applyMove(move);
         return modifiedBoard;
     }
 

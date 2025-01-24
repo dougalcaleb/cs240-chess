@@ -13,14 +13,21 @@ import java.util.Objects;
  */
 public class ChessPiece {
 
-    private ChessGame.TeamColor teamColor;
-    private ChessPiece.PieceType type;
+    private final ChessGame.TeamColor teamColor;
+    private final ChessPiece.PieceType type;
     private ChessPosition currentPosition;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type)
     {
         teamColor = pieceColor;
         this.type = type;
+    }
+
+    public ChessPiece(ChessPiece copySource)
+    {
+        this.teamColor = copySource.getTeamColor();
+        this.type = copySource.getPieceType();
+        this.currentPosition = copySource.getCurrentPosition();
     }
 
     /**
@@ -38,6 +45,10 @@ public class ChessPiece {
     public void setCurrentPosition(ChessPosition position)
     {
         this.currentPosition = position;
+    }
+    public ChessPosition getCurrentPosition()
+    {
+       return currentPosition;
     }
 
     /**
