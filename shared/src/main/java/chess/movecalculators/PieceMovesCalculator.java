@@ -9,7 +9,7 @@ import chess.ChessPosition;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PieceMovesCalculator
+public abstract class PieceMovesCalculator
 {
     protected final ChessBoard currentBoard;
     protected final ChessPosition currentPosition;
