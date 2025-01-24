@@ -27,13 +27,13 @@ public class KingInCheckCalculator
     {
         List<ChessMove> safeMoves = new ArrayList<>();
         TeamColor opponentColor = teamColor == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
-        ChessPosition friendlyKingPos = board.findPiece(ChessPiece.PieceType.KING).getFirst();
 
         // Each move that the friendly piece can make
         friendlyMoveLoop:
         for (ChessMove move : moves)
         {
             ChessBoard possibleBoard = board.withMove(move);
+            ChessPosition friendlyKingPos = possibleBoard.findPiece(ChessPiece.PieceType.KING, teamColor).getFirst();
             List<ChessPiece> opponentPieces = possibleBoard.getAllOfColor(opponentColor);
             // For each opponent's piece that could threaten the friendly king
             for (ChessPiece opponentPiece : opponentPieces)

@@ -73,7 +73,7 @@ public class ChessBoard {
         return piece;
     }
 
-    public List<ChessPosition> findPiece(ChessPiece.PieceType piece)
+    public List<ChessPosition> findPiece(ChessPiece.PieceType piece, TeamColor color)
     {
         List<ChessPosition> pieces = new ArrayList<>();
         for (int row = 1; row <= 8; row++)
@@ -83,7 +83,7 @@ public class ChessBoard {
                 ChessPosition pos = new ChessPosition(row, col);
                 ChessPiece pieceAtPos = getPiece(pos);
 
-                if (pieceAtPos != null && pieceAtPos.getPieceType() == piece)
+                if (pieceAtPos != null && pieceAtPos.getPieceType() == piece && pieceAtPos.getTeamColor() == color)
                 {
                     pieces.add(pos);
                 }
