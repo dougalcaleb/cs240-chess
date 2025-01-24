@@ -85,7 +85,18 @@ public class ChessGame {
 
         List<ChessMove> allMoves = pieceToMove.pieceMoves();
 
-        if (!KingInCheckCalculator.isSafeMove(board, getTeamTurn(), move))
+        boolean includedInPossibleMoves = false;
+
+        for (ChessMove possibleMove : allMoves)
+        {
+            if (move.equals(possibleMove))
+            {
+                includedInPossibleMoves = true;
+                break;
+            }
+        }
+
+        if (!KingInCheckCalculator.isSafeMove(board, getTeamTurn(), move) || !includedInPossibleMoves)
         {
             throw new InvalidMoveException("Move is invalid");
         }
