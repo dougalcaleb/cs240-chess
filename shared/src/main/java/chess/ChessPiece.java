@@ -40,6 +40,7 @@ public class ChessPiece {
         this.type = copySource.getPieceType();
         this.currentPosition = copySource.getCurrentPosition();
         this.board = copySource.board;
+        this.hasBeenMoved = copySource.hasBeenMoved;
     }
 
     /**
@@ -95,13 +96,19 @@ public class ChessPiece {
         {
             throw new RuntimeException("ChessPiece not initialized with a board");
         }
-        return pieceMoves(null, null);
+        return pieceMoves(null, null, true);
     }
 
     // alternate params
     public List<ChessMove> pieceMoves(ChessBoard board)
     {
-        return pieceMoves(board, currentPosition);
+        return pieceMoves(board, currentPosition, true);
+    }
+
+    // alternate params
+    public List<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition)
+    {
+        return pieceMoves(board, myPosition, true);
     }
 
     /**
@@ -111,7 +118,7 @@ public class ChessPiece {
      *
      * @return Collection of valid moves
      */
-    public List<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+    public List<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition, boolean checkCastle) {
         if (myPosition != null)
         {
             currentPosition = myPosition;
@@ -127,7 +134,7 @@ public class ChessPiece {
             case PieceType.QUEEN -> new QueenMovesCalculator(board, currentPosition, teamColor);
             case PieceType.BISHOP -> new BishopMovesCalculator(board, currentPosition, teamColor);
             case PieceType.KNIGHT -> new KnightMovesCalculator(board, currentPosition, teamColor);
-            case PieceType.KING -> new KingMovesCalculator(board, currentPosition, teamColor, hasBeenMoved);
+            case PieceType.KING -> new KingMovesCalculator(board, currentPosition, teamColor, hasBeenMoved, checkCastle);
             case PieceType.PAWN -> new PawnMovesCalculator(board, currentPosition, teamColor, ChessGame.TeamColor.BLACK);
             default -> throw new RuntimeException("Unrecognized piece type: " + type.toString());
         };

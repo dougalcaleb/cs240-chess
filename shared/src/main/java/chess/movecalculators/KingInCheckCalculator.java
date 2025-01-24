@@ -12,8 +12,18 @@ import java.util.List;
 
 public class KingInCheckCalculator
 {
-    // Returns moves that do not put the piece's team's king in check
+
     public static List<ChessMove> getSafeMoves(ChessBoard board, List<ChessMove> moves, TeamColor teamColor)
+    {
+        return KingInCheckCalculator._getSafeMoves(board, moves, teamColor, true);
+    }
+
+    public static List<ChessMove> getSafeMoves(ChessBoard board, List<ChessMove> moves, TeamColor teamColor, boolean checkCastle)
+    {
+        return KingInCheckCalculator._getSafeMoves(board, moves, teamColor, checkCastle);
+    }
+    // Returns moves that do not put the piece's team's king in check
+    private static List<ChessMove> _getSafeMoves(ChessBoard board, List<ChessMove> moves, TeamColor teamColor, boolean checkCastle)
     {
         List<ChessMove> safeMoves = new ArrayList<>();
         TeamColor opponentColor = teamColor == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
@@ -28,7 +38,18 @@ public class KingInCheckCalculator
             // For each opponent's piece that could threaten the friendly king
             for (ChessPiece opponentPiece : opponentPieces)
             {
-                List<ChessMove> opponentMoves = opponentPiece.pieceMoves(possibleBoard);
+                List<ChessMove> opponentMoves;
+
+                // If this piece is the opponent's king, and we're already checking if friendly
+                // castling is valid, skip checking opponent castling to avoid recursion
+                if (!checkCastle && opponentPiece.getPieceType() == ChessPiece.PieceType.KING)
+                {
+                    opponentMoves = opponentPiece.pieceMoves(possibleBoard, opponentPiece.getCurrentPosition(), false);
+                }
+                else
+                {
+                    opponentMoves = opponentPiece.pieceMoves(possibleBoard);
+                }
                 // If any move includes the friendly king, this friendly move is unsafe
                 for (ChessMove opponentMove: opponentMoves)
                 {
