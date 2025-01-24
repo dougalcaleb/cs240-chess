@@ -70,9 +70,8 @@ public class KingInCheckCalculator
         return false;
     }
 
-    public static boolean isInCheckmate(ChessBoard board, TeamColor color)
+    public static boolean safeMovesExist(ChessBoard board, TeamColor color)
     {
-        TeamColor opponentColor = color == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
         List<ChessPiece> ownPieces = board.getAllOfColor(color);
         List<ChessMove> allPossibleMoves = new ArrayList<>();
 
