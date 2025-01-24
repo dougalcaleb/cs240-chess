@@ -62,9 +62,7 @@ public class ChessGame {
 
         List<ChessMove> allMoves = piece.pieceMoves(board);
 
-        KingInCheckCalculator checkCalc = new KingInCheckCalculator(board, allMoves, piece.getTeamColor());
-
-        return checkCalc.getSafeMoves();
+        return KingInCheckCalculator.getSafeMoves(board, allMoves, piece.getTeamColor());
     }
 
     /**
@@ -86,9 +84,8 @@ public class ChessGame {
         }
 
         List<ChessMove> allMoves = pieceToMove.pieceMoves();
-        KingInCheckCalculator safeMoveCalc = new KingInCheckCalculator(board, allMoves, getTeamTurn());
 
-        if (!safeMoveCalc.isSafeMove(move))
+        if (!KingInCheckCalculator.isSafeMove(board, getTeamTurn(), move))
         {
             throw new InvalidMoveException("Move is invalid");
         }
@@ -104,7 +101,7 @@ public class ChessGame {
      * @return True if the specified team is in check
      */
     public boolean isInCheck(TeamColor teamColor) {
-        throw new RuntimeException("Not implemented");
+        return KingInCheckCalculator.isInCheck(board, teamColor);
     }
 
     /**

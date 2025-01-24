@@ -7,23 +7,13 @@ import chess.ChessPiece;
 import chess.ChessPosition;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class KingInCheckCalculator
 {
-    private final ChessBoard board;
-    private final List<ChessMove> moves;
-    private final TeamColor teamColor;
-
-    public KingInCheckCalculator(ChessBoard board, List<ChessMove> checkMoves, TeamColor kingTeam)
-    {
-        this.board = board;
-        moves = checkMoves;
-        teamColor = kingTeam;
-    }
-
     // Returns moves that do not put the piece's team's king in check
-    public List<ChessMove> getSafeMoves()
+    public static List<ChessMove> getSafeMoves(ChessBoard board, List<ChessMove> moves, TeamColor teamColor)
     {
         List<ChessMove> safeMoves = new ArrayList<>();
         TeamColor opponentColor = teamColor == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
@@ -57,9 +47,46 @@ public class KingInCheckCalculator
         return safeMoves;
     }
 
-    public boolean isSafeMove(ChessMove move)
+    public static boolean isInCheck(ChessBoard board, TeamColor color)
     {
-        List<ChessMove> safe = getSafeMoves();
+        TeamColor opponentColor = color == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+        ChessPosition friendlyKingPos = board.findPiece(ChessPiece.PieceType.KING, color).getFirst();
+        List<ChessPiece> opponentPieces = board.getAllOfColor(opponentColor);
+        // For each opponent's piece that could threaten the friendly king
+        for (ChessPiece opponentPiece : opponentPieces)
+        {
+            List<ChessMove> opponentMoves = opponentPiece.pieceMoves(board);
+            // If any move includes the friendly king, this friendly move is unsafe
+            for (ChessMove opponentMove: opponentMoves)
+            {
+                if (opponentMove.getEndPosition().equals(friendlyKingPos))
+                {
+                    // Skip the rest of this and check the next friendly move
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean isInCheckmate(ChessBoard board, TeamColor color)
+    {
+        TeamColor opponentColor = color == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;
+        List<ChessPiece> ownPieces = board.getAllOfColor(color);
+        List<ChessMove> allPossibleMoves = new ArrayList<>();
+
+        for (ChessPiece teammate : ownPieces)
+        {
+            allPossibleMoves.addAll(teammate.pieceMoves());
+        }
+
+        return !KingInCheckCalculator.getSafeMoves(board, allPossibleMoves, color).isEmpty();
+    }
+
+    public static boolean isSafeMove(ChessBoard board, TeamColor color, ChessMove move)
+    {
+        List<ChessMove> safe = KingInCheckCalculator.getSafeMoves(board, new ArrayList<ChessMove>(Collections.singletonList(move)), color);
 
         for (ChessMove safeMove : safe)
         {
