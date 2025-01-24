@@ -45,15 +45,14 @@ public class ChessBoard {
         if (piece != null)
         {
             piece.setCurrentPosition(new ChessPosition(position.getRow(), position.getColumn()));
+            piece.setBoard(this);
         }
         board[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
-    public void applyMove(ChessMove move)
+    public void setPiece(ChessPosition position, ChessPiece piece)
     {
-        ChessPiece pieceMoved = getPiece(move.getStartPosition());
-        addPiece(move.getStartPosition(), null);
-        addPiece(move.getEndPosition(), pieceMoved);
+        addPiece(position, piece);
     }
 
     /**
@@ -91,6 +90,21 @@ public class ChessBoard {
         }
 
         return pieces;
+    }
+
+    public void applyMove(ChessMove move)
+    {
+        ChessPiece pieceMoved = getPiece(move.getStartPosition());
+        setPiece(move.getStartPosition(), null);
+
+        if (move.getPromotionPiece() != null)
+        {
+            setPiece(move.getEndPosition(), new ChessPiece(pieceMoved.getTeamColor(), move.getPromotionPiece()));
+        }
+        else
+        {
+            setPiece(move.getEndPosition(), pieceMoved);
+        }
     }
 
     /**
@@ -137,7 +151,8 @@ public class ChessBoard {
                 if (current != ' ') {
                     piece = new ChessPiece(
                         Character.isLowerCase(current) ? TeamColor.WHITE : TeamColor.BLACK,
-                        charmap.get(Character.toLowerCase(current))
+                        charmap.get(Character.toLowerCase(current)),
+                        this
                     );
                 }
 
