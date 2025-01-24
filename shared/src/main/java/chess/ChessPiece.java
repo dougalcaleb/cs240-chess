@@ -14,11 +14,20 @@ import java.util.Objects;
 public class ChessPiece {
 
     private final ChessGame.TeamColor teamColor;
-    private final ChessPiece.PieceType type;
+    private final PieceType type;
     private ChessPosition currentPosition;
+    private ChessBoard board;
 
-    public ChessPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type)
+    public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type, ChessBoard parentBoard)
     {
+        board = parentBoard;
+        teamColor = pieceColor;
+        this.type = type;
+    }
+
+    public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type)
+    {
+        board = null;
         teamColor = pieceColor;
         this.type = type;
     }
@@ -28,6 +37,7 @@ public class ChessPiece {
         this.teamColor = copySource.getTeamColor();
         this.type = copySource.getPieceType();
         this.currentPosition = copySource.getCurrentPosition();
+        this.board = copySource.board;
     }
 
     /**
@@ -67,6 +77,31 @@ public class ChessPiece {
         return type;
     }
 
+    public void setBoard(ChessBoard board) {
+        this.board = board;
+    }
+
+    /**
+     * Calculates all the positions a chess piece can move to
+     * Does not take into account moves that are illegal due to leaving the king in
+     * danger
+     *
+     * @return Collection of valid moves
+     */
+    public List<ChessMove> pieceMoves() throws RuntimeException {
+        if (board == null)
+        {
+            throw new RuntimeException("ChessPiece not initialized with a board");
+        }
+        return pieceMoves(null, null);
+    }
+
+    // alternate params
+    public List<ChessMove> pieceMoves(ChessBoard board)
+    {
+        return pieceMoves(board, currentPosition);
+    }
+
     /**
      * Calculates all the positions a chess piece can move to
      * Does not take into account moves that are illegal due to leaving the king in
@@ -78,6 +113,11 @@ public class ChessPiece {
         if (myPosition != null)
         {
             currentPosition = myPosition;
+        }
+        if (board == null) {
+            board = this.board;
+        } else {
+            this.board = board;
         }
 
         PieceMovesCalculator calc = switch (type) {
@@ -91,11 +131,6 @@ public class ChessPiece {
         };
 
         return calc.getMoves();
-    }
-
-    public List<ChessMove> pieceMoves(ChessBoard board)
-    {
-        return pieceMoves(board, currentPosition);
     }
 
     @Override
