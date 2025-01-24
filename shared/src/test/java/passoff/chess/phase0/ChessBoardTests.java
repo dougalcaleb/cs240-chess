@@ -1,4 +1,4 @@
-package passoff.chess;
+package passoff.chess.phase0;
 
 import chess.ChessBoard;
 import chess.ChessGame;
@@ -7,6 +7,7 @@ import chess.ChessPosition;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import passoff.chess.TestUtilities;
 
 public class ChessBoardTests {
 

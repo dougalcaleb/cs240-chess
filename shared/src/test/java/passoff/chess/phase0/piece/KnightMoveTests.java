@@ -1,4 +1,4 @@
-package passoff.chess.piece;
+package passoff.chess.phase0.piece;
 
 import chess.ChessPosition;
 import org.junit.jupiter.api.Test;
