@@ -13,6 +13,7 @@ public class ChessMove {
     private final ChessPosition startPos;
     private final ChessPosition endPos;
     private final ChessPiece.PieceType promotion;
+    public ChessPosition enPassantCapture;
 
     public ChessMove( ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece )
     {
@@ -71,6 +72,12 @@ public class ChessMove {
                 : 4;
 
         return new ChessMove(new ChessPosition(startPos.getRow(), startCol), new ChessPosition(startPos.getRow(), endCol));
+    }
+
+    public boolean isPawnDouble()
+    {
+        return (startPos.getRow() == 2 || startPos.getRow() == 7) &&
+                Math.abs(endPos.getRow() - startPos.getRow()) == 2;
     }
 
     @Override

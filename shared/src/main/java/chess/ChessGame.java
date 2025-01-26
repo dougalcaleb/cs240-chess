@@ -1,6 +1,7 @@
 package chess;
 
 import chess.movecalculators.KingInCheckCalculator;
+import chess.movecalculators.PawnMovesCalculator;
 
 import java.util.Collection;
 import java.util.List;
@@ -101,6 +102,20 @@ public class ChessGame {
         if (!KingInCheckCalculator.isSafeMove(board, getTeamTurn(), move) || !includedInPossibleMoves)
         {
             throw new InvalidMoveException("Move is invalid");
+        }
+
+        if (PawnMovesCalculator.lastMoveWasPawnDouble)
+        {
+            move.enPassantCapture = PawnMovesCalculator.pawnDoubleMove.getEndPosition();
+        }
+
+        if (pieceToMove.getPieceType() == ChessPiece.PieceType.PAWN && move.isPawnDouble())
+        {
+            PawnMovesCalculator.lastMoveWasPawnDouble = true;
+            PawnMovesCalculator.pawnDoubleMove = move;
+        } else {
+            PawnMovesCalculator.lastMoveWasPawnDouble = false;
+            PawnMovesCalculator.pawnDoubleMove = null;
         }
 
         board.applyMove(move);

@@ -126,6 +126,12 @@ public class ChessBoard {
                 setPiece(move.getEndPosition(), pieceMoved);
                 pieceMoved.hasBeenMoved = true;
             }
+
+            // en passant
+            if (move.enPassantCapture != null)
+            {
+                setPiece(move.enPassantCapture, null);
+            }
         }
     }
 
