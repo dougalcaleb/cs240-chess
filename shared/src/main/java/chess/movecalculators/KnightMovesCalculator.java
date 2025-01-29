@@ -31,6 +31,6 @@ public class KnightMovesCalculator extends PieceMovesCalculator
         addIfValidAndNotOwnTeam(new ChessPosition(row + 1, col - 2));
         addIfValidAndNotOwnTeam(new ChessPosition(row + 1, col + 2));
 
-        return convert(moves);
+        return getConverted();
     }
 }

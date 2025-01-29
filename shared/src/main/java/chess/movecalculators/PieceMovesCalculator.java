@@ -33,13 +33,13 @@ public abstract class PieceMovesCalculator
     }
 
     // Converts from a list of ChessPositions to ChessMoves
-    protected List<ChessMove> convert(List<ChessPosition> positions)
+    protected List<ChessMove> getConverted()
     {
         List<ChessMove> fullMoves = new ArrayList<>();
 
-        if (positions != null)
+        if (moves != null)
         {
-            for (ChessPosition pos : positions)
+            for (ChessPosition pos : moves)
             {
                 if (this.type == PieceType.PAWN && (pos.getRow() == 1 || pos.getRow() == 8))
                 {

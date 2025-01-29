@@ -29,24 +29,24 @@ public class PawnMovesCalculator extends PieceMovesCalculator
 
     @Override
     public List<ChessMove> getMoves() {
-        int dir = 1; // movement direction, "forward"
-        int homeRow = 2;
 
-        if (teamColor == topColor) {
-            dir = -1;
-            homeRow = 7;
-        }
+        int dir = (teamColor == topColor)
+            ? -1
+            : 1;
+        int homeRow = (teamColor == topColor)
+            ? 7
+            : 2;
 
-        ChessPosition inFrontOfHome = new ChessPosition(homeRow + dir, currentPosition.getColumn());
+        ChessPosition oneAhead = new ChessPosition(currentPosition.getRow() + dir, currentPosition.getColumn());
         // initial move
-        if (currentPosition.getRow() == homeRow && currentBoard.getPiece(inFrontOfHome) == null)
+        if (currentPosition.getRow() == homeRow && currentBoard.getPiece(oneAhead) == null)
         {
-            addIfValidAndFree(new ChessPosition(homeRow + dir, currentPosition.getColumn()));
+            addIfValidAndFree(oneAhead);
             addIfValidAndFree(new ChessPosition(homeRow + (dir*2), currentPosition.getColumn()));
         }
         else // moves past initial
         {
-            addIfValidAndFree(new ChessPosition(currentPosition.getRow() + dir, currentPosition.getColumn()));
+            addIfValidAndFree(oneAhead);
         }
 
         // capture
@@ -77,6 +77,6 @@ public class PawnMovesCalculator extends PieceMovesCalculator
             }
         }
 
-        return convert(moves);
+        return getConverted();
     }
 }

@@ -22,6 +22,6 @@ public class BishopMovesCalculator extends PieceMovesCalculator
         moves.addAll(straightLine(currentBoard, currentPosition, -1, -1));
         moves.addAll(straightLine(currentBoard, currentPosition, 1, -1));
 
-        return convert(moves);
+        return getConverted();
     }
 }

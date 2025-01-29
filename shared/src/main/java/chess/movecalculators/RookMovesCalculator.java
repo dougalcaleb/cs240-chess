@@ -22,6 +22,6 @@ public class RookMovesCalculator extends PieceMovesCalculator
         moves.addAll(straightLine(currentBoard, currentPosition, -1, 0));
         moves.addAll(straightLine(currentBoard, currentPosition, 0, -1));
 
-        return convert(moves);
+        return getConverted();
     }
 }

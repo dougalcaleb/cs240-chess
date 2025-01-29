@@ -73,6 +73,6 @@ public class KingMovesCalculator extends PieceMovesCalculator
             }
         }
 
-        return convert(moves);
+        return getConverted();
     }
 }

@@ -50,6 +50,7 @@ public class ChessBoard {
         board[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
+    // Alias for get/set convention consistency
     public void setPiece(ChessPosition position, ChessPiece piece)
     {
         addPiece(position, piece);
@@ -184,7 +185,7 @@ public class ChessBoard {
                     );
                 }
 
-                addPiece(pos, piece);
+                setPiece(pos, piece);
             }
         }
     }
