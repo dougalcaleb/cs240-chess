@@ -25,12 +25,15 @@ function submit() {
   try {
     const requestObj = JSON.parse(requestBody);
     gameID = requestObj.gameID || gameID;
-  } catch (ignored) {}
+  } catch (ignored) {
+    console.error(ignored);
+  }
 
   return false;
 }
 
 function send(path, params, method) {
+    console.log("Sending request to path", path, "method",method, "with params",params);
   params = !!params ? params : undefined;
   let status = '';
   fetch(path, {
@@ -59,6 +62,7 @@ function send(path, params, method) {
       scrollToId('responseBox');
     })
     .catch((error) => {
+      console.error(error);
       document.getElementById('response').innerText = error;
     });
 }
@@ -71,6 +75,9 @@ function displayRequest(method, endpoint, request) {
   scrollToId('execute');
 }
 
+function dump() {
+    displayRequest("GET", "/dump", null);
+}
 function clearAll() {
   displayRequest('DELETE', '/db', null);
 }
@@ -121,6 +128,7 @@ function socketMessage(event) {
     displayMessage(JSON.stringify(JSON.parse(event.data), null, 2));
   } catch (e) {
     displayMessage("Error: " + e);
+    console.error(e);
   }
 }
 
@@ -152,7 +160,9 @@ function sendWs() {
     const dataObj = JSON.parse(data);
     gameID = data.gameID || gameID;
     lastMove = data.move || lastMove;
-  } catch (ignored) {}
+  } catch (ignored) {
+    console.error(ignored);
+  }
 }
 
 function closeWs() {
