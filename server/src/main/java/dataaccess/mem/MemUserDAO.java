@@ -1,7 +1,7 @@
 package dataaccess.mem;
 
-import dataaccess.DataAccessException;
 import dataaccess.struct.UserDAO;
+import exceptions.DataAccessException;
 import model.UserData;
 
 import java.util.Collection;

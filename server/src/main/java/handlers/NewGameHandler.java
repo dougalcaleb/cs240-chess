@@ -1,5 +1,6 @@
 package handlers;
 
+import exceptions.GameTakenException;
 import models.ErrorMessage;
 import models.NewGameRequest;
 import models.NewGameResponse;
@@ -23,7 +24,7 @@ public class NewGameHandler extends BaseRequestHandler {
         {
             gameID = Server.gameAccess.createGame(input.gameName());
         }
-        catch (RuntimeException e)
+        catch (GameTakenException e)
         {
             res.status(400);
             return serializeResponse(new ErrorMessage(e.getMessage()));

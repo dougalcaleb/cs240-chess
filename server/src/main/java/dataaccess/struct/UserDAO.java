@@ -1,6 +1,6 @@
 package dataaccess.struct;
 
-import dataaccess.DataAccessException;
+import exceptions.DataAccessException;
 import model.UserData;
 
 import java.util.Collection;

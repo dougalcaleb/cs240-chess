@@ -1,6 +1,6 @@
 package handlers;
 
-import dataaccess.DataAccessException;
+import exceptions.DataAccessException;
 import model.AuthData;
 import model.UserData;
 import models.ErrorMessage;

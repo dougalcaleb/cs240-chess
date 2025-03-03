@@ -18,4 +18,6 @@ public interface AuthDAO {
     public Collection<String> getAllAsList();
 
     public boolean tokenExists(String token);
+
+    public String getUsernameByToken(String token);
 }

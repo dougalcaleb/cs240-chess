@@ -1,6 +1,6 @@
 package service;
 
-import dataaccess.AuthException;
+import exceptions.AuthException;
 
 import java.util.Collection;
 
@@ -22,6 +22,11 @@ public class AuthService extends BaseService {
         {
             throw new AuthException();
         }
+    }
+
+    public String getUsername(String token)
+    {
+        return authAccess.getUsernameByToken(token);
     }
 
     public Collection<String> getAll()

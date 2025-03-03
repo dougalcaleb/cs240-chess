@@ -35,4 +35,38 @@ public class MemGameDAO implements GameDAO {
         }
         return false;
     }
+
+    public boolean gameExists(int gameID)
+    {
+        for (Integer existingID : MemGameDAO.db.keySet())
+        {
+            if (existingID.equals(gameID))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public GameData getGame(int gameID)
+    {
+        return MemGameDAO.db.get(gameID);
+    }
+
+    public void setPlayerColor(int gameID, String username, String color)
+    {
+        GameData existing = MemGameDAO.db.get(gameID);
+
+        if (color.equals("BLACK"))
+        {
+            existing.blackUsername = username;
+        }
+        else
+        {
+            existing.whiteUsername = username;
+        }
+
+        // probably don't need this, but I don't want to test it and have it not work
+        MemGameDAO.db.put(gameID, existing);
+    }
 }

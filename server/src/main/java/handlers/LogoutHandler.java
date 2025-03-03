@@ -1,6 +1,6 @@
 package handlers;
 
-import dataaccess.AuthException;
+import exceptions.AuthException;
 import models.ErrorMessage;
 import server.Server;
 import spark.Request;

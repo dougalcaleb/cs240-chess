@@ -37,6 +37,21 @@ public class MemAuthDAO implements AuthDAO {
         return null;
     }
 
+    @Override
+    public String getUsernameByToken(String token)
+    {
+        for (var entry : MemAuthDAO.db.entrySet())
+        {
+            if (entry.getValue().equals(token))
+            {
+                return entry.getKey();
+            }
+        }
+
+        return null;
+    }
+
+    @Override
     public boolean tokenExists(String token)
     {
         for (String existingToken : MemAuthDAO.db.values())
@@ -57,6 +72,7 @@ public class MemAuthDAO implements AuthDAO {
         return true;
     }
 
+    @Override
     public boolean deleteAuthData(String token)
     {
         // funky one-liner removes all matching values (which theoretically there should never be more than one
