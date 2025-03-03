@@ -16,8 +16,23 @@ public class MemGameDAO implements GameDAO {
         return MemGameDAO.db.values();
     }
 
-    public void setGame(GameData data)
+    public int setGame(GameData data)
     {
+        data.gameID = MemGameDAO.db.size();
         MemGameDAO.db.put(data.gameID, data);
+
+        return data.gameID;
+    }
+
+    public boolean gameExists(String gameName)
+    {
+        for (GameData game : MemGameDAO.db.values())
+        {
+            if (game.gameName.equals(gameName))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 }

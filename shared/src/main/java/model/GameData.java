@@ -8,4 +8,11 @@ public class GameData {
     public String blackUsername;
     public String gameName;
     public ChessGame game;
+
+    public GameData(String name)
+    {
+        gameName = name;
+    }
+
+    public GameData() {}
 }

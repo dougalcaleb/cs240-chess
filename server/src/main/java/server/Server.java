@@ -39,7 +39,7 @@ public class Server {
 
         Spark.get("/game", (req, res) -> new ListGamesHandler(req, res).HandleRequestAuthd() );
 
-//        Spark.post("/game", (req, res) -> new NewGameHandler(req, res).HandleRequest() );
+        Spark.post("/game", (req, res) -> new NewGameHandler(req, res).HandleRequestAuthd() );
 
 //        Spark.put("/game", (req, res) -> new JoinGameHandler(req, res).HandleRequest() );
 
