@@ -21,6 +21,7 @@ public class UserService extends BaseService {
 
         try {
             userAccess.setUser(data);
+            result.createSucceeded = true;
         } catch (DataAccessException e) {
             result.createSucceeded = false;
             return result;
@@ -28,12 +29,13 @@ public class UserService extends BaseService {
 
         try {
             result.token = authAccess.createAuth(data);
+            result.loginSucceeded = true;
         } catch (Exception e) {
             result.loginSucceeded = false;
             return result;
         }
 
-        return null;
+        return result;
     }
 
     public AuthData loginUser(UserData data)

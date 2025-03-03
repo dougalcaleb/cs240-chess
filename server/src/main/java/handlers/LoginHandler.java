@@ -10,7 +10,7 @@ public class LoginHandler extends BaseRequestHandler {
     }
 
     @Override
-    protected String HandleRequest() {
+    public String HandleRequest() {
         return null;
     }
 }

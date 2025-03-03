@@ -1,5 +1,8 @@
 package handlers;
 
+import model.RegisterResult;
+import model.UserData;
+import server.Server;
 import spark.Request;
 import spark.Response;
 
@@ -10,7 +13,9 @@ public class RegisterHandler extends BaseRequestHandler {
     }
 
     @Override
-    protected String HandleRequest() {
-        return null;
+    public String HandleRequest() {
+        UserData input = (UserData) deserializeRequest(UserData.class);
+        RegisterResult registrationResult = Server.userAccess.registerUser(input);
+        return serializeResponse(registrationResult);
     }
 }

@@ -1,6 +1,7 @@
 package server;
 
 import handlers.DumpHandler;
+import handlers.RegisterHandler;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
@@ -29,7 +30,7 @@ public class Server {
         //This line initializes the server and can be removed once you have a functioning endpoint 
 //        Spark.init();
 
-//        Spark.post("/user", (req, res) -> new RegisterHandler(req, res) );
+        Spark.post("/user", (req, res) -> new RegisterHandler(req, res).HandleRequest() );
 
         Spark.get("/dump", (req, res) -> new DumpHandler(req, res).HandleRequest() );
 

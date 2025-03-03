@@ -22,10 +22,15 @@ public abstract class BaseRequestHandler {
         return false;
     }
 
-    protected Object serializeRequest(Object returnClass) {
-        return serializer.fromJson(req.body(), returnClass.getClass());
+    protected <T> Object deserializeRequest(Class<T> returnClass) {
+        return serializer.fromJson(req.body(), returnClass);
     }
 
-    protected abstract String HandleRequest();
+    protected String serializeResponse(Object data)
+    {
+        return serializer.toJson(data);
+    }
+
+    public abstract String HandleRequest();
 
 }
