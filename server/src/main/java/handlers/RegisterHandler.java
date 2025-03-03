@@ -16,6 +16,17 @@ public class RegisterHandler extends BaseRequestHandler {
     public String HandleRequest() {
         UserData input = (UserData) deserializeRequest(UserData.class);
         RegisterResult registrationResult = Server.userAccess.registerUser(input);
+
+        // probably needs different error codes for different errors
+//        if (
+//            registrationResult == null ||
+//            !registrationResult.loginSucceeded ||
+//            !registrationResult.createSucceeded ||
+//            registrationResult.userExists
+//        ) {
+//            res.status(500);
+//        }
+
         return serializeResponse(registrationResult);
     }
 }

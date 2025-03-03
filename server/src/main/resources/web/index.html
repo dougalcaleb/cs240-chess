@@ -11,139 +11,126 @@
 </head>
 
 <body>
-<h1><span class="chess-icon">♔</span> CS 240 Chess Server</h1>
-<p>
-    The CS 240 Chess Server Web API is described below. Some of the APIs require a request body to be sent (like
-    <code>/user/login</code> and <code>/user/register</code>), while others require an Authorization authToken
-    (received at login). To view the required JSON format, click on a command below and look at the example request
-    body. To try out an API, modify the request as needed, and press Send.
-</p>
 
-<h2>HTTP Endpoints</h2>
-<table>
-    <tr>
-        <td class="endpoint" onclick="dump()">
-            <div class="method">[GET]</div>
-            <div class="path">/db</div>
-        </td>
-        <td>
-            <span class="description">Dump DB</span>
-            Output all data in all databases.
-        </td>
-    </tr>
-    <tr>
-        <td class="endpoint" onclick="register()">
-            <div class="method">[POST]</div>
-            <div class="path">/user</div>
-        </td>
-        <td>
-            <span class="description">Register a user</span> If successful, an authorization authToken is returned. You
-            may use the authToken with future requests that require authorization. No authorization authToken is
-            required
-            to call this endpoint.
-        </td>
-    </tr>
-    <tr>
-        <td class="endpoint" onclick="login()">
-            <div class="method">[POST]</div>
-            <div class="path">/session</div>
-        </td>
-        <td>
-            <span class="description">Log in a user</span> If successful, an authorization authToken is returned. You
-            may
-            use the authToken with future requests that require authorization. No authorization authToken is required to
-            call this endpoint.
-        </td>
-    </tr>
-    <tr>
-        <td class="endpoint" onclick="logout()">
-            <div class="method">[DELETE]</div>
-            <div class="path">/session</div>
-        </td>
-        <td>
-            <span class="description">Logs out an authenticated user</span> An authToken is required to call this
-            endpoint.
-        </td>
-    </tr>
-    <tr>
-        <td class="endpoint" onclick="gamesList()">
-            <div class="method">[GET]</div>
-            <div class="path">/game</div>
-        </td>
-        <td>
-            <span class="description">Lists all the games in the database</span> This API does not take a request body.
-            The response JSON lists all the games. An authToken is required to call this endpoint.
-        </td>
-    </tr>
-    <tr>
-        <td class="endpoint" onclick="createGame()">
-            <div class="method">[POST]</div>
-            <div class="path">/game</div>
-        </td>
-        <td>
-            <span class="description">Create a new Chess Game</span> The request body must contain a name for the game.
-            The response JSON contains the ID of created game, or if failed, an error message describing the reason. An
-            authToken is required to call this endpoint.
-        </td>
-    </tr>
-    <tr>
-        <td class="endpoint" onclick="joinGame()">
-            <div class="method">[PUT]</div>
-            <div class="path">/game</div>
-        </td>
-        <td>
-            <span class="description">Join a Chess Game</span> The request body must contain the game ID and player
-            color. An authToken is required to call this endpoint.
-        </td>
-    </tr>
-    <tr>
-        <td class="endpoint" onclick="clearAll()">
-            <div class="method">[DELETE]</div>
-            <div class="path">/db</div>
-        </td>
-        <td>
-            <span class="description">Clear ALL data from the database</span> This includes users and all game data. No
-            authorization authToken is required.
-        </td>
-    </tr>
-</table>
-<h2 id="execute">Execute HTTP Request</h2>
-<div class="box">
-    <h3>Request</h3>
-    <div class="input">
-        <label for="method">Method:</label> 
-		<input type="text" id="method"/>
-		<!-- <select id="requestMethod">
-			<option value="POST">POST</option>
-			<option value="GET">GET</option>
-			<option value="PUT">PUT</option>
-			<option value="DELETE">DELETE</option>
-		</select> -->
-		
+<div id="http-wrapper">
+
+    <div class="flex-col">
+        <h2>HTTP Endpoints</h2>
+        <table>
+            <tr>
+                <td class="endpoint" onclick="dump()">
+                    <div class="method">[GET]</div>
+                    <div class="path">/db</div>
+                </td>
+                <td>
+                    <span class="description">Dump DB</span>
+                    Output all data in all databases.
+                </td>
+            </tr>
+            <tr>
+                <td class="endpoint" onclick="register()">
+                    <div class="method">[POST]</div>
+                    <div class="path">/user</div>
+                </td>
+                <td>
+                    <span class="description">Register a user</span> If successful, returns an AuthToken. No AuthToken required to call this endpoint.
+                </td>
+            </tr>
+            <tr>
+                <td class="endpoint" onclick="login()">
+                    <div class="method">[POST]</div>
+                    <div class="path">/session</div>
+                </td>
+                <td>
+                    <span class="description">Log in a user</span> If successful, returns an AuthToken. No AuthToken required to call this endpoint.
+                </td>
+            </tr>
+            <tr>
+                <td class="endpoint" onclick="logout()">
+                    <div class="method">[DELETE]</div>
+                    <div class="path">/session</div>
+                </td>
+                <td>
+                    <span class="description">Logs out an authenticated user</span> AuthToken required to call this endpoint.
+                </td>
+            </tr>
+            <tr>
+                <td class="endpoint" onclick="gamesList()">
+                    <div class="method">[GET]</div>
+                    <div class="path">/game</div>
+                </td>
+                <td>
+                    <span class="description">Lists all games in the database</span> Does not take a request body. AuthToken is required to call this endpoint.
+                </td>
+            </tr>
+            <tr>
+                <td class="endpoint" onclick="createGame()">
+                    <div class="method">[POST]</div>
+                    <div class="path">/game</div>
+                </td>
+                <td>
+                    <span class="description">Create a new Chess Game</span> Request body must contain a game name.
+                    Response contains the new game ID, error message. AuthToken is required to call this endpoint.
+                </td>
+            </tr>
+            <tr>
+                <td class="endpoint" onclick="joinGame()">
+                    <div class="method">[PUT]</div>
+                    <div class="path">/game</div>
+                </td>
+                <td>
+                    <span class="description">Join a Chess Game</span>
+                    Request body must contain game ID and player
+                    color. AuthToken is required to call this endpoint.
+                </td>
+            </tr>
+            <tr>
+                <td class="endpoint" onclick="clearAll()">
+                    <div class="method">[DELETE]</div>
+                    <div class="path">/db</div>
+                </td>
+                <td>
+                    <span class="description">Clear ALL data from the database</span> This includes users and all game data. No
+                    authorization authToken is required.
+                </td>
+            </tr>
+        </table>
+
+        <h2 id="execute">Execute HTTP Request</h2>
+        <div class="box">
+            <h3>Request</h3>
+
+            <div class="flex-row">
+                <div class="input">
+                    <label for="method">Method:</label>
+                    <input type="text" id="method"/>
+                </div>
+
+                <div class="input">
+                    <label for="handleBox">Endpoint:</label>
+                    <input type="text" id="handleBox" name="handleBox"/>
+                </div>
+            </div>
+
+            <div class="input">
+                <label for="authToken">Auth Token:</label> <input type="text" id="authToken" name="authToken"/>
+            </div>
+
+            <div class="input">
+                <label for="requestBox">Request Body:</label> <textarea id="requestBox" name="requestBox"></textarea>
+            </div>
+
+            <button onclick="submit()">Send</button>
+        </div>
     </div>
 
-    <div class="input">
-        <label for="handleBox">Endpoint:</label> 
-		<input type="text" id="handleBox" name="handleBox"/>
-		<!-- <select id="requestEndpoint">
-			<option value=""></option>
-		</select> -->
-    </div>
 
-    <div class="input">
-        <label for="authToken">Auth Token:</label> <input type="text" id="authToken" name="authToken"/>
+    <div id="responseBox" class="box">
+        <h3>HTTP Response</h3>
+        <pre id="response" readonly></pre>
     </div>
-
-    <div class="input">
-        <label for="requestBox">Request Body:</label> <textarea id="requestBox" name="requestBox"></textarea>
-    </div>
-
-    <button onclick="submit()">Send</button>
 </div>
-<div id="responseBox" class="box">
-    <h3>HTTP Response</h3>
-    <pre id="response" readonly></pre>
-</div>
+
 <h2>Websocket</h2>
 <p>This section is only applicable during phase 6. Use this to test the websocket functionality of your server</p>
 <div id="websocketConnectBox" class="box">
