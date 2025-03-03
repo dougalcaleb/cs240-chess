@@ -78,4 +78,9 @@ public class UserService extends BaseService {
     {
         return userAccess.getAllAsList();
     }
+
+    public void reset()
+    {
+        userAccess.reset();
+    }
 }

@@ -17,4 +17,6 @@ public interface GameDAO {
     public GameData getGame(int gameID);
 
     public void setPlayerColor(int gameID, String username, String color);
+
+    public void reset();
 }

@@ -87,4 +87,9 @@ public class MemAuthDAO implements AuthDAO {
     {
         return MemAuthDAO.db.values();
     }
+
+    public void reset()
+    {
+        MemAuthDAO.db.clear();
+    }
 }

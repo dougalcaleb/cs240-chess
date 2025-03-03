@@ -11,11 +11,13 @@ public class MemGameDAO implements GameDAO {
 
     private static final Map<Integer, GameData> db = new HashMap<>();
 
+    @Override
     public Collection<GameData> getAllAsList()
     {
         return MemGameDAO.db.values();
     }
 
+    @Override
     public int setGame(GameData data)
     {
         data.gameID = MemGameDAO.db.size();
@@ -24,6 +26,7 @@ public class MemGameDAO implements GameDAO {
         return data.gameID;
     }
 
+    @Override
     public boolean gameExists(String gameName)
     {
         for (GameData game : MemGameDAO.db.values())
@@ -36,6 +39,7 @@ public class MemGameDAO implements GameDAO {
         return false;
     }
 
+    @Override
     public boolean gameExists(int gameID)
     {
         for (Integer existingID : MemGameDAO.db.keySet())
@@ -48,11 +52,13 @@ public class MemGameDAO implements GameDAO {
         return false;
     }
 
+    @Override
     public GameData getGame(int gameID)
     {
         return MemGameDAO.db.get(gameID);
     }
 
+    @Override
     public void setPlayerColor(int gameID, String username, String color)
     {
         GameData existing = MemGameDAO.db.get(gameID);
@@ -68,5 +74,10 @@ public class MemGameDAO implements GameDAO {
 
         // probably don't need this, but I don't want to test it and have it not work
         MemGameDAO.db.put(gameID, existing);
+    }
+
+    public void reset()
+    {
+        MemGameDAO.db.clear();
     }
 }

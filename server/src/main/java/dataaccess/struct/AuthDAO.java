@@ -20,4 +20,6 @@ public interface AuthDAO {
     public boolean tokenExists(String token);
 
     public String getUsernameByToken(String token);
+
+    public void reset();
 }

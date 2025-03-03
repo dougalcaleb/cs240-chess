@@ -25,6 +25,7 @@ public class MemUserDAO implements UserDAO {
         return data;
     }
 
+    @Override
     public boolean matchUsernamePassword(UserData data) throws DataAccessException
     {
         UserData retrieved = MemUserDAO.db.get(data.username);
@@ -64,8 +65,15 @@ public class MemUserDAO implements UserDAO {
         MemUserDAO.db.remove(data.username);
     }
 
+    @Override
     public Collection<UserData> getAllAsList()
     {
         return MemUserDAO.db.values();
+    }
+
+    @Override
+    public void reset()
+    {
+        MemUserDAO.db.clear();
     }
 }

@@ -54,4 +54,9 @@ public class GameService extends BaseService {
     {
         return gameAccess.getAllAsList();
     }
+
+    public void reset()
+    {
+        gameAccess.reset();
+    }
 }

@@ -33,4 +33,9 @@ public class AuthService extends BaseService {
     {
         return authAccess.getAllAsList();
     }
+
+    public void reset()
+    {
+        authAccess.reset();
+    }
 }

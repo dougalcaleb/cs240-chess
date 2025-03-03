@@ -43,7 +43,7 @@ public class Server {
 
         Spark.put("/game", (req, res) -> new JoinGameHandler(req, res).HandleRequestAuthd() );
 
-//        Spark.delete("/db", (req, res) -> new ResetDatabaseHandler(req, res).HandleRequest() );
+        Spark.delete("/db", (req, res) -> new ResetDatabaseHandler(req, res).HandleRequest() );
 
         Spark.awaitInitialization();
         return Spark.port();
