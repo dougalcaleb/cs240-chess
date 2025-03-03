@@ -76,7 +76,7 @@ function displayRequest(method, endpoint, request) {
 }
 
 function dump() {
-    displayRequest("GET", "/dump", null);
+    displayRequest("GET", "/db", null);
 }
 function clearAll() {
   displayRequest('DELETE', '/db', null);
