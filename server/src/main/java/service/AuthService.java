@@ -1,19 +1,27 @@
 package service;
 
-import dataaccess.DataAccessException;
+import dataaccess.AuthException;
 
 import java.util.Collection;
 
 public class AuthService extends BaseService {
 
-    public void logoutAuth(String token) throws DataAccessException
+    public void logoutAuth(String token) throws AuthException
     {
         if (!authAccess.tokenExists(token))
         {
-            throw new DataAccessException("Error: unauthorized");
+            throw new AuthException("Error: unauthorized");
         }
 
         authAccess.deleteAuthData(token);
+    }
+
+    public void verifyAuth(String token) throws AuthException
+    {
+        if (!authAccess.tokenExists(token))
+        {
+            throw new AuthException();
+        }
     }
 
     public Collection<String> getAll()

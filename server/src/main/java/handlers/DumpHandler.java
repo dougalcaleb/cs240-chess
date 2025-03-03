@@ -1,5 +1,6 @@
 package handlers;
 
+import model.GameData;
 import model.UserData;
 import models.DumpRecord;
 import server.Server;
@@ -18,8 +19,8 @@ public class DumpHandler extends BaseRequestHandler  {
     public String HandleRequest() {
         Collection<UserData> userData = Server.userAccess.getAll();
         Collection<String> authData = Server.authAccess.getAll();
-//        ArrayList<GameData> gameData = Server.gameAccess;
-        DumpRecord dump = new DumpRecord(userData, authData);
+        Collection<GameData> gameData = Server.gameAccess.getAll();
+        DumpRecord dump = new DumpRecord(userData, authData, gameData);
 
         String dumpJson = serializer.toJson(dump);
 

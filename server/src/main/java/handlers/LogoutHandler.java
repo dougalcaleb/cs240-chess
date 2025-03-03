@@ -1,6 +1,6 @@
 package handlers;
 
-import dataaccess.DataAccessException;
+import dataaccess.AuthException;
 import models.ErrorMessage;
 import server.Server;
 import spark.Request;
@@ -20,10 +20,10 @@ public class LogoutHandler extends BaseRequestHandler {
         {
             Server.authAccess.logoutAuth(logoutToken);
         }
-        catch (DataAccessException e)
+        catch (AuthException e)
         {
             res.status(401);
-            return serializeResponse(new ErrorMessage("Error: unauthorized"));
+            return serializeResponse(new ErrorMessage(e.getMessage()));
         }
 
         return serializeResponse(new Object());
