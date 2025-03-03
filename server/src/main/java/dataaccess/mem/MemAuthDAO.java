@@ -37,9 +37,31 @@ public class MemAuthDAO implements AuthDAO {
         return null;
     }
 
+    public boolean tokenExists(String token)
+    {
+        for (String existingToken : MemAuthDAO.db.values())
+        {
+            if (existingToken.equals(token))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     @Override
     public boolean deleteAuthData(AuthData data) {
         MemAuthDAO.db.remove(data.username);
+
+        return true;
+    }
+
+    public boolean deleteAuthData(String token)
+    {
+        // funky one-liner removes all matching values (which theoretically there should never be more than one
+        // of a given auth token, but just in case)
+        while (MemAuthDAO.db.values().remove(token));
 
         return true;
     }

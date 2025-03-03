@@ -1,5 +1,10 @@
 package handlers;
 
+import dataaccess.DataAccessException;
+import model.AuthData;
+import model.UserData;
+import models.ErrorMessage;
+import server.Server;
 import spark.Request;
 import spark.Response;
 
@@ -11,6 +16,30 @@ public class LoginHandler extends BaseRequestHandler {
 
     @Override
     public String HandleRequest() {
-        return null;
+        UserData input = (UserData) deserializeRequest(UserData.class);
+        AuthData loginData = null;
+
+        try
+        {
+            loginData = Server.userAccess.loginUser(input);
+            if (loginData == null)
+            {
+                res.status(401);
+                return serializeResponse(new ErrorMessage("Error: unauthorized (invalid credentials)"));
+            }
+        }
+        catch (RuntimeException e)
+        {
+            res.status(500);
+            return serializeResponse(new ErrorMessage("Error: " + e.toString()));
+        }
+        catch (DataAccessException e)
+        {
+            res.status(401);
+            return serializeResponse(new ErrorMessage("Error: unauthorized (user does not exist)"));
+        }
+
+        res.status(200);
+        return serializeResponse(loginData);
     }
 }

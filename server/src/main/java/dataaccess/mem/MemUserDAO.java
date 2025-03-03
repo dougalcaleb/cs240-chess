@@ -25,6 +25,18 @@ public class MemUserDAO implements UserDAO {
         return data;
     }
 
+    public boolean matchUsernamePassword(UserData data) throws DataAccessException
+    {
+        UserData retrieved = MemUserDAO.db.get(data.username);
+
+        if (retrieved == null)
+        {
+            throw new DataAccessException("Could not get user - user does not exist");
+        }
+
+        return retrieved.password.equals(data.password);
+    }
+
     @Override
     public boolean userExists(UserData data) {
         return MemUserDAO.db.containsKey(data.username);

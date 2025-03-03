@@ -2,6 +2,7 @@ package server;
 
 import handlers.DumpHandler;
 import handlers.LoginHandler;
+import handlers.LogoutHandler;
 import handlers.RegisterHandler;
 import service.AuthService;
 import service.GameService;
@@ -37,7 +38,7 @@ public class Server {
 
         Spark.post("/session", (req, res) -> new LoginHandler(req, res).HandleRequest() );
 
-//        Spark.delete("/session", (req, res) -> new LogoutHandler(req, res).HandleRequest() );
+        Spark.delete("/session", (req, res) -> new LogoutHandler(req, res).HandleRequest() );
 
 //        Spark.get("/game", (req, res) -> new ListGamesHandler(req, res).HandleRequest() );
 

@@ -31,6 +31,11 @@ public abstract class BaseRequestHandler {
         return serializer.toJson(data);
     }
 
+    protected String getRequestHeader(String header)
+    {
+        return req.headers(header);
+    }
+
     public abstract String HandleRequest();
 
 }

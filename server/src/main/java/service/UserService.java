@@ -19,18 +19,24 @@ public class UserService extends BaseService {
             return result;
         }
 
-        try {
+        try
+        {
             userAccess.setUser(data);
             result.createSucceeded = true;
-        } catch (DataAccessException e) {
+        }
+        catch (DataAccessException e)
+        {
             result.createSucceeded = false;
             return result;
         }
 
-        try {
+        try
+        {
             result.token = authAccess.createAuth(data);
             result.loginSucceeded = true;
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             result.loginSucceeded = false;
             return result;
         }
@@ -38,17 +44,32 @@ public class UserService extends BaseService {
         return result;
     }
 
-    public AuthData loginUser(UserData data)
+    public AuthData loginUser(UserData data) throws DataAccessException, RuntimeException
     {
-        try {
-            userAccess.getUser(data.username);
-        } catch (DataAccessException e) {
-            throw new RuntimeException(e);
+        try
+        {
+            if (!userAccess.matchUsernamePassword(data))
+            {
+                return null;
+            }
+        }
+        catch (DataAccessException e)
+        {
+            throw new DataAccessException("User does not exist");
         }
 
-        try {
+        AuthData existing = authAccess.getAuthData(data.username);
+        if (existing != null)
+        {
+            throw new RuntimeException("User is already logged in");
+        }
+
+        try
+        {
             return authAccess.createAuth(data);
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             throw new RuntimeException(e);
         }
     }

@@ -15,4 +15,6 @@ public interface UserDAO {
     public boolean userExists(UserData data);
 
     public Collection<UserData> getAllAsList();
+
+    public boolean matchUsernamePassword(UserData data) throws DataAccessException;
 }

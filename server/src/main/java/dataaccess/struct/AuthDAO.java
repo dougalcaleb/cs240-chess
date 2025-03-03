@@ -13,5 +13,9 @@ public interface AuthDAO {
 
     public boolean deleteAuthData(AuthData data);
 
+    public boolean deleteAuthData(String token);
+
     public Collection<String> getAllAsList();
+
+    public boolean tokenExists(String token);
 }
