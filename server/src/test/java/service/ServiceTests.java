@@ -1,4 +1,4 @@
-package unittest;
+package service;
 
 
 import exceptions.GameTakenException;
@@ -6,10 +6,6 @@ import model.GameData;
 import model.RegisterResult;
 import model.UserData;
 import org.junit.jupiter.api.*;
-import service.AuthService;
-import service.BaseService;
-import service.GameService;
-import service.UserService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
