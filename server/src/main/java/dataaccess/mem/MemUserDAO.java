@@ -4,6 +4,7 @@ import dataaccess.struct.UserDAO;
 import exceptions.DataAccessException;
 import model.UserData;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -11,6 +12,13 @@ import java.util.Map;
 public class MemUserDAO implements UserDAO {
 
     private static final Map<String, UserData> DB = new HashMap<>();
+
+    // exclusively for testing purposes
+    public void setDB(Map<String, UserData> value)
+    {
+        MemUserDAO.DB.clear();
+        MemUserDAO.DB.putAll(value);
+    }
 
     @Override
     public UserData getUser(String username) throws DataAccessException

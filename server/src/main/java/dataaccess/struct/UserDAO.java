@@ -4,8 +4,12 @@ import exceptions.DataAccessException;
 import model.UserData;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface UserDAO {
+
+    public void setDB(Map<String, UserData> value);
+
     public UserData getUser(String username) throws DataAccessException;
 
     public void setUser(UserData data) throws DataAccessException;

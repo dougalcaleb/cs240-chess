@@ -7,6 +7,7 @@ public class RegisterResult {
         loginSucceeded = login;
         userExists = exists;
         authToken = token;
+        this.username = username;
     }
 
     public RegisterResult() {}

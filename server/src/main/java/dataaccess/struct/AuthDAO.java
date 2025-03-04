@@ -5,8 +5,11 @@ import model.UserData;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
 public interface AuthDAO {
+
+    public void setDB(Map<String, ArrayList<String>> value);
 
     public AuthData createAuth(UserData data);
 

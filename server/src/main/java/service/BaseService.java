@@ -16,6 +16,4 @@ public abstract class BaseService {
     {
 
     }
-
-//    protected abstract void
 }

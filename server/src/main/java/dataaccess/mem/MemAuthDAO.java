@@ -10,6 +10,13 @@ public class MemAuthDAO implements AuthDAO {
 
     private static final Map<String, ArrayList<String>> DB = new HashMap<>();
 
+    // exclusively for testing purposes
+    public void setDB(Map<String, ArrayList<String>> value)
+    {
+        MemAuthDAO.DB.clear();
+        MemAuthDAO.DB.putAll(value);
+    }
+
     public static String generateToken() {
         return UUID.randomUUID().toString();
     }

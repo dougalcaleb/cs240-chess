@@ -3,8 +3,11 @@ package dataaccess.struct;
 import model.GameData;
 
 import java.util.Collection;
+import java.util.Map;
 
 public interface GameDAO {
+
+    public void setDB(Map<Integer, GameData> value);
 
     public Collection<GameData> getAllAsList();
 

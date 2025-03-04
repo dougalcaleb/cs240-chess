@@ -2,6 +2,7 @@ package dataaccess.mem;
 
 import dataaccess.struct.GameDAO;
 import model.GameData;
+import model.UserData;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -10,6 +11,13 @@ import java.util.Map;
 public class MemGameDAO implements GameDAO {
 
     private static final Map<Integer, GameData> DB = new HashMap<>();
+
+    // exclusively for testing purposes
+    public void setDB(Map<Integer, GameData> value)
+    {
+        MemGameDAO.DB.clear();
+        MemGameDAO.DB.putAll(value);
+    }
 
     @Override
     public Collection<GameData> getAllAsList()
