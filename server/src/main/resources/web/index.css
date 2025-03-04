@@ -3,6 +3,9 @@ html {
   background: #f7f0e0;
   color: #343434;
 }
+body {
+  max-width: 80em;
+}
 table {
   border-spacing: 0.5em;
 }
@@ -49,8 +52,7 @@ textarea {
   padding: 0.25em;
 }
 textarea {
-  height: 10em;
-  font-size: 20px;
+  height: 20em;
   padding: 1em;
 }
 .input {
@@ -61,7 +63,6 @@ textarea {
   background: #dad6bf;
   padding: 0.5em 2em 2em;
   margin: 1em;
-  flex-grow: 1;
 }
 button {
   background-color: #786907;
@@ -82,25 +83,9 @@ button:active {
 }
 #response {
   color: #4e3e15;
-  font-size: 20px;
 }
 code {
   background-color: #e8e0cb;
   border-radius: 5px;
   padding: 0.05em;
-}
-
-#http-wrapper {
-    display: flex;
-    width: 100%;
-}
-
-.flex-col {
-    flex-direction: column;
-}
-.flex-row {
-    display: flex;
-}
-.flex-row > * {
-    flex-grow: 1;
 }

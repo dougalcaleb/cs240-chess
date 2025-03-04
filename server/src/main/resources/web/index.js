@@ -59,7 +59,7 @@ function send(path, params, method) {
       }
       const response = (data === "") ? "Empty response body" : JSON.stringify(data, null, 2);
       document.getElementById('response').innerText = status + "\n" + response;
-//      scrollToId('responseBox');
+      scrollToId('responseBox');
     })
     .catch((error) => {
       console.error(error);
@@ -72,7 +72,7 @@ function displayRequest(method, endpoint, request) {
   document.getElementById('handleBox').value = endpoint;
   const body = request ? JSON.stringify(request, null, 2) : '';
   document.getElementById('requestBox').value = body;
-//  scrollToId('execute');
+  scrollToId('execute');
 }
 
 function dump() {
