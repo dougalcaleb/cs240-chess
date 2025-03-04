@@ -15,15 +15,15 @@ public class KingInCheckCalculator
 
     public static List<ChessMove> getSafeMoves(ChessBoard board, List<ChessMove> moves, TeamColor teamColor)
     {
-        return KingInCheckCalculator._getSafeMoves(board, moves, teamColor, true);
+        return KingInCheckCalculator.privateGetSafeMoves(board, moves, teamColor, true);
     }
 
     public static List<ChessMove> getSafeMoves(ChessBoard board, List<ChessMove> moves, TeamColor teamColor, boolean checkCastle)
     {
-        return KingInCheckCalculator._getSafeMoves(board, moves, teamColor, checkCastle);
+        return KingInCheckCalculator.privateGetSafeMoves(board, moves, teamColor, checkCastle);
     }
     // Returns moves that do not put the piece's team's king in check
-    private static List<ChessMove> _getSafeMoves(ChessBoard board, List<ChessMove> moves, TeamColor teamColor, boolean checkCastle)
+    private static List<ChessMove> privateGetSafeMoves(ChessBoard board, List<ChessMove> moves, TeamColor teamColor, boolean checkCastle)
     {
         List<ChessMove> safeMoves = new ArrayList<>();
         TeamColor opponentColor = teamColor == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE;

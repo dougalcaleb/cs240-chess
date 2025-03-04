@@ -32,13 +32,6 @@ public class GameService extends BaseService {
             throw new RuntimeException("Error getting game");
         }
 
-//        if (
-//            (requestedColor.equals("BLACK") && existingGame.whiteUsername != null && existingGame.whiteUsername.equals(username)) ||
-//            (requestedColor.equals("WHITE") && existingGame.blackUsername != null && existingGame.blackUsername.equals(username))
-//        ) {
-//            throw new RuntimeException("Already joined game");
-//        }
-
         if (
             ((existingGame.blackUsername == null || existingGame.blackUsername.isEmpty()) && requestedColor.equals("BLACK")) ||
             ((existingGame.whiteUsername == null || existingGame.whiteUsername.isEmpty()) && requestedColor.equals("WHITE"))

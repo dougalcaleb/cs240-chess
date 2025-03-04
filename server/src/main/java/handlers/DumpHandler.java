@@ -17,7 +17,7 @@ public class DumpHandler extends BaseRequestHandler  {
     }
 
     @Override
-    public String HandleRequest() {
+    public String handleRequest() {
         Collection<UserData> userData = Server.userAccess.getAll();
         Collection<ArrayList<String>> authData = Server.authAccess.getAll();
         Collection<GameData> gameData = Server.gameAccess.getAll();

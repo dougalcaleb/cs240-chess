@@ -12,7 +12,7 @@ public class ListGamesHandler extends BaseRequestHandler {
     }
 
     @Override
-    public String HandleRequest() {
+    public String handleRequest() {
         res.status(200);
         return serializeResponse(new GameList(Server.gameAccess.getAll()));
     }

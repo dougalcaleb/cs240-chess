@@ -15,7 +15,7 @@ public class NewGameHandler extends BaseRequestHandler {
     }
 
     @Override
-    public String HandleRequest() {
+    public String handleRequest() {
         NewGameRequest input = (NewGameRequest) deserializeRequest(NewGameRequest.class);
 
         int gameID = -1;

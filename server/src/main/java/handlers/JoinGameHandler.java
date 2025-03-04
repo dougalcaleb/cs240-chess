@@ -15,7 +15,7 @@ public class JoinGameHandler extends BaseRequestHandler {
     }
 
     @Override
-    public String HandleRequest() {
+    public String handleRequest() {
         JoinGameRequest input = (JoinGameRequest) deserializeRequest(JoinGameRequest.class);
 
         if (input.playerColor() == null || (!input.playerColor().equals("WHITE") && !input.playerColor().equals("BLACK")))

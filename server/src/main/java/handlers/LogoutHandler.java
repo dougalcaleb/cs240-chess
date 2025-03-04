@@ -13,7 +13,7 @@ public class LogoutHandler extends BaseRequestHandler {
     }
 
     @Override
-    public String HandleRequest() {
+    public String handleRequest() {
         String logoutToken = getRequestHeader("Authorization");
 
         try

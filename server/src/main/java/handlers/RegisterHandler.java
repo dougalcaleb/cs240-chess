@@ -14,7 +14,7 @@ public class RegisterHandler extends BaseRequestHandler {
     }
 
     @Override
-    public String HandleRequest() {
+    public String handleRequest() {
         UserData input = (UserData) deserializeRequest(UserData.class);
 
         if (

@@ -20,11 +20,6 @@ public abstract class BaseRequestHandler {
         serializer = new Gson();
     }
 
-    protected boolean Authenticate()
-    {
-        return false;
-    }
-
     protected <T> Object deserializeRequest(Class<T> returnClass) {
         return serializer.fromJson(req.body(), returnClass);
     }
@@ -39,7 +34,7 @@ public abstract class BaseRequestHandler {
         return req.headers(header);
     }
 
-    public String HandleRequestAuthd()
+    public String handleRequestAuthd()
     {
         String authToken = getRequestHeader("Authorization");
 
@@ -53,9 +48,9 @@ public abstract class BaseRequestHandler {
             return serializeResponse(new ErrorMessage(e.getMessage()));
         }
 
-        return HandleRequest();
+        return handleRequest();
     }
 
-    public abstract String HandleRequest();
+    public abstract String handleRequest();
 
 }

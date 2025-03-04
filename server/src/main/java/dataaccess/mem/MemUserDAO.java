@@ -10,12 +10,12 @@ import java.util.Map;
 
 public class MemUserDAO implements UserDAO {
 
-    private static final Map<String, UserData> db = new HashMap<>();
+    private static final Map<String, UserData> DB = new HashMap<>();
 
     @Override
     public UserData getUser(String username) throws DataAccessException
     {
-        UserData data = MemUserDAO.db.get(username);
+        UserData data = MemUserDAO.DB.get(username);
 
         if (data == null)
         {
@@ -28,7 +28,7 @@ public class MemUserDAO implements UserDAO {
     @Override
     public boolean matchUsernamePassword(UserData data) throws DataAccessException
     {
-        UserData retrieved = MemUserDAO.db.get(data.username);
+        UserData retrieved = MemUserDAO.DB.get(data.username);
 
         if (retrieved == null)
         {
@@ -40,40 +40,29 @@ public class MemUserDAO implements UserDAO {
 
     @Override
     public boolean userExists(UserData data) {
-        return MemUserDAO.db.containsKey(data.username);
+        return MemUserDAO.DB.containsKey(data.username);
     }
 
     @Override
     public void setUser(UserData data) throws DataAccessException
     {
-        if (MemUserDAO.db.get(data.username) != null)
+        if (MemUserDAO.DB.get(data.username) != null)
         {
             throw new DataAccessException("Could not set user - user already exists");
         }
 
-        MemUserDAO.db.put(data.username, data);
-    }
-
-    @Override
-    public void deleteUser(UserData data) throws DataAccessException
-    {
-        if (MemUserDAO.db.get(data.username) == null)
-        {
-            throw new DataAccessException("Could not delete user - user does not exist.");
-        }
-
-        MemUserDAO.db.remove(data.username);
+        MemUserDAO.DB.put(data.username, data);
     }
 
     @Override
     public Collection<UserData> getAllAsList()
     {
-        return MemUserDAO.db.values();
+        return MemUserDAO.DB.values();
     }
 
     @Override
     public void reset()
     {
-        MemUserDAO.db.clear();
+        MemUserDAO.DB.clear();
     }
 }

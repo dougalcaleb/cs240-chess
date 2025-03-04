@@ -29,21 +29,21 @@ public class Server {
         //This line initializes the server and can be removed once you have a functioning endpoint 
 //        Spark.init();
 
-        Spark.get("/db", (req, res) -> new DumpHandler(req, res).HandleRequest() );
+        Spark.get("/db", (req, res) -> new DumpHandler(req, res).handleRequest() );
 
-        Spark.post("/user", (req, res) -> new RegisterHandler(req, res).HandleRequest() );
+        Spark.post("/user", (req, res) -> new RegisterHandler(req, res).handleRequest() );
 
-        Spark.post("/session", (req, res) -> new LoginHandler(req, res).HandleRequest() );
+        Spark.post("/session", (req, res) -> new LoginHandler(req, res).handleRequest() );
 
-        Spark.delete("/session", (req, res) -> new LogoutHandler(req, res).HandleRequest() );
+        Spark.delete("/session", (req, res) -> new LogoutHandler(req, res).handleRequest() );
 
-        Spark.get("/game", (req, res) -> new ListGamesHandler(req, res).HandleRequestAuthd() );
+        Spark.get("/game", (req, res) -> new ListGamesHandler(req, res).handleRequestAuthd() );
 
-        Spark.post("/game", (req, res) -> new NewGameHandler(req, res).HandleRequestAuthd() );
+        Spark.post("/game", (req, res) -> new NewGameHandler(req, res).handleRequestAuthd() );
 
-        Spark.put("/game", (req, res) -> new JoinGameHandler(req, res).HandleRequestAuthd() );
+        Spark.put("/game", (req, res) -> new JoinGameHandler(req, res).handleRequestAuthd() );
 
-        Spark.delete("/db", (req, res) -> new ResetDatabaseHandler(req, res).HandleRequest() );
+        Spark.delete("/db", (req, res) -> new ResetDatabaseHandler(req, res).handleRequest() );
 
         Spark.awaitInitialization();
         return Spark.port();

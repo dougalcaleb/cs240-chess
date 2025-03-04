@@ -15,7 +15,7 @@ public class LoginHandler extends BaseRequestHandler {
     }
 
     @Override
-    public String HandleRequest() {
+    public String handleRequest() {
         UserData input = (UserData) deserializeRequest(UserData.class);
         AuthData loginData = null;
 
@@ -28,11 +28,6 @@ public class LoginHandler extends BaseRequestHandler {
                 return serializeResponse(new ErrorMessage("Error: unauthorized (invalid credentials)"));
             }
         }
-//        catch (RuntimeException e)
-//        {
-//            res.status(500);
-//            return serializeResponse(new ErrorMessage("Error: " + e.toString()));
-//        }
         catch (DataAccessException e)
         {
             res.status(401);

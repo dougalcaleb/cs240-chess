@@ -12,7 +12,7 @@ public class ResetDatabaseHandler extends BaseRequestHandler {
     }
 
     @Override
-    public String HandleRequest() {
+    public String handleRequest() {
 
         try
         {

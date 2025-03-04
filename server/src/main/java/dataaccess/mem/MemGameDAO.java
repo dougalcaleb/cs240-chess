@@ -9,19 +9,19 @@ import java.util.Map;
 
 public class MemGameDAO implements GameDAO {
 
-    private static final Map<Integer, GameData> db = new HashMap<>();
+    private static final Map<Integer, GameData> DB = new HashMap<>();
 
     @Override
     public Collection<GameData> getAllAsList()
     {
-        return MemGameDAO.db.values();
+        return MemGameDAO.DB.values();
     }
 
     @Override
     public int setGame(GameData data)
     {
-        data.gameID = MemGameDAO.db.size() + 1;
-        MemGameDAO.db.put(data.gameID, data);
+        data.gameID = MemGameDAO.DB.size() + 1;
+        MemGameDAO.DB.put(data.gameID, data);
 
         return data.gameID;
     }
@@ -29,7 +29,7 @@ public class MemGameDAO implements GameDAO {
     @Override
     public boolean gameExists(String gameName)
     {
-        for (GameData game : MemGameDAO.db.values())
+        for (GameData game : MemGameDAO.DB.values())
         {
             if (game.gameName.equals(gameName))
             {
@@ -42,7 +42,7 @@ public class MemGameDAO implements GameDAO {
     @Override
     public boolean gameExists(int gameID)
     {
-        for (Integer existingID : MemGameDAO.db.keySet())
+        for (Integer existingID : MemGameDAO.DB.keySet())
         {
             if (existingID.equals(gameID))
             {
@@ -55,13 +55,13 @@ public class MemGameDAO implements GameDAO {
     @Override
     public GameData getGame(int gameID)
     {
-        return MemGameDAO.db.get(gameID);
+        return MemGameDAO.DB.get(gameID);
     }
 
     @Override
     public void setPlayerColor(int gameID, String username, String color)
     {
-        GameData existing = MemGameDAO.db.get(gameID);
+        GameData existing = MemGameDAO.DB.get(gameID);
 
         if (color.equals("BLACK"))
         {
@@ -73,11 +73,11 @@ public class MemGameDAO implements GameDAO {
         }
 
         // probably don't need this, but I don't want to test it and have it not work
-        MemGameDAO.db.put(gameID, existing);
+        MemGameDAO.DB.put(gameID, existing);
     }
 
     public void reset()
     {
-        MemGameDAO.db.clear();
+        MemGameDAO.DB.clear();
     }
 }

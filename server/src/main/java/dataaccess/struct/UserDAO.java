@@ -10,8 +10,6 @@ public interface UserDAO {
 
     public void setUser(UserData data) throws DataAccessException;
 
-    public void deleteUser(UserData data) throws DataAccessException;
-
     public boolean userExists(UserData data);
 
     public Collection<UserData> getAllAsList();

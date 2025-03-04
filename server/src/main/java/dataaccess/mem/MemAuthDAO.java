@@ -8,7 +8,7 @@ import java.util.*;
 
 public class MemAuthDAO implements AuthDAO {
 
-    private static final Map<String, ArrayList<String>> db = new HashMap<>();
+    private static final Map<String, ArrayList<String>> DB = new HashMap<>();
 
     public static String generateToken() {
         return UUID.randomUUID().toString();
@@ -18,7 +18,7 @@ public class MemAuthDAO implements AuthDAO {
     public AuthData createAuth(UserData data) {
         String token = generateToken();
 
-        ArrayList<String> existingTokens = MemAuthDAO.db.get(data.username);
+        ArrayList<String> existingTokens = MemAuthDAO.DB.get(data.username);
 
         if (existingTokens == null)
         {
@@ -27,14 +27,14 @@ public class MemAuthDAO implements AuthDAO {
 
         existingTokens.add(token);
 
-        MemAuthDAO.db.put(data.username, existingTokens);
+        MemAuthDAO.DB.put(data.username, existingTokens);
 
         return new AuthData(token, data.username);
     }
 
     @Override
     public AuthData getAuthData(String username) {
-        ArrayList<String> retrieved = MemAuthDAO.db.get(username);
+        ArrayList<String> retrieved = MemAuthDAO.DB.get(username);
 
         if (retrieved != null)
         {
@@ -47,7 +47,7 @@ public class MemAuthDAO implements AuthDAO {
     @Override
     public String getUsernameByToken(String token)
     {
-        for (var entry : MemAuthDAO.db.entrySet())
+        for (var entry : MemAuthDAO.DB.entrySet())
         {
             for (String existingToken : entry.getValue())
             {
@@ -64,7 +64,7 @@ public class MemAuthDAO implements AuthDAO {
     @Override
     public boolean tokenExists(String token)
     {
-        for (ArrayList<String> existingTokens : MemAuthDAO.db.values())
+        for (ArrayList<String> existingTokens : MemAuthDAO.DB.values())
         {
             for (String existingToken : existingTokens)
             {
@@ -79,7 +79,7 @@ public class MemAuthDAO implements AuthDAO {
 
     @Override
     public boolean deleteAuthData(AuthData data) {
-        MemAuthDAO.db.remove(data.username);
+        MemAuthDAO.DB.remove(data.username);
 
         return true;
     }
@@ -87,7 +87,7 @@ public class MemAuthDAO implements AuthDAO {
     @Override
     public boolean deleteAuthData(String token)
     {
-        for (var entry : MemAuthDAO.db.entrySet())
+        for (var entry : MemAuthDAO.DB.entrySet())
         {
             for (String existingToken : entry.getValue())
             {
@@ -104,12 +104,12 @@ public class MemAuthDAO implements AuthDAO {
     @Override
     public Collection<ArrayList<String>> getAllAsList()
     {
-        return MemAuthDAO.db.values();
+        return MemAuthDAO.DB.values();
     }
 
     @Override
     public void reset()
     {
-        MemAuthDAO.db.clear();
+        MemAuthDAO.DB.clear();
     }
 }

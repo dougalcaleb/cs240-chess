@@ -60,12 +60,6 @@ public class UserService extends BaseService {
             throw new DataAccessException("User does not exist");
         }
 
-//        AuthData existing = authAccess.getAuthData(data.username);
-//        if (existing != null)
-//        {
-//            throw new RuntimeException("User is already logged in");
-//        }
-
         try
         {
             return authAccess.createAuth(data);
