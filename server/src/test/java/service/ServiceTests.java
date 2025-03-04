@@ -49,7 +49,7 @@ public class ServiceTests {
      */
 
     @Test
-    public void auth_logoutAuthRoutesCorrectly()
+    public void authLogoutAuthRoutesCorrectly()
     {
         BaseService.authAccess.setDB(Map.of(
             "user1", new ArrayList<>(Arrays.asList("auth-token-1"))
@@ -70,7 +70,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void auth_logoutAuthThrows()
+    public void authLogoutAuthThrows()
     {
         BaseService.authAccess.setDB(Map.of(
             "user1", new ArrayList<>(Arrays.asList("auth-token-1"))
@@ -91,7 +91,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void auth_verifyAuthPasses()
+    public void authVerifyAuthPasses()
     {
         BaseService.authAccess.setDB(Map.of(
             "user1", new ArrayList<>(Arrays.asList("auth-token-1"))
@@ -112,7 +112,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void auth_verifyAuthThrows()
+    public void authVerifyAuthThrows()
     {
         BaseService.authAccess.setDB(Map.of(
             "user1", new ArrayList<>(Arrays.asList("auth-token-1"))
@@ -133,7 +133,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void auth_getUsernameGetsUsername()
+    public void authGetUsernameGetsUsername()
     {
         BaseService.authAccess.setDB(Map.of(
             "user1", new ArrayList<>(Arrays.asList("auth-token-1"))
@@ -143,7 +143,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void auth_getUsernameFailsOnNonexistentToken()
+    public void authGetUsernameFailsOnNonexistentToken()
     {
         BaseService.authAccess.setDB(Map.of(
             "user1", new ArrayList<>(Arrays.asList("auth-token-1"))
@@ -153,7 +153,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void auth_getAllReturnsFullDbList()
+    public void authGetAllReturnsFullDbList()
     {
         BaseService.authAccess.setDB(Map.of(
             "user1", new ArrayList<>(Arrays.asList("auth-token-1")),
@@ -169,7 +169,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void auth_getAllDoesNotReturnNull()
+    public void authGetAllDoesNotReturnNull()
     {
         BaseService.authAccess.setDB(Map.of(
                 "user1", new ArrayList<>(Arrays.asList("auth-token-1")),
@@ -180,7 +180,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void auth_resetGoesThrough()
+    public void authResetGoesThrough()
     {
         Assertions.assertDoesNotThrow(() -> auth.reset());
     }
@@ -193,7 +193,7 @@ public class ServiceTests {
      */
 
     @Test
-    public void user_registerCompletes()
+    public void userRegisterCompletes()
     {
         RegisterResult actual = user.registerUser(new UserData("user1", "pw1", "e@mail.com"));
 
@@ -206,7 +206,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void user_registerFailsDouble()
+    public void userRegisterFailsDouble()
     {
         RegisterResult actual1 = user.registerUser(new UserData("user1", "pw1", "e@mail.com"));
         RegisterResult actual2 = user.registerUser(new UserData("user1", "pw1", "e@mail.com"));
@@ -222,7 +222,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void user_loginUserCompletes()
+    public void userLoginUserCompletes()
     {
         UserData uData = new UserData("user1", "pw1", "e@mail.com");
         user.registerUser(uData);
@@ -241,7 +241,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void user_loginUserDoesNotLoginNonexistentUser()
+    public void userLoginUserDoesNotLoginNonexistentUser()
     {
         UserData uData = new UserData("user1", "pw1", "e@mail.com");
         user.registerUser(uData);
@@ -260,7 +260,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void user_getAllReturnsFullDbList()
+    public void userGetAllReturnsFullDbList()
     {
         BaseService.userAccess.setDB(Map.of(
             "user1", new UserData("user1", "pw1", "e@mail.com"),
@@ -276,7 +276,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void user_getAllDoesNotReturnNullOrEmpty()
+    public void userGetAllDoesNotReturnNullOrEmpty()
     {
         BaseService.userAccess.setDB(Map.of(
                 "user1", new UserData("user1", "pw1", "e@mail.com"),
@@ -290,7 +290,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void user_resetGoesThrough()
+    public void userResetGoesThrough()
     {
         Assertions.assertDoesNotThrow(() -> user.reset());
     }
@@ -302,20 +302,20 @@ public class ServiceTests {
      */
 
     @Test
-    public void game_createGameCompletes()
+    public void gameCreateGameCompletes()
     {
         Assertions.assertDoesNotThrow(() -> game.createGame("coolgame"));
     }
 
     @Test
-    public void game_createGameThrows()
+    public void gameCreateGameThrows()
     {
         Assertions.assertDoesNotThrow(() -> game.createGame("coolgame"));
         Assertions.assertThrows(GameTakenException.class, () -> game.createGame("coolgame"));
     }
 
     @Test
-    public void game_joinGameCompletes()
+    public void gameJoinGameCompletes()
     {
         try {
             game.createGame("coolgame");
@@ -325,7 +325,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void game_joinGameThrows()
+    public void gameJoinGameThrows()
     {
         try {
             game.createGame("coolgame");
@@ -336,7 +336,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void game_getAllReturnsFullDbList()
+    public void gameGetAllReturnsFullDbList()
     {
         BaseService.gameAccess.setDB(Map.of(
             2345, new GameData(2345, "userw", "userb", "game1"),
@@ -352,7 +352,7 @@ public class ServiceTests {
     }
 
     @Test
-    public void game_getAllDoesNotReturnNullOrEmpty()
+    public void gameGetAllDoesNotReturnNullOrEmpty()
     {
         BaseService.gameAccess.setDB(Map.of(
                 2345, new GameData(2345, "userw", "userb", "game1"),
