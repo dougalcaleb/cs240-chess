@@ -7,6 +7,7 @@ import server.Server;
 import spark.Request;
 import spark.Response;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class DumpHandler extends BaseRequestHandler  {
@@ -18,7 +19,7 @@ public class DumpHandler extends BaseRequestHandler  {
     @Override
     public String HandleRequest() {
         Collection<UserData> userData = Server.userAccess.getAll();
-        Collection<String> authData = Server.authAccess.getAll();
+        Collection<ArrayList<String>> authData = Server.authAccess.getAll();
         Collection<GameData> gameData = Server.gameAccess.getAll();
         DumpRecord dump = new DumpRecord(userData, authData, gameData);
 

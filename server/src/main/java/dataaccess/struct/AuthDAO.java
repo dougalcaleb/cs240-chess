@@ -3,6 +3,7 @@ package dataaccess.struct;
 import model.AuthData;
 import model.UserData;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public interface AuthDAO {
@@ -15,7 +16,7 @@ public interface AuthDAO {
 
     public boolean deleteAuthData(String token);
 
-    public Collection<String> getAllAsList();
+    public Collection<ArrayList<String>> getAllAsList();
 
     public boolean tokenExists(String token);
 

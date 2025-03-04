@@ -2,6 +2,7 @@ package service;
 
 import exceptions.AuthException;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class AuthService extends BaseService {
@@ -29,7 +30,7 @@ public class AuthService extends BaseService {
         return authAccess.getUsernameByToken(token);
     }
 
-    public Collection<String> getAll()
+    public Collection<ArrayList<String>> getAll()
     {
         return authAccess.getAllAsList();
     }
