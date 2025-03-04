@@ -20,7 +20,7 @@ public class MemGameDAO implements GameDAO {
     @Override
     public int setGame(GameData data)
     {
-        data.gameID = MemGameDAO.db.size();
+        data.gameID = MemGameDAO.db.size() + 1;
         MemGameDAO.db.put(data.gameID, data);
 
         return data.gameID;

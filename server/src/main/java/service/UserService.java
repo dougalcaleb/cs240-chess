@@ -32,7 +32,7 @@ public class UserService extends BaseService {
 
         try
         {
-            result.token = authAccess.createAuth(data);
+            result.authToken = authAccess.createAuth(data).authToken;
             result.loginSucceeded = true;
         }
         catch (Exception e)
@@ -40,6 +40,8 @@ public class UserService extends BaseService {
             result.loginSucceeded = false;
             return result;
         }
+
+        result.username = data.username;
 
         return result;
     }
@@ -58,11 +60,11 @@ public class UserService extends BaseService {
             throw new DataAccessException("User does not exist");
         }
 
-        AuthData existing = authAccess.getAuthData(data.username);
-        if (existing != null)
-        {
-            throw new RuntimeException("User is already logged in");
-        }
+//        AuthData existing = authAccess.getAuthData(data.username);
+//        if (existing != null)
+//        {
+//            throw new RuntimeException("User is already logged in");
+//        }
 
         try
         {

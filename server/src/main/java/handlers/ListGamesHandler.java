@@ -1,5 +1,6 @@
 package handlers;
 
+import models.GameList;
 import server.Server;
 import spark.Request;
 import spark.Response;
@@ -13,6 +14,6 @@ public class ListGamesHandler extends BaseRequestHandler {
     @Override
     public String HandleRequest() {
         res.status(200);
-        return serializeResponse(Server.gameAccess.getAll());
+        return serializeResponse(new GameList(Server.gameAccess.getAll()));
     }
 }

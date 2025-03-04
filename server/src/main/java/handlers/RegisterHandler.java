@@ -16,6 +16,16 @@ public class RegisterHandler extends BaseRequestHandler {
     @Override
     public String HandleRequest() {
         UserData input = (UserData) deserializeRequest(UserData.class);
+
+        if (
+            (input.password == null || (input.password != null && input.password.isBlank())) ||
+            (input.username == null || (input.username != null && input.username.isBlank())) ||
+            (input.email == null || (input.email != null && input.email.isBlank()))
+        ) {
+            res.status(400);
+            return serializeResponse(new ErrorMessage("Error: bad request (missing information)"));
+        }
+
         RegisterResult registrationResult = Server.userAccess.registerUser(input);
 
         if (registrationResult == null)

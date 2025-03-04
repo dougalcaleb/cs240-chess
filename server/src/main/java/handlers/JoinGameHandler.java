@@ -18,7 +18,7 @@ public class JoinGameHandler extends BaseRequestHandler {
     public String HandleRequest() {
         JoinGameRequest input = (JoinGameRequest) deserializeRequest(JoinGameRequest.class);
 
-        if (!input.playerColor().equals("WHITE") && !input.playerColor().equals("BLACK"))
+        if (input.playerColor() == null || (!input.playerColor().equals("WHITE") && !input.playerColor().equals("BLACK")))
         {
             res.status(400);
             return serializeResponse(new ErrorMessage("Error: bad request (invalid player color)"));

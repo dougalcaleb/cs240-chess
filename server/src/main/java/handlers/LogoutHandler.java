@@ -26,6 +26,7 @@ public class LogoutHandler extends BaseRequestHandler {
             return serializeResponse(new ErrorMessage(e.getMessage()));
         }
 
+        res.status(200);
         return serializeResponse(new Object());
     }
 }
