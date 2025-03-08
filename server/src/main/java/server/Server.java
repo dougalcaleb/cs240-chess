@@ -1,5 +1,6 @@
 package server;
 
+import dataaccess.DatabaseManager;
 import handlers.*;
 import service.AuthService;
 import service.GameService;
@@ -24,11 +25,7 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
-        // Register your endpoints and handle exceptions here.
-
-        //This line initializes the server and can be removed once you have a functioning endpoint 
-//        Spark.init();
-
+        // Endpoints
         Spark.get("/db", (req, res) -> new DumpHandler(req, res).handleRequest() );
 
         Spark.post("/user", (req, res) -> new RegisterHandler(req, res).handleRequest() );
@@ -46,6 +43,10 @@ public class Server {
         Spark.delete("/db", (req, res) -> new ResetDatabaseHandler(req, res).handleRequest() );
 
         Spark.awaitInitialization();
+
+        // Database
+        DatabaseManager.initDatabase(false);
+
         return Spark.port();
     }
 
