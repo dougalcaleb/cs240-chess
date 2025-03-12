@@ -4,6 +4,7 @@ import exceptions.DataAccessException;
 import model.AuthData;
 import model.RegisterResult;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Collection;
 
@@ -21,9 +22,7 @@ public class UserService extends BaseService {
 
         try
         {
-            //!!!!!!!!
-            // HASH PASSWORD HERE
-            //!!!!!!!!
+            data.password = BCrypt.hashpw(data.password, BCrypt.gensalt());
             userAccess.setUser(data);
             result.createSucceeded = true;
         }

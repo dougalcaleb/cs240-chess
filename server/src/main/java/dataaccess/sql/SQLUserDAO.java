@@ -4,6 +4,7 @@ import dataaccess.struct.BaseSQLDAO;
 import dataaccess.struct.UserDAO;
 import exceptions.DataAccessException;
 import model.UserData;
+import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -75,7 +76,7 @@ public class SQLUserDAO extends BaseSQLDAO implements UserDAO {
         try (ResultSet entries = executeSQLQuery("SELECT * FROM users WHERE username='" + data.username + "';")) {
             if (entries.next())
             {
-                return entries.getString(2).equals(data.password);
+                return BCrypt.checkpw(data.password, entries.getString(2));
             } else {
                 throw new DataAccessException("Could not get user - user does not exist");
             }
