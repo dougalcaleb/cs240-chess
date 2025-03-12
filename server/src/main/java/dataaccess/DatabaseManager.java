@@ -70,7 +70,7 @@ public class DatabaseManager {
      * }
      * </code>
      */
-    static Connection getConnection() throws DataAccessException {
+    public static Connection getConnection() throws DataAccessException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 

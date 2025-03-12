@@ -40,18 +40,6 @@ public class MemAuthDAO implements AuthDAO {
     }
 
     @Override
-    public AuthData getAuthData(String username) {
-        ArrayList<String> retrieved = MemAuthDAO.DB.get(username);
-
-        if (retrieved != null)
-        {
-            return new AuthData(retrieved.getLast(), username);
-        }
-
-        return null;
-    }
-
-    @Override
     public String getUsernameByToken(String token)
     {
         for (var entry : MemAuthDAO.DB.entrySet())
@@ -82,13 +70,6 @@ public class MemAuthDAO implements AuthDAO {
         }
 
         return false;
-    }
-
-    @Override
-    public boolean deleteAuthData(AuthData data) {
-        MemAuthDAO.DB.remove(data.username);
-
-        return true;
     }
 
     @Override

@@ -13,10 +13,6 @@ public interface AuthDAO {
 
     public AuthData createAuth(UserData data);
 
-    public AuthData getAuthData(String username);
-
-    public boolean deleteAuthData(AuthData data);
-
     public boolean deleteAuthData(String token);
 
     public Collection<ArrayList<String>> getAllAsList();
