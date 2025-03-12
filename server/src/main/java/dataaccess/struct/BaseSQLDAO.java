@@ -48,6 +48,19 @@ public abstract class BaseSQLDAO {
         }
     }
 
+    protected ResultSet executeSqlQueryWithStrReplacement(String statement, String value)
+    {
+        closeStatement();
+        try {
+            activeStatement = DatabaseManager.getConnection().prepareStatement(statement);
+            activeStatement.setString(1, value);
+            return activeStatement.executeQuery();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     protected ResultSet executeSQLGetKeys(String statement)
     {
         closeStatement();

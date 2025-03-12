@@ -15,7 +15,10 @@ import java.util.Map;
 public class SQLUserDAO extends BaseSQLDAO implements UserDAO {
     @Override
     public void setDB(Map<String, UserData> value) {
-        throw new RuntimeException("Not supported in SQL database mode.");
+        for (var entry : value.entrySet())
+        {
+            executeSQL("INSERT INTO users (username, password, email) VALUES ('"+entry.getValue().username+"', '"+entry.getValue().password+"', '"+entry.getValue().email+"');");
+        }
     }
 
     @Override

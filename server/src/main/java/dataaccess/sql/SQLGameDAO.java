@@ -13,7 +13,14 @@ import java.util.Map;
 public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
     @Override
     public void setDB(Map<Integer, GameData> value) {
-        throw new RuntimeException("Not supported in SQL database mode.");
+        for (var entry : value.entrySet())
+        {
+            String gameData = entry.getValue().game == null ? "null" : "'"+serialize(entry.getValue().game)+"'";
+            String bName = entry.getValue().blackUsername == null ? "null" : "'"+entry.getValue().blackUsername+"'";
+            String wName = entry.getValue().whiteUsername == null ? "null" : "'"+entry.getValue().whiteUsername+"'";
+            String values = "'"+entry.getValue().gameName+"', "+gameData+", "+bName+", "+wName;
+            executeSQL("INSERT INTO games (name, data, blackUser, whiteUser) VALUES ("+values+");");
+        }
     }
 
     @Override
@@ -39,10 +46,10 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
 
     @Override
     public int setGame(GameData data) {
-        String gameData = data.game == null ? "null" : "'"+serialize(data.game)+"'";
-        String bName = data.blackUsername == null ? "null" : "'"+data.blackUsername+"'";
-        String wName = data.whiteUsername == null ? "null" : "'"+data.whiteUsername+"'";
-        String values = "'"+data.gameName+"', "+gameData+", "+bName+", "+wName;
+        String gameData = data.game == null ? "null" : "\""+serialize(data.game)+"\"";
+        String bName = data.blackUsername == null ? "null" : "\""+data.blackUsername+"\"";
+        String wName = data.whiteUsername == null ? "null" : "\""+data.whiteUsername+"\"";
+        String values = "\""+data.gameName+"\", "+gameData+", "+bName+", "+wName;
         ResultSet entries = executeSQLGetKeys("INSERT INTO games (name, data, blackUser, whiteUser) VALUES ("+values+");");
         try {
             entries.next();
@@ -54,7 +61,7 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
 
     @Override
     public boolean gameExists(String gameName) {
-        try (ResultSet entries = executeSQLQuery("SELECT * FROM games WHERE name='" + gameName + "';")) {
+        try (ResultSet entries = executeSQLQuery("SELECT * FROM games WHERE name=\"" + gameName + "\";")) {
             if (entries.next())
             {
                 return true;

@@ -7,10 +7,7 @@ import model.UserData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class SQLAuthDAO extends BaseSQLDAO implements AuthDAO
 {
@@ -55,8 +52,11 @@ public class SQLAuthDAO extends BaseSQLDAO implements AuthDAO
     {
         try (ResultSet entries = executeSQLQuery("SELECT (username) FROM auth WHERE token='" + token + "';"))
         {
-            entries.next();
-            return entries.getString(1);
+            if (entries.next())
+            {
+                return entries.getString(1);
+            }
+            return null;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -64,29 +64,29 @@ public class SQLAuthDAO extends BaseSQLDAO implements AuthDAO
 
     public Collection<ArrayList<String>> getAllAsList()
     {
-        ArrayList<ArrayList<String>> tokenLists = new ArrayList<>();
+        Map<String, ArrayList<String>> tokenLists = new HashMap<>();
 
         try (ResultSet entries = executeSQLQuery("SELECT * FROM auth ORDER BY username LIMIT 0, 1000;"))
         {
-            String currentUsername = "";
             ArrayList<String> currentUserTokens = new ArrayList<>();
 
             while (entries.next())
             {
-                if (!entries.getString(1).equals(currentUsername))
+                String username = entries.getString(1);
+                String token = entries.getString(2);
+
+                if (!tokenLists.containsKey(username))
                 {
-                    tokenLists.add(new ArrayList<>(currentUserTokens));
-                    currentUserTokens.clear();
-                    currentUsername = entries.getString(1);
+                    tokenLists.put(username, new ArrayList<String>());
                 }
 
-                currentUserTokens.add(entries.getString(2));
+                tokenLists.get(username).add(token);
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
 
-        return tokenLists;
+        return tokenLists.values();
     }
 
     public void reset()
@@ -96,6 +96,12 @@ public class SQLAuthDAO extends BaseSQLDAO implements AuthDAO
 
     public void setDB(Map<String, ArrayList<String>> value)
     {
-        throw new RuntimeException("Not supported in SQL database mode.");
+        for (var userTokens : value.entrySet())
+        {
+            for (String token : userTokens.getValue())
+            {
+                executeSQL("INSERT INTO auth (username, token) VALUES ('"+userTokens.getKey()+"', '"+token+"');");
+            }
+        }
     }
 }

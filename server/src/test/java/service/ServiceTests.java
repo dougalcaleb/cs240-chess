@@ -339,13 +339,13 @@ public class ServiceTests {
     public void gameGetAllReturnsFullDbList()
     {
         BaseService.gameAccess.setDB(Map.of(
-            2345, new GameData(2345, "userw", "userb", "game1"),
-            3456, new GameData(3456, "userw1", "userb1", "game2")
+            1, new GameData(1, "userw", "userb", "game1"),
+            2, new GameData(2, "userw1", "userb1", "game2")
         ));
 
         ArrayList<GameData> expected = new ArrayList<>(Arrays.asList(
-            new GameData(3456, "userw1", "userb1", "game2"),
-            new GameData(2345, "userw", "userb", "game1")
+            new GameData(1, "userw1", "userb1", "game2"),
+            new GameData(2, "userw", "userb", "game1")
         ));
 
         Assertions.assertIterableEquals(expected, game.getAll());
