@@ -45,7 +45,7 @@ public class Server {
         Spark.awaitInitialization();
 
         // Database
-        DatabaseManager.initDatabase(false);
+        DatabaseManager.initDatabase(false, false);
 
         return Spark.port();
     }
