@@ -30,7 +30,8 @@ public class DatabaseManager {
                 }
                 Properties props = new Properties();
                 props.load(propStream);
-                DATABASE_NAME = props.getProperty("db.name");
+//                DATABASE_NAME = props.getProperty("db.name");
+                DATABASE_NAME = "chess";
                 USER = props.getProperty("db.user");
                 PASSWORD = props.getProperty("db.password");
 
