@@ -344,8 +344,8 @@ public class ServiceTests {
         ));
 
         ArrayList<GameData> expected = new ArrayList<>(Arrays.asList(
-            new GameData(1, "userw1", "userb1", "game2"),
-            new GameData(2, "userw", "userb", "game1")
+            new GameData(1, "userw", "userb", "game1"),
+            new GameData(2, "userw1", "userb1", "game2")
         ));
 
         Assertions.assertIterableEquals(expected, game.getAll());
