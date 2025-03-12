@@ -17,9 +17,9 @@ public class DatabaseManager {
     private static final String PASSWORD;
     private static final String CONNECTION_URL;
 
-    private static final String databaseSetupFile = "db-init.txt";
-    private static final String databaseSetupFileDropOld = "db-init-drop.txt";
-    private static final String sqlFileDelim = ";";
+    private static final String DATABASE_SETUP_FILE = "db-init.txt";
+    private static final String DATABASE_SETUP_FILE_DROP_OLD = "db-init-drop.txt";
+    private static final String SQL_FILE_DELIM = ";";
 
     /*
      * Load the database information for the db.properties file.
@@ -101,11 +101,11 @@ public class DatabaseManager {
             {
                 if (dropExisting)
                 {
-                    executeSqlFile(conn, databaseSetupFileDropOld);
+                    executeSqlFile(conn, DATABASE_SETUP_FILE_DROP_OLD);
                 }
                 else
                 {
-                    executeSqlFile(conn, databaseSetupFile);
+                    executeSqlFile(conn, DATABASE_SETUP_FILE);
                 }
             } catch (Exception e) {
                 throw new RuntimeException(e);
@@ -168,7 +168,7 @@ public class DatabaseManager {
     {
         try (Scanner scanner = new Scanner(Thread.currentThread().getContextClassLoader().getResourceAsStream(filePath)))
         {
-            scanner.useDelimiter(sqlFileDelim);
+            scanner.useDelimiter(SQL_FILE_DELIM);
 
             while (scanner.hasNext())
             {

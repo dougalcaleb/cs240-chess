@@ -17,7 +17,8 @@ public class SQLUserDAO extends BaseSQLDAO implements UserDAO {
     public void setDB(Map<String, UserData> value) {
         for (var entry : value.entrySet())
         {
-            executeSQL("INSERT INTO users (username, password, email) VALUES ('"+entry.getValue().username+"', '"+entry.getValue().password+"', '"+entry.getValue().email+"');");
+            String values = entry.getValue().username+"', '"+entry.getValue().password+"', '"+entry.getValue().email;
+            executeSQL("INSERT INTO users (username, password, email) VALUES ('"+values+"');");
         }
     }
 

@@ -17,10 +17,6 @@ public abstract class BaseSQLDAO {
         serializer = new Gson();
     }
 
-    protected <T> Object deseralize(String data, Class<T> returnClass) {
-        return serializer.fromJson(data, returnClass);
-    }
-
     protected String serialize(Object data)
     {
         return serializer.toJson(data);
@@ -47,19 +43,6 @@ public abstract class BaseSQLDAO {
             throw new RuntimeException(e);
         }
     }
-
-    protected ResultSet executeSqlQueryWithStrReplacement(String statement, String value)
-    {
-        closeStatement();
-        try {
-            activeStatement = DatabaseManager.getConnection().prepareStatement(statement);
-            activeStatement.setString(1, value);
-            return activeStatement.executeQuery();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
 
     protected ResultSet executeSQLGetKeys(String statement)
     {
