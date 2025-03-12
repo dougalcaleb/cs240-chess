@@ -22,9 +22,9 @@ public class SQLUserDAO extends BaseSQLDAO implements UserDAO {
         try (ResultSet entries = executeSQLQuery("SELECT * FROM users WHERE username='" + username + "';")) {
             entries.next();
             return new UserData(
-                entries.getString(0),
                 entries.getString(1),
-                entries.getString(2)
+                entries.getString(2),
+                entries.getString(3)
             );
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -33,7 +33,7 @@ public class SQLUserDAO extends BaseSQLDAO implements UserDAO {
 
     @Override
     public void setUser(UserData data) throws DataAccessException {
-        executeSQL("INSERT INTO users (username, password, email) VALUES ('"+data.username+"', "+data.password+"', "+data.email+"');");
+        executeSQL("INSERT INTO users (username, password, email) VALUES ('"+data.username+"', '"+data.password+"', '"+data.email+"');");
     }
 
     @Override
@@ -58,9 +58,9 @@ public class SQLUserDAO extends BaseSQLDAO implements UserDAO {
             while (entries.next())
             {
                 data.add(new UserData(
-                    entries.getString(0),
                     entries.getString(1),
-                    entries.getString(2)
+                    entries.getString(2),
+                    entries.getString(3)
                 ));
             }
         } catch (SQLException e) {
@@ -75,7 +75,7 @@ public class SQLUserDAO extends BaseSQLDAO implements UserDAO {
         try (ResultSet entries = executeSQLQuery("SELECT * FROM users WHERE username='" + data.username + "';")) {
             if (entries.next())
             {
-                return entries.getString(1).equals(data.password);
+                return entries.getString(2).equals(data.password);
             } else {
                 throw new DataAccessException("Could not get user - user does not exist");
             }

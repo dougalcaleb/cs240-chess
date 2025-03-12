@@ -23,7 +23,7 @@ public class SQLAuthDAO extends BaseSQLDAO implements AuthDAO
     {
         String token = generateToken();
 
-        executeSQL("INSERT INTO auth (username, token) VALUES ("+data.username+", "+token+");");
+        executeSQL("INSERT INTO auth (username, token) VALUES ('"+data.username+"', '"+token+"');");
 
         return new AuthData(token, data.username);
     }
@@ -56,7 +56,7 @@ public class SQLAuthDAO extends BaseSQLDAO implements AuthDAO
         try (ResultSet entries = executeSQLQuery("SELECT (username) FROM auth WHERE token='" + token + "';"))
         {
             entries.next();
-            return entries.getString(0);
+            return entries.getString(1);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -73,14 +73,14 @@ public class SQLAuthDAO extends BaseSQLDAO implements AuthDAO
 
             while (entries.next())
             {
-                if (!entries.getString(0).equals(currentUsername))
+                if (!entries.getString(1).equals(currentUsername))
                 {
                     tokenLists.add(new ArrayList<>(currentUserTokens));
                     currentUserTokens.clear();
-                    currentUsername = entries.getString(0);
+                    currentUsername = entries.getString(1);
                 }
 
-                currentUserTokens.add(entries.getString(1));
+                currentUserTokens.add(entries.getString(2));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

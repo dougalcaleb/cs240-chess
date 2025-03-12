@@ -24,10 +24,10 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
             while (entries.next())
             {
                 data.add(new GameData(
-                    entries.getInt(0),
+                    entries.getInt(1),
+                    entries.getString(5),
                     entries.getString(4),
-                    entries.getString(3),
-                    entries.getString(1)
+                    entries.getString(2)
                 ));
             }
         } catch (SQLException e) {
@@ -39,11 +39,14 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
 
     @Override
     public int setGame(GameData data) {
-        String values = data.gameName+", "+serialize(data.game)+", "+data.blackUsername+", "+data.whiteUsername;
-        ResultSet[] results = executeSQLQueryGetKeys("INSERT INTO games (name, data, blackUser, whiteUser) VALUES ("+values+");");
+        String gameData = data.game == null ? "null" : "'"+serialize(data.game)+"'";
+        String bName = data.blackUsername == null ? "null" : "'"+data.blackUsername+"'";
+        String wName = data.whiteUsername == null ? "null" : "'"+data.whiteUsername+"'";
+        String values = "'"+data.gameName+"', "+gameData+", "+bName+", "+wName;
+        ResultSet entries = executeSQLGetKeys("INSERT INTO games (name, data, blackUser, whiteUser) VALUES ("+values+");");
         try {
-            results[1].next();
-            return results[1].getInt(0);
+            entries.next();
+            return entries.getInt(1);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -77,14 +80,14 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
 
     @Override
     public GameData getGame(int gameID) {
-        try (ResultSet entries = executeSQLQuery("SELECT * FROM games WHERE name='" + gameID + "';")) {
+        try (ResultSet entries = executeSQLQuery("SELECT * FROM games WHERE id=" + gameID + ";")) {
             entries.next();
 
             return new GameData(
-                entries.getInt(0),
+                entries.getInt(1),
+                entries.getString(5),
                 entries.getString(4),
-                entries.getString(3),
-                entries.getString(1)
+                entries.getString(2)
             );
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -94,7 +97,7 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
     @Override
     public void setPlayerColor(int gameID, String username, String color) {
         String colName = color.equals("BLACK") ? "blackUser" : "whiteUser";
-        executeSQL("UPDATE games SET "+colName+"="+username+" WHERE id="+gameID+";");
+        executeSQL("UPDATE games SET "+colName+"='"+username+"' WHERE id="+gameID+";");
     }
 
     @Override
