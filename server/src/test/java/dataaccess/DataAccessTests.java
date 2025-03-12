@@ -7,6 +7,7 @@ import dataaccess.struct.AuthDAO;
 import dataaccess.struct.GameDAO;
 import dataaccess.struct.UserDAO;
 import model.AuthData;
+import model.GameData;
 import model.UserData;
 import org.junit.jupiter.api.*;
 import org.mindrot.jbcrypt.BCrypt;
@@ -329,4 +330,143 @@ public class DataAccessTests {
      * GameDAO
      * =========================================================================================
      */
+
+    @Test
+    public void gameSetGameReturnsNewGameID()
+    {
+        int id = gamedao.setGame(
+            new GameData(999, "wUser", "bUser", "game1")
+        );
+        Assertions.assertEquals(1, id);
+    }
+
+    @Test
+    public void gameSetGameCanInsertDuplicateGames()
+    {
+        int id1 = gamedao.setGame(
+            new GameData(999, "wUser", "bUser", "game1")
+        );
+        Assertions.assertEquals(1, id1);
+
+        int id2 = gamedao.setGame(
+            new GameData(999, "wUser", "bUser", "game1")
+        );
+        Assertions.assertEquals(2, id2);
+    }
+
+    @Test
+    public void gameGameExistsStringFindsExisting()
+    {
+        gamedao.setDB(Map.of(
+            1, new GameData(1, "userw", "userb", "game1"),
+            2, new GameData(2, "userw1", "userb1", "game2")
+        ));
+
+        boolean result = gamedao.gameExists("game1");
+
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void gameGameExistsGameIDFindsExisting()
+    {
+        gamedao.setDB(Map.of(
+                1, new GameData(1, "userw", "userb", "game1"),
+                2, new GameData(2, "userw1", "userb1", "game2")
+        ));
+
+        boolean result = gamedao.gameExists(2);
+
+        Assertions.assertTrue(result);
+    }
+
+    @Test
+    public void gameGameExistsStringDoesNotFindNonexistent()
+    {
+        gamedao.setDB(Map.of(
+                1, new GameData(1, "userw", "userb", "game1"),
+                2, new GameData(2, "userw1", "userb1", "game2")
+        ));
+
+        boolean result = gamedao.gameExists("coolgame");
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void gameGameExistsGameIDDoesNotFindNonexistent()
+    {
+        gamedao.setDB(Map.of(
+                1, new GameData(1, "userw", "userb", "game1"),
+                2, new GameData(2, "userw1", "userb1", "game2")
+        ));
+
+        boolean result = gamedao.gameExists(24);
+
+        Assertions.assertFalse(result);
+    }
+
+    @Test
+    public void gameGetGameFindsGame()
+    {
+        gamedao.setDB(Map.of(
+            1, new GameData(1, "userw", "userb", "game1"),
+            2, new GameData(2, "userw1", "userb1", "game2")
+        ));
+
+        GameData result = gamedao.getGame(2);
+
+        Assertions.assertEquals(
+                new GameData(2, "userw1", "userb1", "game2"),
+                result
+        );
+    }
+
+    @Test
+    public void gameGetGameDoesNotFindNonexistent()
+    {
+        gamedao.setDB(Map.of(
+            1, new GameData(1, "userw", "userb", "game1"),
+            2, new GameData(2, "userw1", "userb1", "game2")
+        ));
+
+        GameData result = gamedao.getGame(224);
+
+        Assertions.assertNull(result);
+    }
+
+    @Test
+    public void gameSetPlayerColorCompletes()
+    {
+        gamedao.setDB(Map.of(
+            1, new GameData(1, null, null, "game1"),
+            2, new GameData(2, null, null, "game2")
+        ));
+
+        gamedao.setPlayerColor(2, "whiteuser", "WHITE");
+
+        GameData data = gamedao.getGame(2);
+
+        Assertions.assertEquals("whiteuser", data.whiteUsername);
+        Assertions.assertNull(data.blackUsername);
+    }
+
+    @Test
+    public void gameSetPlayerColorDoesNotUpdateNonexistent()
+    {
+        gamedao.setDB(Map.of(
+            1, new GameData(1, null, null, "game1"),
+            2, new GameData(2, null, null, "game2")
+        ));
+
+        gamedao.setPlayerColor(200, "whiteuser", "WHITE");
+
+        GameData data1 = gamedao.getGame(1);
+        GameData data2 = gamedao.getGame(2);
+
+        Assertions.assertNull(data1.whiteUsername);
+        Assertions.assertNull(data1.blackUsername);
+        Assertions.assertNull(data2.whiteUsername);
+        Assertions.assertNull(data2.blackUsername);
+    }
 }
