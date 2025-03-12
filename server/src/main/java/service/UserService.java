@@ -21,6 +21,9 @@ public class UserService extends BaseService {
 
         try
         {
+            //!!!!!!!!
+            // HASH PASSWORD HERE
+            //!!!!!!!!
             userAccess.setUser(data);
             result.createSucceeded = true;
         }
