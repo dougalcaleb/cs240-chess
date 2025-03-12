@@ -1,15 +1,12 @@
 DROP DATABASE chess;
 
-DROP TABLE users;
-DROP TABLE auth;
-DROP TABLE games;
-
 CREATE DATABASE IF NOT EXISTS chess;
 USE chess;
 
 CREATE TABLE IF NOT EXISTS users (
     `username` VARCHAR(256) NOT NULL,
     `password` VARCHAR(256) NOT NULL,
+     `email` VARCHAR(256) DEFAULT NULL,
     PRIMARY KEY (`username`)
 ) CHARSET=utf8mb4;
 

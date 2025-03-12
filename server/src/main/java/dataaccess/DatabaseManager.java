@@ -70,21 +70,29 @@ public class DatabaseManager {
      * }
      * </code>
      */
-    public static Connection getConnection() throws DataAccessException {
+    public static Connection getConnection(boolean dbExists) throws DataAccessException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
 
             var conn = DriverManager.getConnection(CONNECTION_URL, USER, PASSWORD);
-            conn.setCatalog(DATABASE_NAME);
+            if (dbExists)
+            {
+                conn.setCatalog(DATABASE_NAME);
+            }
             return conn;
         } catch (Exception e) {
             throw new DataAccessException(e.getMessage());
         }
     }
 
+    public static Connection getConnection() throws DataAccessException
+    {
+        return getConnection(true);
+    }
+
     public static void initDatabase(boolean dropExisting) throws RuntimeException
     {
-        try (var conn = getConnection())
+        try (var conn = getConnection(false))
         {
             if (dropExisting)
             {
