@@ -88,14 +88,16 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
     @Override
     public GameData getGame(int gameID) {
         try (ResultSet entries = executeSQLQuery("SELECT * FROM games WHERE id=" + gameID + ";")) {
-            entries.next();
-
-            return new GameData(
-                entries.getInt(1),
-                entries.getString(5),
-                entries.getString(4),
-                entries.getString(2)
-            );
+            if (entries.next())
+            {
+                return new GameData(
+                    entries.getInt(1),
+                    entries.getString(5),
+                    entries.getString(4),
+                    entries.getString(2)
+                );
+            }
+            return null;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
