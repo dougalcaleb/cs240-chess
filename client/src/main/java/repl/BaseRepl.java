@@ -6,6 +6,7 @@ public abstract class BaseRepl {
     public boolean running = true;
     public static String authToken = null;
     public static String username = null;
+    public static int gameId = -1;
     protected Map<String, String[]> helpText;
     protected BaseRepl newRepl = null;
     public static final String INDENT = "   ";

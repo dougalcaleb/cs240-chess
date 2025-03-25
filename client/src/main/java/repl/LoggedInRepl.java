@@ -57,8 +57,14 @@ public class LoggedInRepl extends BaseRepl {
                 FacadeResult result = ServerFacade.list();
                 yield result.message();
             }
-            case "join":
-                yield "";
+            case "join": {
+                FacadeResult result = ServerFacade.join(commandArgs);
+                if (result.success())
+                {
+                    newRepl = new InGameRepl();
+                }
+                yield INDENT + result.message();
+            }
             case "observe":
                 yield "";
             case "help":

@@ -34,7 +34,7 @@ public class Main {
             }
             catch (Exception e)
             {
-                System.err.print(e.toString());
+                System.err.print(e.toString() + "\n");
             }
         }
     }

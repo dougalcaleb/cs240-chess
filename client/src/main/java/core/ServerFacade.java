@@ -182,6 +182,40 @@ public class ServerFacade {
         return new FacadeResult(finalResultSuccess, finalResultMessage);
     }
 
+    public static FacadeResult join(String[] args)
+    {
+        if (args.length != 2)
+        {
+            throw new RuntimeException("Invalid arguments: expected 2 arguments, got " + args.length);
+        }
+
+        args[1] = args[1].toUpperCase();
+
+        if (!args[1].equals("WHITE") && !args[1].equals("BLACK"))
+        {
+            throw new RuntimeException("Invalid arguments: argument [color] should match (WHITE|BLACK)");
+        }
+
+        boolean finalResultSuccess = false;
+        String finalResultMessage = "";
+
+        try {
+            httpRequest("/game", "PUT", new JoinGameRequest(args[1], Integer.parseInt(args[0])), EmptyResult.class);
+            BaseRepl.gameId = Integer.parseInt(args[0]);
+            finalResultMessage = "Successfully joined game";
+            finalResultSuccess = true;
+        } catch (RequestError e) {
+            switch (e.status)
+            {
+                case 403 -> finalResultMessage = "Color already taken";
+                case 400 -> finalResultMessage = "Game does not exist";
+                default -> finalResultMessage = "Server error: " + e.getMessage();
+            };
+        }
+
+        return new FacadeResult(finalResultSuccess, finalResultMessage);
+    }
+
     private static <T> T httpRequest(String endpoint, String method, Object body, Class<T> responseSchema) throws RequestError
     {
         try
