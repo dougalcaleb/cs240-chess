@@ -72,7 +72,8 @@ public class ServerFacade {
         } catch (RequestError e) {
             switch (e.status)
             {
-                case 401 -> finalResultMessage = "User '"+args[0]+"' does not exist.";
+                case 401 -> finalResultMessage = "User '"+args[0]+"' does not exist";
+                case 403 -> finalResultMessage = "Invalid credentials";
                 default -> finalResultMessage = "Server error: " + e.getMessage();
             };
         }
