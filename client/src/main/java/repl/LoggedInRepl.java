@@ -66,7 +66,7 @@ public class LoggedInRepl extends BaseRepl {
                 yield INDENT + result.message();
             }
             case "observe":
-                yield "";
+                yield INDENT + "Not implemented";
             case "help":
                 if (args.length > 1)
                 {

@@ -13,8 +13,14 @@ public abstract class BaseRepl {
 
     public abstract String getPrompt();
     public abstract String evaluate(String[] args);
+
     public BaseRepl getActiveRepl() {
         return newRepl;
+    }
+
+    public void resetActiveRepl()
+    {
+        newRepl = null;
     }
 
     protected String printHelpText()

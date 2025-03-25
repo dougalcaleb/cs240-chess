@@ -28,6 +28,8 @@ public class Main {
                 if (repl.getActiveRepl() != null)
                 {
                     repl = repl.getActiveRepl();
+                    // probably not necessary because garbage collection but...
+                    repl.resetActiveRepl();
                 }
 
                 System.out.print(result);

@@ -1,5 +1,8 @@
 package repl;
 
+import core.ServerFacade;
+import model.FacadeResult;
+
 import java.util.Map;
 
 import static ui.EscapeSequences.*;
@@ -34,6 +37,14 @@ public class InGameRepl extends BaseRepl {
 
         return switch (args[0])
         {
+            case "logout": {
+                FacadeResult result = ServerFacade.logout();
+                if (result.success())
+                {
+                    newRepl = new LoggedOutRepl();
+                }
+                yield INDENT + result.message();
+            }
             case "help":
                 if (args.length > 1)
                 {
@@ -43,6 +54,8 @@ public class InGameRepl extends BaseRepl {
             case "quit":
                 running = false;
                 yield "";
+            case "move":
+                yield INDENT + "Not implemented";
             default: yield printHelpText();
         };
     }
