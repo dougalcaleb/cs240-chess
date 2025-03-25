@@ -14,10 +14,10 @@ public class LoggedOutRepl extends BaseRepl {
         super();
 
         helpText = Map.of(
-            "help", new String[] { "[command?]", "Displays available list of commands. Can display help about a specific command if provided" },
+            "help", new String[] { "[string command?]", "Displays available list of commands. Can display help about a specific command if provided" },
             "quit", new String[] { "", "Exits the program" },
-            "register", new String[] { "[username] [password] [email?]", "Registers a new user and logs in" },
-            "login", new String[] { "[username] [password]", "Logs in an existing user" }
+            "register", new String[] { "[string username] [string password] [string email?]", "Registers a new user and logs in" },
+            "login", new String[] { "[string username] [string password]", "Logs in an existing user" }
         );
     }
 

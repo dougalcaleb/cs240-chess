@@ -4,7 +4,6 @@ import java.util.Map;
 
 public abstract class BaseRepl {
     public boolean running = true;
-    public String authToken = null;
     protected static String authToken = null;
     protected static String username = null;
     protected Map<String, String[]> helpText;
@@ -23,7 +22,11 @@ public abstract class BaseRepl {
 
         for (var pair : helpText.entrySet())
         {
-            output.append("\n");
+            if (!output.isEmpty())
+            {
+                output.append("\n");
+            }
+            output.append(INDENT);
             output.append(pair.getKey());
             if (!pair.getValue()[0].isEmpty())
             {
@@ -46,7 +49,7 @@ public abstract class BaseRepl {
 
         StringBuilder output = new StringBuilder();
 
-        output.append("\n");
+        output.append(INDENT);
         output.append(value);
         if (!helpText.get(value)[0].isEmpty())
         {
