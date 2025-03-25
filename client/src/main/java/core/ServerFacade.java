@@ -136,7 +136,29 @@ public class ServerFacade {
     }
 
 
+    public static FacadeResult create(String[] args)
+    {
+        if (args.length != 1)
+        {
+            throw new RuntimeException("Invalid arguments: expected 1 argument, got " + args.length);
+        }
 
+        boolean finalResultSuccess = false;
+        String finalResultMessage = "";
+
+        try {
+            CreateGameResult response = httpRequest("/game", "POST", new NewGameRequest(args[0]), CreateGameResult.class);
+            finalResultMessage = "Successfully created game. ID is " + response.gameID;
+            finalResultSuccess = true;
+        } catch (RequestError e) {
+            switch (e.status)
+            {
+                default -> finalResultMessage = "Server error: " + e.getMessage();
+            };
+        }
+
+        return new FacadeResult(finalResultSuccess, finalResultMessage);
+    }
 
     private static <T> T httpRequest(String endpoint, String method, Object body, Class<T> responseSchema) throws RequestError
     {

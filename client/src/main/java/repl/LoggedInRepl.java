@@ -43,11 +43,14 @@ public class LoggedInRepl extends BaseRepl {
         {
             case "logout":
                 yield "";
-            case "create":
-                yield "";
-            case "list":
+            case "create": {
+                FacadeResult result = ServerFacade.create(commandArgs);
+                yield INDENT + result.message();
+            }
+            case "list": {
                 FacadeResult result = ServerFacade.list();
                 yield result.message();
+            }
             case "join":
                 yield "";
             case "observe":
