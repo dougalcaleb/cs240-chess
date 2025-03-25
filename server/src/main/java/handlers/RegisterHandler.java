@@ -19,8 +19,7 @@ public class RegisterHandler extends BaseRequestHandler {
 
         if (
             (input.password == null || (input.password != null && input.password.isBlank())) ||
-            (input.username == null || (input.username != null && input.username.isBlank())) ||
-            (input.email == null || (input.email != null && input.email.isBlank()))
+            (input.username == null || (input.username != null && input.username.isBlank()))
         ) {
             res.status(400);
             return serializeResponse(new ErrorMessage("Error: bad request (missing information)"));
