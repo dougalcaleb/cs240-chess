@@ -4,11 +4,11 @@ import java.util.Map;
 
 public abstract class BaseRepl {
     public boolean running = true;
-    protected static String authToken = null;
-    protected static String username = null;
+    public static String authToken = null;
+    public static String username = null;
     protected Map<String, String[]> helpText;
     protected BaseRepl newRepl = null;
-    protected final String INDENT = "   ";
+    public static final String INDENT = "   ";
 
     public abstract String getPrompt();
     public abstract String evaluate(String[] args);

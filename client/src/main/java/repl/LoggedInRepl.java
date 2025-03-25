@@ -1,5 +1,8 @@
 package repl;
 
+import core.ServerFacade;
+import model.FacadeResult;
+
 import java.util.Map;
 
 import static ui.EscapeSequences.*;
@@ -43,7 +46,8 @@ public class LoggedInRepl extends BaseRepl {
             case "create":
                 yield "";
             case "list":
-                yield "";
+                FacadeResult result = ServerFacade.list();
+                yield result.message();
             case "join":
                 yield "";
             case "observe":

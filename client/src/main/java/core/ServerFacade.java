@@ -11,6 +11,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ServerFacade {
 
@@ -79,6 +80,61 @@ public class ServerFacade {
         return new FacadeResult(finalResultSuccess, finalResultMessage);
     }
 
+    public static FacadeResult list()
+    {
+        boolean finalResultSuccess = false;
+        String finalResultMessage = "";
+
+        try {
+            ListGamesResult response = httpRequest("/game", "GET", null, ListGamesResult.class);
+            StringBuilder gameListBuilder = new StringBuilder();
+
+            int nameColWidth = 0;
+            int idColWidth = 4;
+
+            for (GameData game : response.games)
+            {
+                if (game.gameName.length() > nameColWidth)
+                {
+                    nameColWidth = game.gameName.length();
+                }
+            }
+
+            gameListBuilder.append(BaseRepl.INDENT);
+            gameListBuilder.append("Name");
+            gameListBuilder.append(" ".repeat(Math.max(0, nameColWidth - 4)));
+            gameListBuilder.append("  ");
+            gameListBuilder.append("ID  ");
+            gameListBuilder.append("Players");
+
+            for (GameData game : response.games)
+            {
+                gameListBuilder.append("\n");
+                gameListBuilder.append(BaseRepl.INDENT);
+                gameListBuilder.append(game.gameName);
+                gameListBuilder.append(" ".repeat(Math.max(0, nameColWidth - game.gameName.length())));
+                gameListBuilder.append("  ");
+                gameListBuilder.append(game.gameID);
+                gameListBuilder.append(" ".repeat(Math.max(0, idColWidth - String.valueOf(game.gameID).length())));
+                gameListBuilder.append("White: ");
+                gameListBuilder.append(Objects.requireNonNullElse(game.whiteUsername, "    "));
+                gameListBuilder.append(" ");
+                gameListBuilder.append("Black: ");
+                gameListBuilder.append(Objects.requireNonNullElse(game.blackUsername, "    "));
+            }
+
+            finalResultMessage = gameListBuilder.toString();
+            finalResultSuccess = true;
+        } catch (RequestError e) {
+            switch (e.status)
+            {
+                default -> finalResultMessage = "Server error: " + e.getMessage();
+            };
+        }
+
+        return new FacadeResult(finalResultSuccess, finalResultMessage);
+    }
+
 
 
 
@@ -91,9 +147,15 @@ public class ServerFacade {
             connection.setRequestMethod(method);
             connection.setDoOutput(true);
 
+            if (BaseRepl.authToken != null)
+            {
+                connection.addRequestProperty("Authorization", BaseRepl.authToken);
+            }
+
             if (body != null)
             {
                 connection.addRequestProperty("Content-Type", "application/json");
+
                 try (OutputStream toRequest = connection.getOutputStream())
                 {
                     toRequest.write(new Gson().toJson(body).getBytes());
