@@ -4,6 +4,7 @@ import java.util.Map;
 
 public abstract class BaseRepl {
     public boolean running = true;
+    public String authToken = null;
     protected Map<String, String[]> helpText;
 
     public abstract String getPrompt();

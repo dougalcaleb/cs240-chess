@@ -1,10 +1,14 @@
 package repl;
 
+import core.ServerFacade;
+
 import java.util.Map;
 
 import static ui.EscapeSequences.*;
 
 public class LoggedOutRepl extends BaseRepl {
+
+    private String loggedInAs = null;
 
     public LoggedOutRepl()
     {
@@ -24,10 +28,13 @@ public class LoggedOutRepl extends BaseRepl {
             throw new RuntimeException("No arguments given");
         }
 
+        String[] commandArgs = new String[args.length - 1];
+        System.arraycopy(args, 1, commandArgs, 0, commandArgs.length);
+
         return switch (args[0])
         {
             case "register":
-                yield "";
+                yield ServerFacade.register(commandArgs);
             case "login":
                 yield "";
             case "help":
