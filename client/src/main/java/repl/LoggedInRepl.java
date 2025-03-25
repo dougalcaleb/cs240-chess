@@ -41,8 +41,14 @@ public class LoggedInRepl extends BaseRepl {
 
         return switch (args[0])
         {
-            case "logout":
-                yield "";
+            case "logout": {
+                FacadeResult result = ServerFacade.logout();
+                if (result.success())
+                {
+                    newRepl = new LoggedOutRepl();
+                }
+                yield INDENT + result.message();
+            }
             case "create": {
                 FacadeResult result = ServerFacade.create(commandArgs);
                 yield INDENT + result.message();

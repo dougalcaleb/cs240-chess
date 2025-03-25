@@ -160,6 +160,28 @@ public class ServerFacade {
         return new FacadeResult(finalResultSuccess, finalResultMessage);
     }
 
+    public static FacadeResult logout()
+    {
+        boolean finalResultSuccess = false;
+        String finalResultMessage = "";
+
+        try {
+            httpRequest("/session", "DELETE", null, EmptyResult.class);
+            BaseRepl.setAuthToken(null);
+            BaseRepl.setUsername(null);
+            finalResultMessage = "Successfully logged out";
+            finalResultSuccess = true;
+        } catch (RequestError e) {
+            switch (e.status)
+            {
+                case 401 -> finalResultMessage = "Unauthorized";
+                default -> finalResultMessage = "Server error: " + e.getMessage();
+            };
+        }
+
+        return new FacadeResult(finalResultSuccess, finalResultMessage);
+    }
+
     private static <T> T httpRequest(String endpoint, String method, Object body, Class<T> responseSchema) throws RequestError
     {
         try
