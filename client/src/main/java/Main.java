@@ -24,6 +24,12 @@ public class Main {
             try
             {
                 String result = repl.evaluate(input.nextLine().split(" +"));
+
+                if (repl.getActiveRepl() != null)
+                {
+                    repl = repl.getActiveRepl();
+                }
+
                 System.out.print(result);
             }
             catch (Exception e)

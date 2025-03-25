@@ -2,8 +2,8 @@ package core;
 
 import com.google.gson.Gson;
 import exception.RequestError;
-import model.RegisterRequest;
-import model.RegisterResult;
+import model.*;
+import repl.BaseRepl;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -21,23 +21,62 @@ public class ServerFacade {
         serverURL = url;
     }
 
-    public static String register(String[] args)
+    public static FacadeResult register(String[] args)
     {
-        if (args.length != 3)
+        if (args.length < 2 || args.length > 3)
         {
-            throw new RuntimeException("Invalid arguments: expected 3 arguments, got " + args.length);
+            throw new RuntimeException("Invalid arguments: expected 2 or 3 arguments, got " + args.length);
         }
 
+        boolean finalResultSuccess = false;
+        String finalResultMessage = "";
+
+        String email = args.length == 2
+            ? null
+            : args[2];
+
         try {
-            RegisterResult response = httpRequest("/user", "POST", new RegisterRequest(args[0], args[1], args[2]), RegisterResult.class);
-            return "Successfully registered and logged in as " + response.username;
+            RegisterResult response = httpRequest("/user", "POST", new RegisterRequest(args[0], args[1], email), RegisterResult.class);
+            BaseRepl.setAuthToken(response.authToken);
+            BaseRepl.setUsername(response.username);
+            finalResultMessage = "Successfully registered and logged in as " + response.username;
+            finalResultSuccess = true;
         } catch (RequestError e) {
-            return switch (e.status)
+            switch (e.status)
             {
-                case 403 -> "Username '"+args[0]+"' is already taken.";
-                default -> "Server error: " + e.getMessage();
+                case 403 -> finalResultMessage = "Username '"+args[0]+"' is already taken.";
+                default -> finalResultMessage = "Server error: " + e.getMessage();
             };
         }
+
+        return new FacadeResult(finalResultSuccess, finalResultMessage);
+    }
+
+    public static FacadeResult login(String[] args)
+    {
+        if (args.length != 2)
+        {
+            throw new RuntimeException("Invalid arguments: expected 2 arguments, got " + args.length);
+        }
+
+        boolean finalResultSuccess = false;
+        String finalResultMessage = "";
+
+        try {
+            LoginResult response = httpRequest("/session", "POST", new LoginRequest(args[0], args[1]), LoginResult.class);
+            BaseRepl.setAuthToken(response.authToken);
+            BaseRepl.setUsername(response.username);
+            finalResultMessage = "Successfully logged in as " + response.username;
+            finalResultSuccess = true;
+        } catch (RequestError e) {
+            switch (e.status)
+            {
+                case 401 -> finalResultMessage = "User '"+args[0]+"' does not exist.";
+                default -> finalResultMessage = "Server error: " + e.getMessage();
+            };
+        }
+
+        return new FacadeResult(finalResultSuccess, finalResultMessage);
     }
 
 

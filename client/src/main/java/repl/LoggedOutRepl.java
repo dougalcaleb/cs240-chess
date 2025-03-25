@@ -1,14 +1,13 @@
 package repl;
 
 import core.ServerFacade;
+import model.FacadeResult;
 
 import java.util.Map;
 
 import static ui.EscapeSequences.*;
 
 public class LoggedOutRepl extends BaseRepl {
-
-    private String loggedInAs = null;
 
     public LoggedOutRepl()
     {
@@ -33,10 +32,22 @@ public class LoggedOutRepl extends BaseRepl {
 
         return switch (args[0])
         {
-            case "register":
-                yield ServerFacade.register(commandArgs);
-            case "login":
-                yield "";
+            case "register": {
+                FacadeResult result = ServerFacade.register(commandArgs);
+                if (result.success())
+                {
+                    newRepl = new LoggedInRepl();
+                }
+                yield INDENT + result.message();
+            }
+            case "login": {
+                FacadeResult result = ServerFacade.login(commandArgs);
+                if (result.success())
+                {
+                    newRepl = new LoggedInRepl();
+                }
+                yield INDENT + result.message();
+            }
             case "help":
                 if (args.length > 1)
                 {
@@ -52,6 +63,6 @@ public class LoggedOutRepl extends BaseRepl {
 
     public String getPrompt()
     {
-        return "\n\n" + RESET_TEXT_COLOR + SET_TEXT_FAINT + SET_TEXT_ITALIC + " LOGGED OUT >>> " + RESET_TEXT_ITALIC + RESET_TEXT_BOLD_FAINT;
+        return "\n" + RESET_TEXT_COLOR + SET_TEXT_FAINT + SET_TEXT_ITALIC + "LOGGED OUT >>> " + RESET_TEXT_ITALIC + RESET_TEXT_BOLD_FAINT;
     }
 }
