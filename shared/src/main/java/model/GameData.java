@@ -26,6 +26,14 @@ public class GameData {
         this.game = game;
     }
 
+    public GameData(int gameID, String wUsername, String bUsername, String name)
+    {
+        this.gameID = gameID;
+        whiteUsername = wUsername;
+        blackUsername = bUsername;
+        gameName = name;
+    }
+
     public GameData() {}
 
     @Override
