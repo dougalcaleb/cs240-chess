@@ -4,8 +4,8 @@ import chess.ChessGame;
 import clientmodel.*;
 import com.google.gson.Gson;
 import exception.RequestError;
-import sharedmodel.*;
 import repl.BaseRepl;
+import sharedmodel.*;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -77,7 +77,7 @@ public class ServerFacade {
         } catch (RequestError e) {
             switch (e.status)
             {
-                case 401 -> finalResultMessage = "User '"+args[0]+"' does not exist.";
+                case 401 -> finalResultMessage = "Unauthorized";
                 default -> finalResultMessage = "Server error: " + e.getMessage();
             };
         }
@@ -137,6 +137,7 @@ public class ServerFacade {
         } catch (RequestError e) {
             switch (e.status)
             {
+                case 401 -> finalResultMessage = "Unauthorized";
                 default -> finalResultMessage = "Server error: " + e.getMessage();
             };
         }

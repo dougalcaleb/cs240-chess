@@ -50,6 +50,13 @@ public class Server {
         return Spark.port();
     }
 
+    public void drop()
+    {
+        Server.gameAccess.reset();
+        Server.userAccess.reset();
+        Server.authAccess.reset();
+    }
+
     public void stop() {
         Spark.stop();
         Spark.awaitStop();
