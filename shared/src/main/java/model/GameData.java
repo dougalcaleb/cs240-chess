@@ -14,6 +14,7 @@ public class GameData {
     public GameData(String name)
     {
         gameName = name;
+        game = new ChessGame();
     }
 
     public GameData(int gameID, String wUsername, String bUsername, String name)

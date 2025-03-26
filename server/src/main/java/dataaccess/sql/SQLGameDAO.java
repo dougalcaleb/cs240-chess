@@ -46,7 +46,7 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
 
     @Override
     public int setGame(GameData data) {
-        String gameData = data.game == null ? "null" : "\""+serialize(data.game)+"\"";
+        String gameData = data.game == null ? "null" : "'"+serializeGame(data.game)+"'";
         String bName = data.blackUsername == null ? "null" : "\""+data.blackUsername+"\"";
         String wName = data.whiteUsername == null ? "null" : "\""+data.whiteUsername+"\"";
         String values = "\""+data.gameName+"\", "+gameData+", "+bName+", "+wName;

@@ -1,6 +1,7 @@
 package chess;
 
 import chess.movecalculators.*;
+import com.google.gson.annotations.Expose;
 
 import java.util.List;
 import java.util.Objects;
@@ -13,8 +14,11 @@ import java.util.Objects;
  */
 public class ChessPiece {
 
+    @Expose
     private final ChessGame.TeamColor teamColor;
+    @Expose
     private final PieceType type;
+    @Expose
     private ChessPosition currentPosition;
     private ChessBoard board;
 

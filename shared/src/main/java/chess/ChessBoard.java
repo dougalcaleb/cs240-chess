@@ -1,6 +1,7 @@
 package chess;
 
 import chess.ChessGame.TeamColor;
+import com.google.gson.annotations.Expose;
 
 import java.util.*;
 
@@ -12,6 +13,7 @@ import java.util.*;
  */
 public class ChessBoard {
 
+    @Expose
     private ChessPiece[][] board;
 
     public ChessBoard()

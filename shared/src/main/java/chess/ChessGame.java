@@ -2,6 +2,7 @@ package chess;
 
 import chess.movecalculators.KingInCheckCalculator;
 import chess.movecalculators.PawnMovesCalculator;
+import com.google.gson.annotations.Expose;
 
 import java.util.Collection;
 import java.util.List;
@@ -14,8 +15,10 @@ import java.util.List;
  */
 public class ChessGame {
 
-    private ChessBoard board;
-    private TeamColor currentTurn;
+    @Expose
+    public ChessBoard board;
+    @Expose
+    public TeamColor currentTurn;
 
     public ChessGame() {
         currentTurn = TeamColor.WHITE;
