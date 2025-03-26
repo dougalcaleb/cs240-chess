@@ -115,9 +115,7 @@ public abstract class BaseRepl {
             int idx = 7;
             for (ChessPiece[] row : initialBoard)
             {
-                List<ChessPiece> reversed = Arrays.asList(row);
-                Collections.reverse(reversed);
-                finalBoard[idx] = reversed.toArray(new ChessPiece[8]);
+                finalBoard[idx] = row;
                 idx--;
             }
 
@@ -127,7 +125,15 @@ public abstract class BaseRepl {
         }
         else
         {
-            finalBoard = initialBoard;
+            int idx = 0;
+            for (ChessPiece[] row : initialBoard)
+            {
+                List<ChessPiece> reversed = Arrays.asList(row);
+                Collections.reverse(reversed);
+                finalBoard[idx] = reversed.toArray(new ChessPiece[8]);
+                finalBoard[idx] = row;
+                idx++;
+            }
 
             List<String> revRank = Arrays.asList(colNames);
             Collections.reverse(revRank);
