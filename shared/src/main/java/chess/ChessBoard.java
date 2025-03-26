@@ -270,4 +270,8 @@ public class ChessBoard {
     public int hashCode() {
         return Arrays.deepHashCode(board);
     }
+
+    public ChessPiece[][] getBoardAsArray() {
+        return board;
+    }
 }

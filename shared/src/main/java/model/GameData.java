@@ -17,12 +17,13 @@ public class GameData {
         game = new ChessGame();
     }
 
-    public GameData(int gameID, String wUsername, String bUsername, String name)
+    public GameData(int gameID, String wUsername, String bUsername, String name, ChessGame game)
     {
         this.gameID = gameID;
         whiteUsername = wUsername;
         blackUsername = bUsername;
         gameName = name;
+        this.game = game;
     }
 
     public GameData() {}

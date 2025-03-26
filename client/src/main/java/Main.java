@@ -6,6 +6,8 @@ import repl.LoggedOutRepl;
 
 import java.util.Scanner;
 
+import static ui.EscapeSequences.*;
+
 public class Main {
     public static String serverURL = "http://localhost:8080";
 
@@ -20,9 +22,10 @@ public class Main {
 
         while (repl.running)
         {
-            System.out.print(repl.getPrompt());
+
             try
             {
+                System.out.print(SET_TEXT_ITALIC + SET_TEXT_COLOR_GREEN + repl.getPrompt() + RESET_TEXT_COLOR + RESET_TEXT_ITALIC);
                 String result = repl.evaluate(input.nextLine().split(" +"));
 
                 if (repl.getActiveRepl() != null)
@@ -36,7 +39,7 @@ public class Main {
             }
             catch (Exception e)
             {
-                System.err.print(e.toString() + "\n");
+                System.out.print( RESET_TEXT_COLOR + SET_TEXT_COLOR_RED + BaseRepl.INDENT + e.getMessage());
             }
         }
     }

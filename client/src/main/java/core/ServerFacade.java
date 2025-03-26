@@ -1,5 +1,6 @@
 package core;
 
+import chess.ChessGame;
 import com.google.gson.Gson;
 import exception.RequestError;
 import model.*;
@@ -12,6 +13,9 @@ import java.net.HttpURLConnection;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.Objects;
+
+import static ui.EscapeSequences.RESET_TEXT_BOLD_FAINT;
+import static ui.EscapeSequences.SET_TEXT_BOLD;
 
 public class ServerFacade {
 
@@ -101,12 +105,16 @@ public class ServerFacade {
                 }
             }
 
+            gameListBuilder.append(SET_TEXT_BOLD);
+
             gameListBuilder.append(BaseRepl.INDENT);
             gameListBuilder.append("Name");
             gameListBuilder.append(" ".repeat(Math.max(0, nameColWidth - 4)));
             gameListBuilder.append("  ");
             gameListBuilder.append("ID  ");
             gameListBuilder.append("Players");
+
+            gameListBuilder.append(RESET_TEXT_BOLD_FAINT);
 
             for (GameData game : response.games)
             {
@@ -202,7 +210,27 @@ public class ServerFacade {
 
         try {
             httpRequest("/game", "PUT", new JoinGameRequest(args[1], Integer.parseInt(args[0])), EmptyResult.class);
+            ListGamesResult games = httpRequest("/game", "GET", null, ListGamesResult.class);
+            GameData joining = null;
+
+            for (GameData gameData : games.games)
+            {
+                if (gameData.gameID == Integer.parseInt(args[0]))
+                {
+                    joining = gameData;
+                    break;
+                }
+            }
+
+            if (joining == null)
+            {
+                throw new RuntimeException("Game not found");
+            }
+
             BaseRepl.gameId = Integer.parseInt(args[0]);
+            BaseRepl.color = ChessGame.TeamColor.valueOf(args[1]);
+            BaseRepl.game = joining.game;
+
             finalResultMessage = "Successfully joined game";
             finalResultSuccess = true;
         } catch (RequestError e) {

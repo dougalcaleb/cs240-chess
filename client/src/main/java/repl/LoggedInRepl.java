@@ -1,11 +1,10 @@
 package repl;
 
+import chess.ChessGame;
 import core.ServerFacade;
 import model.FacadeResult;
 
 import java.util.Map;
-
-import static ui.EscapeSequences.*;
 
 public class LoggedInRepl extends BaseRepl {
 
@@ -26,7 +25,7 @@ public class LoggedInRepl extends BaseRepl {
 
     @Override
     public String getPrompt() {
-        return "\n" + RESET_TEXT_COLOR + SET_TEXT_FAINT + SET_TEXT_ITALIC + "LOGGED IN [" + BaseRepl.username + "] >>> " + RESET_TEXT_ITALIC + RESET_TEXT_BOLD_FAINT;
+        return "\n LOGGED IN [" + BaseRepl.username + "] > ";
     }
 
     @Override
@@ -62,8 +61,14 @@ public class LoggedInRepl extends BaseRepl {
                 if (result.success())
                 {
                     newRepl = new InGameRepl();
+                    yield INDENT + result.message()
+                            + "\n\n" + printChessboard(ChessGame.TeamColor.WHITE)
+                            + "\n" + printChessboard(ChessGame.TeamColor.BLACK);
+//                    yield INDENT + result.message();
                 }
-                yield INDENT + result.message();
+                else {
+                    yield INDENT + result.message();
+                }
             }
             case "observe":
                 yield INDENT + "Not implemented";

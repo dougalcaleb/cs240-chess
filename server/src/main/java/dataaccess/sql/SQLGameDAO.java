@@ -1,5 +1,7 @@
 package dataaccess.sql;
 
+import chess.ChessGame;
+import com.google.gson.Gson;
 import dataaccess.struct.BaseSQLDAO;
 import dataaccess.struct.GameDAO;
 import model.GameData;
@@ -34,7 +36,8 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
                     entries.getInt(1),
                     entries.getString(5),
                     entries.getString(4),
-                    entries.getString(2)
+                    entries.getString(2),
+                    new Gson().fromJson(entries.getString(3), ChessGame.class)
                 ));
             }
         } catch (SQLException e) {
@@ -94,7 +97,8 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
                     entries.getInt(1),
                     entries.getString(5),
                     entries.getString(4),
-                    entries.getString(2)
+                    entries.getString(2),
+                    new Gson().fromJson(entries.getString(3), ChessGame.class)
                 );
             }
             return null;

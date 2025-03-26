@@ -5,8 +5,6 @@ import model.FacadeResult;
 
 import java.util.Map;
 
-import static ui.EscapeSequences.*;
-
 public class LoggedOutRepl extends BaseRepl {
 
     public LoggedOutRepl()
@@ -63,6 +61,6 @@ public class LoggedOutRepl extends BaseRepl {
 
     public String getPrompt()
     {
-        return "\n" + RESET_TEXT_COLOR + SET_TEXT_FAINT + SET_TEXT_ITALIC + "LOGGED OUT >>> " + RESET_TEXT_ITALIC + RESET_TEXT_BOLD_FAINT;
+        return "\n LOGGED OUT > ";
     }
 }

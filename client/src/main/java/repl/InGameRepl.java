@@ -5,8 +5,6 @@ import model.FacadeResult;
 
 import java.util.Map;
 
-import static ui.EscapeSequences.*;
-
 public class InGameRepl extends BaseRepl {
     public InGameRepl()
     {
@@ -16,13 +14,13 @@ public class InGameRepl extends BaseRepl {
             "help", new String[] { "[string command?]", "Displays available list of commands. Can display help about a specific command if provided" },
             "quit", new String[] { "", "Exits the program" },
             "logout", new String[] { "", "Logs out the current user" },
-            "move", new String[] { "[string start] [string end]", "Logs out the current user" }
+            "move", new String[] { "[string start] [string end]", "Logs out the current user" },
+            "print", new String[] { "", "Prints the chessboard" }
         );
     }
     @Override
     public String getPrompt() {
-        return "\n" + RESET_TEXT_COLOR + SET_TEXT_FAINT + SET_TEXT_ITALIC +
-                "LOGGED IN [" + BaseRepl.username + "] {" + BaseRepl.gameId + "} >>> " + RESET_TEXT_ITALIC + RESET_TEXT_BOLD_FAINT;
+        return "\n LOGGED IN [" + BaseRepl.username + "] {" + BaseRepl.gameId + "} > ";
     }
 
     @Override
@@ -51,6 +49,8 @@ public class InGameRepl extends BaseRepl {
                     yield printHelpText(args[1]);
                 }
                 yield printHelpText();
+            case "print":
+                yield printChessboard();
             case "quit":
                 running = false;
                 yield "";
