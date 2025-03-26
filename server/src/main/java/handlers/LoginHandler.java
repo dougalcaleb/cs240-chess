@@ -24,7 +24,7 @@ public class LoginHandler extends BaseRequestHandler {
             loginData = Server.userAccess.loginUser(input);
             if (loginData == null)
             {
-                res.status(403);
+                res.status(401);
                 return serializeResponse(new ErrorMessage("Error: unauthorized (invalid credentials)"));
             }
         }
