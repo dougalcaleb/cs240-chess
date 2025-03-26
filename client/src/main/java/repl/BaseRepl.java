@@ -2,7 +2,7 @@ package repl;
 
 import chess.ChessGame;
 import chess.ChessPiece;
-import clientmodel.rgbColor;
+import clientmodel.RgbColor;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +21,13 @@ public abstract class BaseRepl {
     public static final String INDENT = "   ";
     public static ChessGame game;
     public static ChessGame.TeamColor color;
+
+    private static final RgbColor LIGHT_BG = new RgbColor(152,153,135);
+    private static final RgbColor DARK_BG = new RgbColor(59, 77, 42);
+    private static final RgbColor LIGHT_FG = new RgbColor(230, 230, 230);
+    private static final RgbColor DARK_FG = new RgbColor(15, 15, 15);
+    private static final RgbColor BORDER_BG = new RgbColor(0, 23, 7);
+    private static final RgbColor BORDER_FG = new RgbColor(26, 71, 39);
 
     public abstract String getPrompt();
     public abstract String evaluate(String[] args);
@@ -129,16 +136,8 @@ public abstract class BaseRepl {
 
         StringBuilder boardRepr = new StringBuilder();
 
-        boolean isLight = true;
-        rgbColor lightBg = new rgbColor(152,153,135);
-        rgbColor darkBg = new rgbColor(59, 77, 42);
-        rgbColor lightFg = new rgbColor(230, 230, 230);
-        rgbColor darkFg = new rgbColor(15, 15, 15);
-        rgbColor borderBg = new rgbColor(0, 23, 7);
-        rgbColor borderFg = new rgbColor(26, 71, 39);
-
-        boardRepr.append(getColorEsc(false, borderBg.red(), borderBg.green(), borderBg.blue()));
-        boardRepr.append(getColorEsc(true, borderFg.red(), borderFg.green(), borderFg.blue()));
+        boardRepr.append(getColorEsc(false, BORDER_BG.red(), BORDER_BG.green(), BORDER_BG.blue()));
+        boardRepr.append(getColorEsc(true, BORDER_FG.red(), BORDER_FG.green(), BORDER_FG.blue()));
         boardRepr.append(EM_SPACE);
         boardRepr.append("  ");
 
@@ -156,50 +155,11 @@ public abstract class BaseRepl {
 
         boardRepr.append("\n");
 
-        int rowIdx = 0;
-        for (ChessPiece[] row : finalBoard)
-        {
-            boardRepr.append(getColorEsc(false, borderBg.red(), borderBg.green(), borderBg.blue()));
-            boardRepr.append(getColorEsc(true, borderFg.red(), borderFg.green(), borderFg.blue()));
-            boardRepr.append(EM_SPACE);
-            boardRepr.append(rowNames[rowIdx]);
-            boardRepr.append(" ");
+        addChessboard(boardRepr, finalBoard, rowNames);
 
-            for (ChessPiece piece : row)
-            {
-                rgbColor bg = isLight ? lightBg : darkBg;
-                boardRepr.append(getColorEsc(false, bg.red(), bg.green(), bg.blue()));
-                if (piece != null)
-                {
-                    rgbColor fg = piece.getTeamColor() == ChessGame.TeamColor.WHITE ? lightFg : darkFg;
 
-                    boardRepr.append(getColorEsc(true, fg.red(), fg.green(), fg.blue()));
-                    boardRepr.append(getPieceStr(piece));
-                }
-                else
-                {
-                    boardRepr.append(EMPTY);
-                }
-                boardRepr.append(RESET_BG_COLOR);
-                boardRepr.append(RESET_TEXT_COLOR);
-                isLight = !isLight;
-            }
-
-            boardRepr.append(getColorEsc(false, borderBg.red(), borderBg.green(), borderBg.blue()));
-            boardRepr.append(getColorEsc(true, borderFg.red(), borderFg.green(), borderFg.blue()));
-            boardRepr.append(" ");
-            boardRepr.append(rowNames[rowIdx++]);
-            boardRepr.append(EM_SPACE);
-
-            boardRepr.append(RESET_BG_COLOR);
-            boardRepr.append(RESET_TEXT_COLOR);
-
-            isLight = !isLight;
-            boardRepr.append("\n");
-        }
-
-        boardRepr.append(getColorEsc(false, borderBg.red(), borderBg.green(), borderBg.blue()));
-        boardRepr.append(getColorEsc(true, borderFg.red(), borderFg.green(), borderFg.blue()));
+        boardRepr.append(getColorEsc(false, BORDER_BG.red(), BORDER_BG.green(), BORDER_BG.blue()));
+        boardRepr.append(getColorEsc(true, BORDER_FG.red(), BORDER_FG.green(), BORDER_FG.blue()));
         boardRepr.append(EM_SPACE);
         boardRepr.append("  ");
 
@@ -219,6 +179,52 @@ public abstract class BaseRepl {
         boardRepr.append("\n");
 
         return boardRepr.toString();
+    }
+
+    private static void addChessboard(StringBuilder boardRepr, ChessPiece[][] finalBoard, String[] rowNames)
+    {
+        int rowIdx = 0;
+        boolean isLight = true;
+        for (ChessPiece[] row : finalBoard)
+        {
+            boardRepr.append(getColorEsc(false, BORDER_BG.red(), BORDER_BG.green(), BORDER_BG.blue()));
+            boardRepr.append(getColorEsc(true, BORDER_FG.red(), BORDER_FG.green(), BORDER_FG.blue()));
+            boardRepr.append(EM_SPACE);
+            boardRepr.append(rowNames[rowIdx]);
+            boardRepr.append(" ");
+
+            for (ChessPiece piece : row)
+            {
+                RgbColor bg = isLight ? LIGHT_BG : DARK_BG;
+                boardRepr.append(getColorEsc(false, bg.red(), bg.green(), bg.blue()));
+                if (piece != null)
+                {
+                    RgbColor fg = piece.getTeamColor() == ChessGame.TeamColor.WHITE ? LIGHT_FG : DARK_FG;
+
+                    boardRepr.append(getColorEsc(true, fg.red(), fg.green(), fg.blue()));
+                    boardRepr.append(getPieceStr(piece));
+                }
+                else
+                {
+                    boardRepr.append(EMPTY);
+                }
+                boardRepr.append(RESET_BG_COLOR);
+                boardRepr.append(RESET_TEXT_COLOR);
+                isLight = !isLight;
+            }
+
+            boardRepr.append(getColorEsc(false, BORDER_BG.red(), BORDER_BG.green(), BORDER_BG.blue()));
+            boardRepr.append(getColorEsc(true, BORDER_FG.red(), BORDER_FG.green(), BORDER_FG.blue()));
+            boardRepr.append(" ");
+            boardRepr.append(rowNames[rowIdx++]);
+            boardRepr.append(EM_SPACE);
+
+            boardRepr.append(RESET_BG_COLOR);
+            boardRepr.append(RESET_TEXT_COLOR);
+
+            isLight = !isLight;
+            boardRepr.append("\n");
+        }
     }
 
     private static String getPieceStr(ChessPiece piece)

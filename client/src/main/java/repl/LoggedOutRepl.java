@@ -1,7 +1,7 @@
 package repl;
 
-import core.ServerFacade;
 import clientmodel.FacadeResult;
+import core.ServerFacade;
 
 import java.util.Map;
 
@@ -12,7 +12,8 @@ public class LoggedOutRepl extends BaseRepl {
         super();
 
         helpText = Map.of(
-            "help", new String[] { "[string command?]", "Displays available list of commands. Can display help about a specific command if provided" },
+            "help", new String[] { "[string command?]",
+                        "Displays available list of commands. Can display help about a specific command if provided" },
             "quit", new String[] { "", "Exits the program" },
             "register", new String[] { "[string username] [string password] [string email?]", "Registers a new user and logs in" },
             "login", new String[] { "[string username] [string password]", "Logs in an existing user" }

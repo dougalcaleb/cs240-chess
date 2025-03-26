@@ -1,8 +1,8 @@
 package repl;
 
 import chess.ChessGame;
-import core.ServerFacade;
 import clientmodel.FacadeResult;
+import core.ServerFacade;
 
 import java.util.Map;
 
@@ -13,7 +13,8 @@ public class LoggedInRepl extends BaseRepl {
         super();
 
         helpText = Map.of(
-            "help", new String[] { "[string command?]", "Displays available list of commands. Can display help about a specific command if provided" },
+            "help", new String[] { "[string command?]",
+                        "Displays available list of commands. Can display help about a specific command if provided" },
             "quit", new String[] { "", "Exits the program" },
             "logout", new String[] { "", "Logs out the current user" },
             "create", new String[] { "[string name]", "Creates a new game" },

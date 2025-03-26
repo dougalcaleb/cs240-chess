@@ -1,7 +1,7 @@
 package repl;
 
-import core.ServerFacade;
 import clientmodel.FacadeResult;
+import core.ServerFacade;
 
 import java.util.Map;
 
@@ -11,16 +11,13 @@ public class InGameRepl extends BaseRepl {
         super();
 
         helpText = Map.of(
-            "help", new String[] { "[string command?]", "Displays available list of commands. Can display help about a specific command if provided" },
+            "help", new String[] { "[string command?]",
+                        "Displays available list of commands. Can display help about a specific command if provided" },
             "quit", new String[] { "", "Exits the program" },
             "logout", new String[] { "", "Logs out the current user" },
             "move", new String[] { "[string start] [string end]", "Logs out the current user" },
             "print", new String[] { "", "Prints the chessboard" }
         );
-    }
-    @Override
-    public String getPrompt() {
-        return "\n LOGGED IN [" + BaseRepl.username + "] {" + BaseRepl.gameId + "} > ";
     }
 
     @Override
@@ -35,14 +32,6 @@ public class InGameRepl extends BaseRepl {
 
         return switch (args[0])
         {
-            case "logout": {
-                FacadeResult result = ServerFacade.logout();
-                if (result.success())
-                {
-                    newRepl = new LoggedOutRepl();
-                }
-                yield INDENT + result.message();
-            }
             case "help":
                 if (args.length > 1)
                 {
@@ -54,9 +43,22 @@ public class InGameRepl extends BaseRepl {
             case "quit":
                 running = false;
                 yield "";
+            case "logout": {
+                FacadeResult result = ServerFacade.logout();
+                if (result.success())
+                {
+                    newRepl = new LoggedOutRepl();
+                }
+                yield INDENT + result.message();
+            }
             case "move":
                 yield INDENT + "Not implemented";
             default: yield printHelpText();
         };
+    }
+
+    @Override
+    public String getPrompt() {
+        return "\n LOGGED IN [" + BaseRepl.username + "] {" + BaseRepl.gameId + "} > ";
     }
 }
