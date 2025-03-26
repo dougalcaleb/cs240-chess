@@ -1,9 +1,9 @@
 package service;
 
 import exceptions.DataAccessException;
-import model.AuthData;
-import model.RegisterResult;
-import model.UserData;
+import sharedmodel.AuthData;
+import sharedmodel.RegisterResult;
+import sharedmodel.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.Collection;

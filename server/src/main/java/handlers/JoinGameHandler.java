@@ -2,8 +2,8 @@ package handlers;
 
 import exceptions.DoesNotExistException;
 import exceptions.GameTakenException;
-import models.ErrorMessage;
-import models.JoinGameRequest;
+import servermodel.ErrorMessage;
+import servermodel.JoinGameRequest;
 import server.Server;
 import spark.Request;
 import spark.Response;

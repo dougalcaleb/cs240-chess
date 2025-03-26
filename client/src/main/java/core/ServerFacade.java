@@ -1,9 +1,10 @@
 package core;
 
 import chess.ChessGame;
+import clientmodel.*;
 import com.google.gson.Gson;
 import exception.RequestError;
-import model.*;
+import sharedmodel.*;
 import repl.BaseRepl;
 
 import java.io.InputStream;

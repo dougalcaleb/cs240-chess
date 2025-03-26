@@ -1,9 +1,9 @@
 package handlers;
 
 import exceptions.GameTakenException;
-import models.ErrorMessage;
-import models.NewGameRequest;
-import models.NewGameResponse;
+import servermodel.ErrorMessage;
+import servermodel.NewGameRequest;
+import servermodel.NewGameResponse;
 import server.Server;
 import spark.Request;
 import spark.Response;

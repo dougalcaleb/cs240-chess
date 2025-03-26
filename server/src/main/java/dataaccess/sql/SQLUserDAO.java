@@ -3,7 +3,7 @@ package dataaccess.sql;
 import dataaccess.struct.BaseSQLDAO;
 import dataaccess.struct.UserDAO;
 import exceptions.DataAccessException;
-import model.UserData;
+import sharedmodel.UserData;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.sql.ResultSet;

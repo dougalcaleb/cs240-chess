@@ -1,8 +1,8 @@
 package handlers;
 
-import model.GameData;
-import model.UserData;
-import models.DumpRecord;
+import sharedmodel.GameData;
+import sharedmodel.UserData;
+import servermodel.DumpRecord;
 import server.Server;
 import spark.Request;
 import spark.Response;

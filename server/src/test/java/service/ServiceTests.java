@@ -2,9 +2,9 @@ package service;
 
 
 import exceptions.GameTakenException;
-import model.GameData;
-import model.RegisterResult;
-import model.UserData;
+import sharedmodel.GameData;
+import sharedmodel.RegisterResult;
+import sharedmodel.UserData;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;

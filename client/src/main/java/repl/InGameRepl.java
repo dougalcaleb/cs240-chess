@@ -1,7 +1,7 @@
 package repl;
 
 import core.ServerFacade;
-import model.FacadeResult;
+import clientmodel.FacadeResult;
 
 import java.util.Map;
 

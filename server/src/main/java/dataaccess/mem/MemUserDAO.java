@@ -2,9 +2,8 @@ package dataaccess.mem;
 
 import dataaccess.struct.UserDAO;
 import exceptions.DataAccessException;
-import model.UserData;
+import sharedmodel.UserData;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;

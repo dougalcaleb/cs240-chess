@@ -1,7 +1,7 @@
 package dataaccess.struct;
 
-import model.AuthData;
-import model.UserData;
+import sharedmodel.AuthData;
+import sharedmodel.UserData;
 
 import java.util.ArrayList;
 import java.util.Collection;

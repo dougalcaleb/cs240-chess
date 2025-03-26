@@ -1,8 +1,8 @@
 package handlers;
 
-import model.RegisterResult;
-import model.UserData;
-import models.ErrorMessage;
+import sharedmodel.RegisterResult;
+import sharedmodel.UserData;
+import servermodel.ErrorMessage;
 import server.Server;
 import spark.Request;
 import spark.Response;

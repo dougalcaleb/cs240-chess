@@ -1,7 +1,7 @@
-package models;
+package servermodel;
 
-import model.GameData;
-import model.UserData;
+import sharedmodel.GameData;
+import sharedmodel.UserData;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,4 +1,4 @@
-package model;
+package sharedmodel;
 
 public class RegisterResult {
     public RegisterResult(boolean create, boolean login, boolean exists, String token, String username)

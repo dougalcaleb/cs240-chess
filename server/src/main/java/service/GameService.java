@@ -2,7 +2,7 @@ package service;
 
 import exceptions.DoesNotExistException;
 import exceptions.GameTakenException;
-import model.GameData;
+import sharedmodel.GameData;
 
 import java.util.Collection;
 

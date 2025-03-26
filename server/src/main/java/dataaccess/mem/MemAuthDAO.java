@@ -1,8 +1,8 @@
 package dataaccess.mem;
 
 import dataaccess.struct.AuthDAO;
-import model.AuthData;
-import model.UserData;
+import sharedmodel.AuthData;
+import sharedmodel.UserData;
 
 import java.util.*;
 

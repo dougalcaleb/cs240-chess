@@ -4,7 +4,7 @@ import chess.ChessGame;
 import com.google.gson.Gson;
 import dataaccess.struct.BaseSQLDAO;
 import dataaccess.struct.GameDAO;
-import model.GameData;
+import sharedmodel.GameData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

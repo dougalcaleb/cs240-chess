@@ -1,4 +1,4 @@
-package model;
+package sharedmodel;
 
 public class LoginResult {
     public String authToken;

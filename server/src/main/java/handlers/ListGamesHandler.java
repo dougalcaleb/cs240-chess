@@ -1,6 +1,6 @@
 package handlers;
 
-import models.GameList;
+import servermodel.GameList;
 import server.Server;
 import spark.Request;
 import spark.Response;

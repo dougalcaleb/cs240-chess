@@ -1,4 +1,4 @@
-package models;
+package servermodel;
 
 public record NewGameResponse(int gameID) {
 }

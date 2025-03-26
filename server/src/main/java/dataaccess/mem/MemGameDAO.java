@@ -1,8 +1,7 @@
 package dataaccess.mem;
 
 import dataaccess.struct.GameDAO;
-import model.GameData;
-import model.UserData;
+import sharedmodel.GameData;
 
 import java.util.Collection;
 import java.util.HashMap;

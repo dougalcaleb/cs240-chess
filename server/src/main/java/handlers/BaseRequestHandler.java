@@ -2,7 +2,7 @@ package handlers;
 
 import com.google.gson.Gson;
 import exceptions.AuthException;
-import models.ErrorMessage;
+import servermodel.ErrorMessage;
 import server.Server;
 import spark.Request;
 import spark.Response;

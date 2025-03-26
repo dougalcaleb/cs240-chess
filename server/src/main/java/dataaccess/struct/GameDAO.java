@@ -1,6 +1,6 @@
 package dataaccess.struct;
 
-import model.GameData;
+import sharedmodel.GameData;
 
 import java.util.Collection;
 import java.util.Map;

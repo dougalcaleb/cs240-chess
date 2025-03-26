@@ -2,7 +2,7 @@ package repl;
 
 import chess.ChessGame;
 import chess.ChessPiece;
-import model.rgbColor;
+import clientmodel.rgbColor;
 
 import java.util.Arrays;
 import java.util.Collections;

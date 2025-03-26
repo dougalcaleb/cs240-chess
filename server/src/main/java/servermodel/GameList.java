@@ -1,6 +1,6 @@
-package models;
+package servermodel;
 
-import model.GameData;
+import sharedmodel.GameData;
 
 import java.util.Collection;
 

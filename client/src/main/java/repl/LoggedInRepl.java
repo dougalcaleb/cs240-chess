@@ -2,7 +2,7 @@ package repl;
 
 import chess.ChessGame;
 import core.ServerFacade;
-import model.FacadeResult;
+import clientmodel.FacadeResult;
 
 import java.util.Map;
 

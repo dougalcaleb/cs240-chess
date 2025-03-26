@@ -6,9 +6,9 @@ import dataaccess.sql.SQLUserDAO;
 import dataaccess.struct.AuthDAO;
 import dataaccess.struct.GameDAO;
 import dataaccess.struct.UserDAO;
-import model.AuthData;
-import model.GameData;
-import model.UserData;
+import sharedmodel.AuthData;
+import sharedmodel.GameData;
+import sharedmodel.UserData;
 import org.junit.jupiter.api.*;
 import org.mindrot.jbcrypt.BCrypt;
 

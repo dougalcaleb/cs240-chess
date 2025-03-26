@@ -2,8 +2,8 @@ package dataaccess.sql;
 
 import dataaccess.struct.AuthDAO;
 import dataaccess.struct.BaseSQLDAO;
-import model.AuthData;
-import model.UserData;
+import sharedmodel.AuthData;
+import sharedmodel.UserData;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

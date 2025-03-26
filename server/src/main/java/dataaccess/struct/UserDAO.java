@@ -1,7 +1,7 @@
 package dataaccess.struct;
 
 import exceptions.DataAccessException;
-import model.UserData;
+import sharedmodel.UserData;
 
 import java.util.Collection;
 import java.util.Map;

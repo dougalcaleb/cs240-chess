@@ -1,4 +1,4 @@
-package model;
+package sharedmodel;
 
 public class AuthData {
     public AuthData(String token, String username)

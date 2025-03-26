@@ -1,4 +1,4 @@
-package model;
+package clientmodel;
 
 public record EmptyResult() {
 }
