@@ -217,9 +217,15 @@ public class ServerFacade {
         String finalResultMessage = "";
 
         try {
-            int joinIdx = Integer.parseInt(args[0]);
+            int joinIdx = -1;
 
-            if (BaseRepl.listedGames.size() == 0)
+            try {
+                joinIdx = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                throw new RuntimeException("Please enter the Game ID (left column) instead of the game name");
+            }
+
+            if (BaseRepl.listedGames.isEmpty())
             {
                 finalResultMessage = "No games found. Run 'list' to refresh the list of games or create a new game with 'create'.";
             }
