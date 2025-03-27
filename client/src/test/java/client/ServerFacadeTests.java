@@ -121,9 +121,9 @@ public class ServerFacadeTests {
         FacadeResult result = ServerFacade.list();
         Assertions.assertTrue(result.success());
         Assertions.assertEquals("""
-                [1m   Name   ID  Players[22m
-                   game1  1   White:      Black:    \s
-                   game2  2   White:      Black:    \s""", result.message());
+                [1m   Game ID Name  Players[22m
+                   1       game1 White:      Black:    \s
+                   2       game2 White:      Black:    \s""", result.message());
     }
 
     @Test
@@ -133,7 +133,7 @@ public class ServerFacadeTests {
         FacadeResult result = ServerFacade.create(new String[]{ "gameSingle1" });
 
         Assertions.assertTrue(result.success());
-        Assertions.assertEquals("Successfully created game. ID is 1", result.message());
+        Assertions.assertEquals("Successfully created game", result.message());
     }
 
     @Test
@@ -143,12 +143,12 @@ public class ServerFacadeTests {
         FacadeResult result1 = ServerFacade.create(new String[]{ "gameM1" });
 
         Assertions.assertTrue(result1.success());
-        Assertions.assertEquals("Successfully created game. ID is 1", result1.message());
+        Assertions.assertEquals("Successfully created game", result1.message());
 
         FacadeResult result2 = ServerFacade.create(new String[]{ "gameM2" });
 
         Assertions.assertTrue(result2.success());
-        Assertions.assertEquals("Successfully created game. ID is 2", result2.message());
+        Assertions.assertEquals("Successfully created game", result2.message());
     }
 
     @Test
@@ -158,7 +158,7 @@ public class ServerFacadeTests {
         FacadeResult result1 = ServerFacade.create(new String[]{ "gameMD1" });
 
         Assertions.assertTrue(result1.success());
-        Assertions.assertEquals("Successfully created game. ID is 1", result1.message());
+        Assertions.assertEquals("Successfully created game", result1.message());
 
         FacadeResult result2 = ServerFacade.create(new String[]{ "gameMD1" });
 
@@ -207,9 +207,7 @@ public class ServerFacadeTests {
         ServerFacade.register(new String[]{ "joinUser", "pass" });
         ServerFacade.create(new String[]{ "game1" });
 
-        FacadeResult result = ServerFacade.join(new String[]{ "6", "black" });
-        Assertions.assertFalse(result.success());
-        Assertions.assertEquals("Game does not exist", result.message());
+        Assertions.assertThrows(RuntimeException.class, () -> ServerFacade.join(new String[]{ "6", "black" }));
     }
 
     @Test
