@@ -3,11 +3,9 @@ package repl;
 import chess.ChessGame;
 import chess.ChessPiece;
 import clientmodel.RgbColor;
+import sharedmodel.GameData;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ui.EscapeSequences.*;
 
@@ -16,11 +14,14 @@ public abstract class BaseRepl {
     public static String authToken = null;
     public static String username = null;
     public static int gameId = -1;
+    public static String gameName = "";
     protected Map<String, String[]> helpText;
     protected BaseRepl newRepl = null;
     public static final String INDENT = "   ";
     public static ChessGame game;
     public static ChessGame.TeamColor color;
+
+    public static ArrayList<GameData> listedGames = new ArrayList<>();
 
     private static final RgbColor LIGHT_BG = new RgbColor(152,153,135);
     private static final RgbColor DARK_BG = new RgbColor(59, 77, 42);

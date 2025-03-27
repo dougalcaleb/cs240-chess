@@ -5,7 +5,10 @@ import clientmodel.*;
 import com.google.gson.Gson;
 import exception.RequestError;
 import repl.BaseRepl;
-import sharedmodel.*;
+import sharedmodel.GameData;
+import sharedmodel.ListGamesResult;
+import sharedmodel.LoginResult;
+import sharedmodel.RegisterResult;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -95,10 +98,13 @@ public class ServerFacade {
             StringBuilder gameListBuilder = new StringBuilder();
 
             int nameColWidth = 0;
-            int idColWidth = 4;
+            int idColWidth = 8;
+
+            BaseRepl.listedGames.clear();
 
             for (GameData game : response.games)
             {
+                BaseRepl.listedGames.add(game);
                 if (game.gameName.length() > nameColWidth)
                 {
                     nameColWidth = game.gameName.length();
@@ -108,28 +114,29 @@ public class ServerFacade {
             gameListBuilder.append(SET_TEXT_BOLD);
 
             gameListBuilder.append(BaseRepl.INDENT);
-            gameListBuilder.append("Name");
+            gameListBuilder.append("Game ID ");
+            gameListBuilder.append("Name ");
             gameListBuilder.append(" ".repeat(Math.max(0, nameColWidth - 4)));
-            gameListBuilder.append("  ");
-            gameListBuilder.append("ID  ");
             gameListBuilder.append("Players");
 
             gameListBuilder.append(RESET_TEXT_BOLD_FAINT);
 
-            for (GameData game : response.games)
+            int gameIdx = 1;
+            for (GameData game : BaseRepl.listedGames)
             {
                 gameListBuilder.append("\n");
                 gameListBuilder.append(BaseRepl.INDENT);
+                gameListBuilder.append(gameIdx);
+                gameListBuilder.append(" ".repeat(Math.max(0, idColWidth - String.valueOf(gameIdx).length())));
                 gameListBuilder.append(game.gameName);
-                gameListBuilder.append(" ".repeat(Math.max(0, nameColWidth - game.gameName.length())));
-                gameListBuilder.append("  ");
-                gameListBuilder.append(game.gameID);
-                gameListBuilder.append(" ".repeat(Math.max(0, idColWidth - String.valueOf(game.gameID).length())));
+                gameListBuilder.append(" ".repeat(Math.max(0, nameColWidth - game.gameName.length() + 1)));
                 gameListBuilder.append("White: ");
                 gameListBuilder.append(Objects.requireNonNullElse(game.whiteUsername, "    "));
                 gameListBuilder.append(" ");
                 gameListBuilder.append("Black: ");
                 gameListBuilder.append(Objects.requireNonNullElse(game.blackUsername, "    "));
+
+                gameIdx++;
             }
 
             finalResultMessage = gameListBuilder.toString();
@@ -157,8 +164,8 @@ public class ServerFacade {
         String finalResultMessage = "";
 
         try {
-            CreateGameResult response = httpRequest("/game", "POST", new NewGameRequest(args[0]), CreateGameResult.class);
-            finalResultMessage = "Successfully created game. ID is " + response.gameID;
+            httpRequest("/game", "POST", new NewGameRequest(args[0]), EmptyResult.class);
+            finalResultMessage = "Successfully created game";
             finalResultSuccess = true;
         } catch (RequestError e) {
             switch (e.status)
@@ -210,30 +217,31 @@ public class ServerFacade {
         String finalResultMessage = "";
 
         try {
-            httpRequest("/game", "PUT", new JoinGameRequest(args[1], Integer.parseInt(args[0])), EmptyResult.class);
-            ListGamesResult games = httpRequest("/game", "GET", null, ListGamesResult.class);
-            GameData joining = null;
+            int joinIdx = Integer.parseInt(args[0]);
 
-            for (GameData gameData : games.games)
+            if (BaseRepl.listedGames.size() == 0)
             {
-                if (gameData.gameID == Integer.parseInt(args[0]))
+                finalResultMessage = "No games found. Run 'list' to refresh the list of games or create a new game with 'create'.";
+            }
+            else
+            {
+                if (joinIdx < 1 || joinIdx > BaseRepl.listedGames.size())
                 {
-                    joining = gameData;
-                    break;
+                    throw new RuntimeException("Invalid game ID. Must be between 1 and "+BaseRepl.listedGames.size()+", inclusive");
                 }
+
+                GameData joinAttempt = BaseRepl.listedGames.get(joinIdx - 1);
+
+                httpRequest("/game", "PUT", new JoinGameRequest(args[1], joinAttempt.gameID), EmptyResult.class);
+
+                BaseRepl.gameId = Integer.parseInt(args[0]);
+                BaseRepl.color = ChessGame.TeamColor.valueOf(args[1]);
+                BaseRepl.game = joinAttempt.game;
+                BaseRepl.gameName = joinAttempt.gameName;
+
+                finalResultMessage = "Successfully joined game";
+                finalResultSuccess = true;
             }
-
-            if (joining == null)
-            {
-                throw new RuntimeException("Game not found");
-            }
-
-            BaseRepl.gameId = Integer.parseInt(args[0]);
-            BaseRepl.color = ChessGame.TeamColor.valueOf(args[1]);
-            BaseRepl.game = joining.game;
-
-            finalResultMessage = "Successfully joined game";
-            finalResultSuccess = true;
         } catch (RequestError e) {
             switch (e.status)
             {

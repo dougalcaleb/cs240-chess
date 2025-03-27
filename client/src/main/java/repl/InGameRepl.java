@@ -59,6 +59,6 @@ public class InGameRepl extends BaseRepl {
 
     @Override
     public String getPrompt() {
-        return "\n LOGGED IN [" + BaseRepl.username + "] {" + BaseRepl.gameId + "} > ";
+        return "\n LOGGED IN [" + BaseRepl.username + "] [" + BaseRepl.gameName + "] > ";
     }
 }
