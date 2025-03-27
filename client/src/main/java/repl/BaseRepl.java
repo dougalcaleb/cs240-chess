@@ -103,20 +103,28 @@ public abstract class BaseRepl {
         BaseRepl.game = game;
     }
 
-    public static String printChessboard(ChessGame.TeamColor player)
+    public static String printChessboard(ChessGame.TeamColor player, boolean flip)
     {
         ChessPiece[][] initialBoard = game.getBoard().getBoardAsArray();
         ChessPiece[][] finalBoard = new ChessPiece[8][8];
         String[] colNames = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
         String[] rowNames = new String[] { "1", "2", "3", "4", "5", "6", "7", "8" };
 
-        // as stored, black is on bottom but we'll flip if the player is white
         if (player == ChessGame.TeamColor.WHITE)
         {
             int idx = 7;
             for (ChessPiece[] row : initialBoard)
             {
-                finalBoard[idx] = row;
+                if (flip)
+                {
+                    List<ChessPiece> toReverse = Arrays.asList(row);
+                    Collections.reverse(toReverse);
+                    finalBoard[idx] = toReverse.toArray(new ChessPiece[8]);
+                }
+                else
+                {
+                    finalBoard[idx] = row;
+                }
                 idx--;
             }
 
@@ -129,10 +137,17 @@ public abstract class BaseRepl {
             int idx = 0;
             for (ChessPiece[] row : initialBoard)
             {
-                List<ChessPiece> reversed = Arrays.asList(row);
-                Collections.reverse(reversed);
-                finalBoard[idx] = reversed.toArray(new ChessPiece[8]);
-                finalBoard[idx] = row;
+                if (flip)
+                {
+                    finalBoard[idx] = row;
+                }
+                else
+                {
+                    List<ChessPiece> reversed = Arrays.asList(row);
+                    Collections.reverse(reversed);
+                    finalBoard[idx] = reversed.toArray(new ChessPiece[8]);
+                }
+
                 idx++;
             }
 
@@ -260,7 +275,7 @@ public abstract class BaseRepl {
 
     public static String printChessboard()
     {
-        return printChessboard(color);
+        return printChessboard(color, true);
     }
 
 }

@@ -63,8 +63,8 @@ public class LoggedInRepl extends BaseRepl {
                 {
                     newRepl = new InGameRepl();
                     yield INDENT + result.message()
-                            + "\n\n" + printChessboard(ChessGame.TeamColor.WHITE)
-                            + "\n" + printChessboard(ChessGame.TeamColor.BLACK);
+                            + "\n\n" + printChessboard(ChessGame.TeamColor.WHITE, false)
+                            + "\n" + printChessboard(ChessGame.TeamColor.BLACK, false);
 //                    yield INDENT + result.message();
                 }
                 else {
