@@ -27,7 +27,7 @@ public class ServerFacade {
 
     public static void setServerURL(String url)
     {
-        serverURL = url;
+        serverURL = "http://" + url;
     }
 
     public static FacadeResult register(String[] args)
@@ -241,6 +241,7 @@ public class ServerFacade {
                 httpRequest("/game", "PUT", new JoinGameRequest(args[1], joinAttempt.gameID), EmptyResult.class);
 
                 BaseRepl.gameId = Integer.parseInt(args[0]);
+                BaseRepl.trueGameId = joinAttempt.gameID;
                 BaseRepl.color = ChessGame.TeamColor.valueOf(args[1]);
                 BaseRepl.game = joinAttempt.game;
                 BaseRepl.gameName = joinAttempt.gameName;

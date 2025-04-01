@@ -2,6 +2,7 @@ package server;
 
 import dataaccess.DatabaseManager;
 import handlers.*;
+import serverwebsocket.ServerWebsocketHandler;
 import service.AuthService;
 import service.GameService;
 import service.UserService;
@@ -12,18 +13,22 @@ public class Server {
     public static UserService userAccess;
     public static AuthService authAccess;
     public static GameService gameAccess;
+    public static ServerWebsocketHandler WsHandler;
 
     public Server()
     {
         userAccess = new UserService();
         authAccess = new AuthService();
         gameAccess = new GameService();
+        WsHandler = new ServerWebsocketHandler();
     }
 
     public int run(int desiredPort) {
         Spark.port(desiredPort);
 
         Spark.staticFiles.location("web");
+
+        Spark.webSocket("/ws", Server.WsHandler);
 
         // Endpoints
         Spark.get("/db", (req, res) -> new DumpHandler(req, res).handleRequest() );

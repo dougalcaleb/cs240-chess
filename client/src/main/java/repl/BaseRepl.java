@@ -3,6 +3,7 @@ package repl;
 import chess.ChessGame;
 import chess.ChessPiece;
 import clientmodel.RgbColor;
+import core.WebsocketHandler;
 import sharedmodel.GameData;
 
 import java.util.*;
@@ -14,12 +15,16 @@ public abstract class BaseRepl {
     public static String authToken = null;
     public static String username = null;
     public static int gameId = -1;
+    public static int trueGameId = -1;
     public static String gameName = "";
     protected Map<String, String[]> helpText;
     protected BaseRepl newRepl = null;
     public static final String INDENT = "   ";
     public static ChessGame game;
     public static ChessGame.TeamColor color;
+    public static BaseRepl activeRepl;
+
+    public static WebsocketHandler WsHandler = new WebsocketHandler();
 
     public static ArrayList<GameData> listedGames = new ArrayList<>();
 
@@ -40,6 +45,11 @@ public abstract class BaseRepl {
     public void resetActiveRepl()
     {
         newRepl = null;
+    }
+
+    public static void printPrompt()
+    {
+        System.out.print(SET_TEXT_ITALIC + SET_TEXT_COLOR_GREEN + BaseRepl.activeRepl.getPrompt() + RESET_TEXT_COLOR + RESET_TEXT_ITALIC);
     }
 
     protected String printHelpText()

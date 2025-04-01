@@ -62,6 +62,8 @@ public class LoggedInRepl extends BaseRepl {
                 if (result.success())
                 {
                     newRepl = new InGameRepl();
+                    WsHandler.safeConnect();
+                    WsHandler.joinGame();
                     yield INDENT + result.message()
                             + "\n\n" + printChessboard(ChessGame.TeamColor.WHITE, false)
                             + "\n" + printChessboard(ChessGame.TeamColor.BLACK, false);
@@ -71,8 +73,11 @@ public class LoggedInRepl extends BaseRepl {
                     yield INDENT + result.message();
                 }
             }
-            case "observe":
-                yield INDENT + "Not implemented";
+            case "observe": {
+                WsHandler.safeConnect();
+                WsHandler.observeGame(BaseRepl.listedGames.get(Integer.parseInt(commandArgs[0]) - 1).gameID);
+                yield "";
+            }
             case "help":
                 if (args.length > 1)
                 {

@@ -16,7 +16,10 @@ public class InGameRepl extends BaseRepl {
             "quit", new String[] { "", "Exits the program" },
             "logout", new String[] { "", "Logs out the current user" },
             "move", new String[] { "[string start] [string end]", "Logs out the current user" },
-            "print", new String[] { "", "Prints the chessboard" }
+            "print", new String[] { "", "Prints the chessboard" },
+            "leave", new String[] { "", "Leaves the current game" },
+            "resign", new String[] { "[string confirm? (-y)]", "Resigns from the current match" },
+            "legal", new String[] { "[string piece]", "Displays all legal moves for a piece at a given position (ex. a6, h1)" }
         );
     }
 
@@ -32,12 +35,20 @@ public class InGameRepl extends BaseRepl {
 
         return switch (args[0])
         {
+            case "leave":
+                yield "";
+            case "resign":
+                yield "";
+            case "l":
+            case "legal":
+                yield "";
             case "help":
                 if (args.length > 1)
                 {
                     yield printHelpText(args[1]);
                 }
                 yield printHelpText();
+            case "p":
             case "print":
                 yield printChessboard();
             case "quit":
