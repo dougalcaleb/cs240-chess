@@ -1,8 +1,10 @@
 package core;
 
+import chess.ChessMove;
 import com.google.gson.Gson;
 import repl.BaseRepl;
 import websocket.commands.*;
+import websocket.messages.GameMoveMessage;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
@@ -41,8 +43,17 @@ public class WebsocketHandler extends Endpoint {
             session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
-                    ServerMessage msg = new Gson().fromJson(message, ServerMessage.class);
-                    WsMessageHandler.logMessage(msg);
+                    ServerMessage msgBase = new Gson().fromJson(message, ServerMessage.class);
+                    try
+                    {
+                        switch (msgBase.getServerMessageType())
+                        {
+                            case ServerMessage.ServerMessageType.GAME_MOVE -> WsMessageHandler.logAndReprint(new Gson().fromJson(message, GameMoveMessage.class));
+                            default -> WsMessageHandler.logMessage(new Gson().fromJson(message, ServerMessage.class));
+                        }
+                    } catch (Exception e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             });
         }
