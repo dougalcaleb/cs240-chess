@@ -2,10 +2,7 @@ package core;
 
 import com.google.gson.Gson;
 import repl.BaseRepl;
-import websocket.commands.JoinGameCommand;
-import websocket.commands.LeaveGameCommand;
-import websocket.commands.ObserveGameCommand;
-import websocket.commands.StopObserveCommand;
+import websocket.commands.*;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
@@ -93,6 +90,17 @@ public class WebsocketHandler extends Endpoint {
         try
         {
             StopObserveCommand cmd = new StopObserveCommand(BaseRepl.authToken, BaseRepl.observingGame, BaseRepl.username);
+            session.getBasicRemote().sendText(new Gson().toJson(cmd));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void resignGame()
+    {
+        try
+        {
+            ResignGameCommand cmd = new ResignGameCommand(BaseRepl.authToken, BaseRepl.trueGameId, BaseRepl.username, BaseRepl.color);
             session.getBasicRemote().sendText(new Gson().toJson(cmd));
         } catch (IOException e) {
             throw new RuntimeException(e);

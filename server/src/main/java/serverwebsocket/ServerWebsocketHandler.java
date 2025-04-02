@@ -35,6 +35,7 @@ public class ServerWebsocketHandler {
                 case UserGameCommand.CommandType.OBSERVE -> addObserver(session, new Gson().fromJson(message, ObserveGameCommand.class));
                 case UserGameCommand.CommandType.LEAVE -> removePlayer(session, new Gson().fromJson(message, LeaveGameCommand.class));
                 case UserGameCommand.CommandType.STOP_OBSERVE -> removeObserver(session, new Gson().fromJson(message, StopObserveCommand.class));
+                case UserGameCommand.CommandType.RESIGN -> resignPlayer(session, new Gson().fromJson(message, ResignGameCommand.class));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -71,6 +72,11 @@ public class ServerWebsocketHandler {
     private void removeObserver(Session session, StopObserveCommand data) throws IOException {
         notifyAll(data.getGameID(), data.username + " is no longer observing the game");
         sessions.get(data.getGameID()).removeObserver(session);
+    }
+
+    private void resignPlayer(Session session, ResignGameCommand data) throws IOException {
+        notifyAll(data.getGameID(), data.username + " resigned from the game");
+        sessions.get(data.getGameID()).removePlayer(data.color);
     }
 
     private void notifyAll(Integer gameID, String message) throws IOException {

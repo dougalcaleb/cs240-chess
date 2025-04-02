@@ -40,6 +40,8 @@ public class InGameRepl extends BaseRepl {
                 newRepl = new LoggedInRepl();
                 yield "";
             case "resign":
+                WsHandler.resignGame();
+                newRepl = new LoggedInRepl();
                 yield "";
             case "l":
             case "legal":
