@@ -113,6 +113,12 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
         executeSQL("UPDATE games SET "+colName+"='"+username+"' WHERE id="+gameID+";");
     }
 
+    public void unsetPlayerColor(int gameID, String username, String color)
+    {
+        String colName = color.equals("BLACK") ? "blackUser" : "whiteUser";
+        executeSQL("UPDATE games SET "+colName+"=NULL WHERE id="+gameID+";");
+    }
+
     @Override
     public void reset() {
         executeSQL("TRUNCATE TABLE games");

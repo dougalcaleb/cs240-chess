@@ -36,6 +36,8 @@ public class InGameRepl extends BaseRepl {
         return switch (args[0])
         {
             case "leave":
+                WsHandler.leaveGame();
+                newRepl = new LoggedInRepl();
                 yield "";
             case "resign":
                 yield "";

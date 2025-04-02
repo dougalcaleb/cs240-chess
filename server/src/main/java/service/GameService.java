@@ -1,5 +1,6 @@
 package service;
 
+import chess.ChessGame;
 import exceptions.DoesNotExistException;
 import exceptions.GameTakenException;
 import sharedmodel.GameData;
@@ -41,6 +42,23 @@ public class GameService extends BaseService {
         else {
             throw new GameTakenException("Color already taken");
         }
+    }
+
+    public void leaveGame(int gameID, String username, ChessGame.TeamColor color) throws RuntimeException, DoesNotExistException
+    {
+        if (!gameAccess.gameExists(gameID))
+        {
+            throw new DoesNotExistException("Game does not exist");
+        }
+
+        GameData existingGame = gameAccess.getGame(gameID);
+
+        if (existingGame == null)
+        {
+            throw new RuntimeException("Error getting game");
+        }
+
+        gameAccess.unsetPlayerColor(gameID, username, color.name());
     }
 
     public Collection<GameData> getAll()

@@ -21,9 +21,19 @@ public class GameSockets {
         players.put(color, session);
     }
 
+    public void removePlayer(ChessGame.TeamColor color)
+    {
+        players.remove(color);
+    }
+
     public void addObserver(Session session)
     {
         observers.add(session);
+    }
+
+    public void removeObserver(Session session)
+    {
+        observers.removeIf((obs) -> obs.equals(session));
     }
 
     public Session getPlayerSession(ChessGame.TeamColor color)

@@ -87,4 +87,7 @@ public class MemGameDAO implements GameDAO {
     {
         MemGameDAO.DB.clear();
     }
+
+    public void unsetPlayerColor(int gameID, String username, String color)
+    {}
 }

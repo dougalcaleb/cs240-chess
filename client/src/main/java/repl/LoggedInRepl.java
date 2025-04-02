@@ -1,6 +1,5 @@
 package repl;
 
-import chess.ChessGame;
 import clientmodel.FacadeResult;
 import core.ServerFacade;
 
@@ -64,10 +63,7 @@ public class LoggedInRepl extends BaseRepl {
                     newRepl = new InGameRepl();
                     WsHandler.safeConnect();
                     WsHandler.joinGame();
-                    yield INDENT + result.message()
-                            + "\n\n" + printChessboard(ChessGame.TeamColor.WHITE, false)
-                            + "\n" + printChessboard(ChessGame.TeamColor.BLACK, false);
-//                    yield INDENT + result.message();
+                    yield INDENT + result.message() + "\n" + printChessboard();
                 }
                 else {
                     yield INDENT + result.message();

@@ -3,6 +3,7 @@ package core;
 import com.google.gson.Gson;
 import repl.BaseRepl;
 import websocket.commands.JoinGameCommand;
+import websocket.commands.LeaveGameCommand;
 import websocket.commands.ObserveGameCommand;
 import websocket.messages.ServerMessage;
 
@@ -46,8 +47,6 @@ public class WebsocketHandler extends Endpoint {
                     WsMessageHandler.logMessage(msg);
                 }
             });
-
-            joinGame();
         }
         catch (URISyntaxException | DeploymentException | IOException e)
         {
@@ -71,6 +70,17 @@ public class WebsocketHandler extends Endpoint {
         try
         {
             ObserveGameCommand cmd = new ObserveGameCommand(BaseRepl.authToken, gameID, BaseRepl.username);
+            session.getBasicRemote().sendText(new Gson().toJson(cmd));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void leaveGame()
+    {
+        try
+        {
+            LeaveGameCommand cmd = new LeaveGameCommand(BaseRepl.authToken, BaseRepl.trueGameId, BaseRepl.username, BaseRepl.color);
             session.getBasicRemote().sendText(new Gson().toJson(cmd));
         } catch (IOException e) {
             throw new RuntimeException(e);
