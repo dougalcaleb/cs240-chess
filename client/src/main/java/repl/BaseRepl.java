@@ -16,6 +16,7 @@ public abstract class BaseRepl {
     public static String username = null;
     public static int gameId = -1;
     public static int trueGameId = -1;
+    public static int observingGame = -1;
     public static String gameName = "";
     protected Map<String, String[]> helpText;
     protected BaseRepl newRepl = null;

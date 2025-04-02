@@ -5,6 +5,7 @@ import repl.BaseRepl;
 import websocket.commands.JoinGameCommand;
 import websocket.commands.LeaveGameCommand;
 import websocket.commands.ObserveGameCommand;
+import websocket.commands.StopObserveCommand;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
@@ -65,11 +66,11 @@ public class WebsocketHandler extends Endpoint {
         }
     }
 
-    public void observeGame(Integer gameID)
+    public void observeGame()
     {
         try
         {
-            ObserveGameCommand cmd = new ObserveGameCommand(BaseRepl.authToken, gameID, BaseRepl.username);
+            ObserveGameCommand cmd = new ObserveGameCommand(BaseRepl.authToken, BaseRepl.observingGame, BaseRepl.username);
             session.getBasicRemote().sendText(new Gson().toJson(cmd));
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -81,6 +82,17 @@ public class WebsocketHandler extends Endpoint {
         try
         {
             LeaveGameCommand cmd = new LeaveGameCommand(BaseRepl.authToken, BaseRepl.trueGameId, BaseRepl.username, BaseRepl.color);
+            session.getBasicRemote().sendText(new Gson().toJson(cmd));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void stopObserveGame()
+    {
+        try
+        {
+            StopObserveCommand cmd = new StopObserveCommand(BaseRepl.authToken, BaseRepl.observingGame, BaseRepl.username);
             session.getBasicRemote().sendText(new Gson().toJson(cmd));
         } catch (IOException e) {
             throw new RuntimeException(e);

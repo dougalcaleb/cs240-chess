@@ -25,6 +25,7 @@ public class UserGameCommand {
     public enum CommandType {
         CONNECT,
         OBSERVE,
+        STOP_OBSERVE,
         MAKE_MOVE,
         LEAVE,
         RESIGN

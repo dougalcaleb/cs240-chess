@@ -71,7 +71,9 @@ public class LoggedInRepl extends BaseRepl {
             }
             case "observe": {
                 WsHandler.safeConnect();
-                WsHandler.observeGame(BaseRepl.listedGames.get(Integer.parseInt(commandArgs[0]) - 1).gameID);
+                BaseRepl.observingGame = BaseRepl.listedGames.get(Integer.parseInt(commandArgs[0]) - 1).gameID;
+                WsHandler.observeGame();
+                newRepl = new ObservingRepl();
                 yield "";
             }
             case "help":

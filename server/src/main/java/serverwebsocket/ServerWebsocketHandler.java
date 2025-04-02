@@ -7,10 +7,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import server.Server;
 import servermodel.GameSockets;
-import websocket.commands.JoinGameCommand;
-import websocket.commands.LeaveGameCommand;
-import websocket.commands.ObserveGameCommand;
-import websocket.commands.UserGameCommand;
+import websocket.commands.*;
 import websocket.messages.ServerMessage;
 
 import java.io.IOException;
@@ -37,6 +34,7 @@ public class ServerWebsocketHandler {
                 case UserGameCommand.CommandType.CONNECT -> addPlayer(session, new Gson().fromJson(message, JoinGameCommand.class));
                 case UserGameCommand.CommandType.OBSERVE -> addObserver(session, new Gson().fromJson(message, ObserveGameCommand.class));
                 case UserGameCommand.CommandType.LEAVE -> removePlayer(session, new Gson().fromJson(message, LeaveGameCommand.class));
+                case UserGameCommand.CommandType.STOP_OBSERVE -> removeObserver(session, new Gson().fromJson(message, StopObserveCommand.class));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -68,6 +66,11 @@ public class ServerWebsocketHandler {
         sessions.get(data.getGameID()).removePlayer(data.color);
 
         Server.gameAccess.leaveGame(data.getGameID(), data.username, data.color);
+    }
+
+    private void removeObserver(Session session, StopObserveCommand data) throws IOException {
+        notifyAll(data.getGameID(), data.username + " is no longer observing the game");
+        sessions.get(data.getGameID()).removeObserver(session);
     }
 
     private void notifyAll(Integer gameID, String message) throws IOException {

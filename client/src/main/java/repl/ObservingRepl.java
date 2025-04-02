@@ -5,22 +5,25 @@ import core.ServerFacade;
 
 import java.util.Map;
 
-public class InGameRepl extends BaseRepl {
-    public InGameRepl()
+public class ObservingRepl extends BaseRepl {
+    public ObservingRepl()
     {
         super();
 
         helpText = Map.of(
-            "help", new String[] { "[string command?]",
+                "help", new String[] { "[string command?]",
                         "Displays available list of commands. Can display help about a specific command if provided" },
-            "quit", new String[] { "", "Exits the program" },
-            "logout", new String[] { "", "Logs out the current user" },
-            "move", new String[] { "[string start] [string end]", "Makes a move in the game" },
-            "print", new String[] { "", "Prints the chessboard" },
-            "leave", new String[] { "", "Leaves the current game" },
-            "resign", new String[] { "[string confirm? (-y)]", "Resigns from the current match" },
-            "legal", new String[] { "[string piece]", "Displays all legal moves for a piece at a given position (ex. a6, h1)" }
+                "quit", new String[] { "", "Exits the program" },
+                "logout", new String[] { "", "Logs out the current user" },
+                "print", new String[] { "", "Prints the chessboard" },
+                "leave", new String[] { "", "Stops observing the game" },
+                "legal", new String[] { "[string piece]", "Displays all legal moves for a piece at a given position (ex. a6, h1)" }
         );
+    }
+
+    @Override
+    public String getPrompt() {
+        return "\n LOGGED IN [" + BaseRepl.username + "] [" + BaseRepl.gameName + "] (observing) > ";
     }
 
     @Override
@@ -35,14 +38,13 @@ public class InGameRepl extends BaseRepl {
 
         return switch (args[0])
         {
-            case "leave":
-                WsHandler.leaveGame();
-                newRepl = new LoggedInRepl();
-                yield "";
-            case "resign":
-                yield "";
             case "l":
             case "legal":
+                yield "";
+            case "leave":
+                WsHandler.stopObserveGame();
+                BaseRepl.observingGame = -1;
+                newRepl = new LoggedInRepl();
                 yield "";
             case "help":
                 if (args.length > 1)
@@ -64,14 +66,7 @@ public class InGameRepl extends BaseRepl {
                 }
                 yield INDENT + result.message();
             }
-            case "move":
-                yield INDENT + "Not implemented";
             default: yield printHelpText();
         };
-    }
-
-    @Override
-    public String getPrompt() {
-        return "\n LOGGED IN [" + BaseRepl.username + "] [" + BaseRepl.gameName + "] > ";
     }
 }
