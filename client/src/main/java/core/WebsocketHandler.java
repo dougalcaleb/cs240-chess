@@ -48,7 +48,7 @@ public class WebsocketHandler extends Endpoint {
                     {
                         switch (msgBase.getServerMessageType())
                         {
-                            case ServerMessage.ServerMessageType.GAME_MOVE -> WsMessageHandler.logAndReprint(new Gson().fromJson(message, GameMoveMessage.class));
+                            case ServerMessage.ServerMessageType.GAME_MOVE -> WsMessageHandler.handleGameMove(new Gson().fromJson(message, GameMoveMessage.class));
                             default -> WsMessageHandler.logMessage(new Gson().fromJson(message, ServerMessage.class));
                         }
                     } catch (Exception e) {
@@ -112,6 +112,17 @@ public class WebsocketHandler extends Endpoint {
         try
         {
             ResignGameCommand cmd = new ResignGameCommand(BaseRepl.authToken, BaseRepl.trueGameId, BaseRepl.username, BaseRepl.color);
+            session.getBasicRemote().sendText(new Gson().toJson(cmd));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void makeMove(ChessMove move)
+    {
+        try
+        {
+            MakeMoveCommand cmd = new MakeMoveCommand(BaseRepl.authToken, BaseRepl.trueGameId, BaseRepl.username, BaseRepl.color, move);
             session.getBasicRemote().sendText(new Gson().toJson(cmd));
         } catch (IOException e) {
             throw new RuntimeException(e);

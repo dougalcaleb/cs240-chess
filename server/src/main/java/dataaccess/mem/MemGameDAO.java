@@ -90,4 +90,9 @@ public class MemGameDAO implements GameDAO {
 
     public void unsetPlayerColor(int gameID, String username, String color)
     {}
+
+    public void updateGame(GameData data)
+    {
+
+    }
 }

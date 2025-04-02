@@ -1,6 +1,7 @@
 package core;
 
 import repl.BaseRepl;
+import websocket.messages.GameMoveMessage;
 import websocket.messages.ServerMessage;
 
 import static ui.EscapeSequences.*;
@@ -13,6 +14,14 @@ public class WsMessageHandler {
             message.getServerMessageContent() +
             " " + RESET_TEXT_COLOR + RESET_BG_COLOR
         );
+        BaseRepl.printPrompt();
+    }
+
+    public static void handleGameMove(GameMoveMessage message)
+    {
+        logMessage(message);
+        BaseRepl.game = message.gameData.game;
+        System.out.print("\n" + BaseRepl.printChessboard() + "\n");
         BaseRepl.printPrompt();
     }
 }

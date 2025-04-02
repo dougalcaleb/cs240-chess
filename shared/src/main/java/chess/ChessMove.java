@@ -81,6 +81,11 @@ public class ChessMove {
     }
 
     @Override
+    public String toString() {
+        return startPos.toString() + " -> " + endPos.toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) {
             return false;

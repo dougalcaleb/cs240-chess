@@ -26,6 +26,11 @@ public class ChessGame {
         board.resetBoard();
     }
 
+    public void setup()
+    {
+        board.setupBoardPieces();
+    }
+
     /**
      * @return Which team's turn it is
      */
@@ -77,7 +82,7 @@ public class ChessGame {
      * @param move chess move to preform
      * @throws InvalidMoveException if move is invalid
      */
-    public void makeMove(ChessMove move) throws InvalidMoveException {
+    public ChessPiece makeMove(ChessMove move) throws InvalidMoveException {
         ChessPiece pieceToMove = board.getPiece(move.getStartPosition());
         if (pieceToMove == null)
         {
@@ -123,6 +128,8 @@ public class ChessGame {
 
         board.applyMove(move);
         setTeamTurn(getTeamTurn() == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE);
+
+        return pieceToMove;
     }
 
     /**

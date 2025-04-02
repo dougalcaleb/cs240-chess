@@ -62,6 +62,12 @@ public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
         }
     }
 
+    public void updateGame(GameData data)
+    {
+        String gameData = data.game == null ? "null" : "'"+serializeGame(data.game)+"'";
+        executeSQL("UPDATE games SET data="+gameData+" WHERE id="+data.gameID+";");
+    }
+
     @Override
     public boolean gameExists(String gameName) {
         try (ResultSet entries = executeSQLQuery("SELECT * FROM games WHERE name=\"" + gameName + "\";")) {

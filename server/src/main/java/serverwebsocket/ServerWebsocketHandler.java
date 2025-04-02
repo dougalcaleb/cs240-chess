@@ -1,5 +1,6 @@
 package serverwebsocket;
 
+import chess.ChessPiece;
 import com.google.gson.Gson;
 import exceptions.DoesNotExistException;
 import org.eclipse.jetty.websocket.api.Session;
@@ -7,7 +8,10 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import server.Server;
 import servermodel.GameSockets;
+import service.BaseService;
+import sharedmodel.GameData;
 import websocket.commands.*;
+import websocket.messages.GameMoveMessage;
 import websocket.messages.ServerMessage;
 
 import java.io.IOException;
@@ -36,6 +40,7 @@ public class ServerWebsocketHandler {
                 case UserGameCommand.CommandType.LEAVE -> removePlayer(session, new Gson().fromJson(message, LeaveGameCommand.class));
                 case UserGameCommand.CommandType.STOP_OBSERVE -> removeObserver(session, new Gson().fromJson(message, StopObserveCommand.class));
                 case UserGameCommand.CommandType.RESIGN -> resignPlayer(session, new Gson().fromJson(message, ResignGameCommand.class));
+                case UserGameCommand.CommandType.MAKE_MOVE -> makeMove(session, new Gson().fromJson(message, MakeMoveCommand.class));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -79,11 +84,44 @@ public class ServerWebsocketHandler {
         sessions.get(data.getGameID()).removePlayer(data.color);
     }
 
-    private void notifyAll(Integer gameID, String message) throws IOException {
+    private void makeMove(Session session, MakeMoveCommand data) throws IOException {
+        ChessPiece pieceMoved = null;
+        Exception error = null;
+        try {
+            pieceMoved = Server.gameAccess.makeMove(data.getGameID(), data.move);
+        } catch (Exception e) {
+            // pieceMoved remains null
+            error = e;
+        }
+
+        if (pieceMoved != null)
+        {
+//            notifyAll(data.getGameID(), data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString(), ServerMessage.ServerMessageType.GAME_MOVE);
+            GameData updated = BaseService.gameAccess.getGame(data.getGameID());
+
+            for (Session gameSession : sessions.get(data.getGameID()).getParticipants())
+            {
+                GameMoveMessage msgObj = new GameMoveMessage(data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString(), updated);
+                gameSession.getRemote().sendString(msgObj.serialize());
+            }
+        }
+        else
+        {
+            assert error != null;
+            ServerMessage msgObj = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, error.getMessage());
+            session.getRemote().sendString(new Gson().toJson(msgObj));
+        }
+    }
+
+    private void notifyAll(Integer gameID, String message, ServerMessage.ServerMessageType msgType) throws IOException {
         for (Session gameSession : sessions.get(gameID).getParticipants())
         {
-            ServerMessage joinMsgObj = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, message);
-            gameSession.getRemote().sendString(new Gson().toJson(joinMsgObj));
+            ServerMessage msgObj = new ServerMessage(msgType, message);
+            gameSession.getRemote().sendString(new Gson().toJson(msgObj));
         }
+    }
+
+    private void notifyAll(Integer gameID, String message) throws IOException {
+        notifyAll(gameID, message, ServerMessage.ServerMessageType.NOTIFICATION);
     }
 }

@@ -1,5 +1,6 @@
 package chess;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -46,6 +47,21 @@ public class ChessPosition {
     public boolean isValid()
     {
         return row > 0 && row <= 8 && col > 0 && col <= 8;
+    }
+
+    @Override
+    public String toString() {
+        Map<Integer, String> cols = Map.of(
+           1, "a",
+           2, "b",
+           3, "c",
+           4, "d",
+           5, "e",
+           6, "f",
+           7, "g",
+           8, "h"
+        );
+        return cols.get(col) + getRow();
     }
 
     @Override

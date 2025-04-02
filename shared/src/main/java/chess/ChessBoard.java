@@ -36,6 +36,20 @@ public class ChessBoard {
         }
     }
 
+    public void setupBoardPieces()
+    {
+        for (int rowIdx = 1; rowIdx <= 8; rowIdx++)
+        {
+            for (int colIdx = 1; colIdx <= 8; colIdx++)
+            {
+                ChessPiece piece = getPiece(new ChessPosition(rowIdx, colIdx));
+                if (piece != null)
+                {
+                    piece.setBoard(this);
+                }
+            }
+        }
+    }
     /**
      * Adds a chess piece to the chessboard
      *

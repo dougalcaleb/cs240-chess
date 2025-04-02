@@ -1,6 +1,9 @@
 package service;
 
 import chess.ChessGame;
+import chess.ChessMove;
+import chess.ChessPiece;
+import chess.InvalidMoveException;
 import exceptions.DoesNotExistException;
 import exceptions.GameTakenException;
 import sharedmodel.GameData;
@@ -59,6 +62,22 @@ public class GameService extends BaseService {
         }
 
         gameAccess.unsetPlayerColor(gameID, username, color.name());
+    }
+
+    public ChessPiece makeMove(int gameID, ChessMove move)
+    {
+        GameData gameData = gameAccess.getGame(gameID);
+        gameData.game.setup();
+        ChessPiece pieceAffected = null;
+        try {
+            pieceAffected = gameData.game.makeMove(move);
+        } catch (InvalidMoveException e) {
+            throw new RuntimeException(e);
+        }
+
+        gameAccess.updateGame(gameData);
+
+        return pieceAffected;
     }
 
     public Collection<GameData> getAll()
