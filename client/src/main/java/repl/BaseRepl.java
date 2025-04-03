@@ -37,7 +37,7 @@ public abstract class BaseRepl {
     private static final RgbColor BORDER_BG = new RgbColor(0, 23, 7);
     private static final RgbColor BORDER_FG = new RgbColor(26, 71, 39);
     private static final RgbColor LIGHT_BG_HIGHLIGHT = new RgbColor(194, 199, 115);
-    private static final RgbColor DARG_BG_HIGHLIGHT = new RgbColor(135, 158, 51);
+    private static final RgbColor DARK_BG_HIGHLIGHT = new RgbColor(135, 158, 51);
 
     public abstract String getPrompt();
     public abstract String evaluate(String[] args);
@@ -231,7 +231,7 @@ public abstract class BaseRepl {
                             ? LIGHT_BG_HIGHLIGHT
                             : LIGHT_BG
                         : highlighted.contains(renderPos)
-                            ? DARG_BG_HIGHLIGHT
+                            ? DARK_BG_HIGHLIGHT
                             : DARK_BG;
 
                 boardRepr.append(getColorEsc(false, bg.red(), bg.green(), bg.blue()));
@@ -305,6 +305,30 @@ public abstract class BaseRepl {
     {
         return printChessboard(color, highlightedSquares);
     }
+
+    protected ChessPosition convertPosition(String position)
+    {
+        Map<String, Integer> cols = Map.of(
+                "a", 1,
+                "b", 2,
+                "c", 3,
+                "d", 4,
+                "e", 5,
+                "f", 6,
+                "g", 7,
+                "h", 8
+        );
+
+        String[] parts = position.split("");
+
+        if (parts.length != 2)
+        {
+            throw new RuntimeException("Invalid position '" + position + "'. Position should be in the format [column letter][row number] with no other characters. (ex. 'a2')");
+        }
+
+        return new ChessPosition(Integer.parseInt(parts[1]), cols.get(parts[0]));
+    }
+
     protected void verifyArgCount(String[] args, int expected)
     {
         if (args.length != expected)

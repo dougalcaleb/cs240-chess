@@ -1,6 +1,7 @@
 package repl;
 
 import chess.ChessGame;
+import chess.ChessPosition;
 import clientmodel.FacadeResult;
 import core.ServerFacade;
 
@@ -41,6 +42,9 @@ public class ObservingRepl extends BaseRepl {
         {
             case "l":
             case "legal":
+                verifyArgCount(commandArgs, 1);
+                ChessPosition pos = convertPosition(commandArgs[0]);
+                WsHandler.highlightMoves(pos);
                 yield "";
             case "leave":
                 WsHandler.stopObserveGame();
