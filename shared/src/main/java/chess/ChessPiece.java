@@ -22,6 +22,7 @@ public class ChessPiece {
     private ChessPosition currentPosition;
     private ChessBoard board;
 
+    @Expose
     public boolean hasBeenMoved = false;
 
     public ChessPiece(ChessGame.TeamColor pieceColor, PieceType type, ChessBoard parentBoard)
@@ -148,7 +149,12 @@ public class ChessPiece {
 
     @Override
     public String toString() {
-        return type.name();
+        String position = " [nullpos]";
+        if (getCurrentPosition() != null)
+        {
+            position = " " + getCurrentPosition().toString();
+        }
+        return teamColor.name() + " " + type.name() + position + (hasBeenMoved ? "" : " [OPOS]");
     }
 
     @Override
