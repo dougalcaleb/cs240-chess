@@ -102,14 +102,14 @@ public class ServerWebsocketHandler {
             for (Session gameSession : sessions.get(data.getGameID()).getParticipants())
             {
                 GameMoveMessage msgObj = new GameMoveMessage(data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString(), updated);
-                gameSession.getRemote().sendString(msgObj.serialize());
+                safeSend(gameSession, data.getGameID(), msgObj.serialize());
             }
         }
         else
         {
             assert error != null;
             ServerMessage msgObj = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, error.getMessage());
-            session.getRemote().sendString(new Gson().toJson(msgObj));
+            safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
         }
     }
 
@@ -117,11 +117,22 @@ public class ServerWebsocketHandler {
         for (Session gameSession : sessions.get(gameID).getParticipants())
         {
             ServerMessage msgObj = new ServerMessage(msgType, message);
-            gameSession.getRemote().sendString(new Gson().toJson(msgObj));
+            safeSend(gameSession, gameID, new Gson().toJson(msgObj));
         }
     }
 
     private void notifyAll(Integer gameID, String message) throws IOException {
         notifyAll(gameID, message, ServerMessage.ServerMessageType.NOTIFICATION);
+    }
+
+    private void safeSend(Session session, Integer gameID, String message) throws IOException {
+        if (session.isOpen())
+        {
+            session.getRemote().sendString(message);
+        }
+        else
+        {
+            sessions.get(gameID).removeParticipant(session);
+        }
     }
 }

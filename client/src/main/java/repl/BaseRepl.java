@@ -117,55 +117,43 @@ public abstract class BaseRepl {
     public static String printChessboard(ChessGame.TeamColor player, boolean flip)
     {
         ChessPiece[][] initialBoard = game.getBoard().getBoardAsArray();
-        ChessPiece[][] finalBoard = new ChessPiece[8][8];
+//        ChessPiece[][] finalBoard = new ChessPiece[8][8];
+        ChessPiece[][] printBase = new ChessPiece[8][8];
         String[] colNames = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
         String[] rowNames = new String[] { "1", "2", "3", "4", "5", "6", "7", "8" };
 
+        int initFlipIdx = 7;
+        for (ChessPiece[] row : initialBoard)
+        {
+            printBase[initFlipIdx] = row.clone();
+            initFlipIdx--;
+        }
+
+
+
         if (player == ChessGame.TeamColor.WHITE)
         {
-            int idx = 7;
-            for (ChessPiece[] row : initialBoard)
-            {
-                if (flip)
-                {
-                    List<ChessPiece> toReverse = Arrays.asList(row);
-                    Collections.reverse(toReverse);
-                    finalBoard[idx] = toReverse.toArray(new ChessPiece[8]);
-                }
-                else
-                {
-                    finalBoard[idx] = row;
-                }
-                idx--;
-            }
-
-            List<String> revFile = Arrays.asList(rowNames);
+            List<String> revFile = Arrays.asList(rowNames.clone());
             Collections.reverse(revFile);
             rowNames = revFile.toArray(new String[8]);
         }
         else
         {
-            int idx = 0;
+            int blackFlipVertIdx = 0;
             for (ChessPiece[] row : initialBoard)
             {
-                if (flip)
-                {
-                    finalBoard[idx] = row;
-                }
-                else
-                {
-                    List<ChessPiece> reversed = Arrays.asList(row);
-                    Collections.reverse(reversed);
-                    finalBoard[idx] = reversed.toArray(new ChessPiece[8]);
-                }
-
-                idx++;
+                List<ChessPiece> reversedRow = Arrays.asList(row.clone());
+                Collections.reverse(reversedRow);
+                printBase[blackFlipVertIdx] = reversedRow.toArray(new ChessPiece[8]);
+                blackFlipVertIdx++;
             }
 
-            List<String> revRank = Arrays.asList(colNames);
+            List<String> revRank = Arrays.asList(colNames.clone());
             Collections.reverse(revRank);
             colNames = revRank.toArray(new String[8]);
         }
+
+        ChessPiece[][] finalBoard = printBase.clone();
 
         StringBuilder boardRepr = new StringBuilder();
 

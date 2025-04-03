@@ -46,6 +46,22 @@ public class GameSockets {
         return observers;
     }
 
+    public void removeParticipant(Session session)
+    {
+        if (observers.contains(session))
+        {
+            removeObserver(session);
+        }
+        else if (session.equals(players.get(ChessGame.TeamColor.WHITE)))
+        {
+            removePlayer(ChessGame.TeamColor.WHITE);
+        }
+        else if (session.equals(players.get(ChessGame.TeamColor.BLACK)))
+        {
+            removePlayer(ChessGame.TeamColor.BLACK);
+        }
+    }
+
     public List<Session> getParticipants()
     {
         List<Session> participants = new ArrayList<>();
