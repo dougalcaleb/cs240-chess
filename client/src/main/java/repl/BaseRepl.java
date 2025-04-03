@@ -23,7 +23,7 @@ public abstract class BaseRepl {
     protected BaseRepl newRepl = null;
     public static final String INDENT = "   ";
     public static ChessGame game;
-    public static ChessGame.TeamColor color;
+    public static ChessGame.TeamColor color = null;
     public static BaseRepl activeRepl;
 
     public static WebsocketHandler WsHandler = new WebsocketHandler();
@@ -304,6 +304,13 @@ public abstract class BaseRepl {
     public static String printChessboard(List<ChessPosition> highlightedSquares)
     {
         return printChessboard(color, highlightedSquares);
+    }
+    protected void verifyArgCount(String[] args, int expected)
+    {
+        if (args.length != expected)
+        {
+            throw new RuntimeException("Invalid arguments: expected " + expected + ", got " + args.length);
+        }
     }
 
 }

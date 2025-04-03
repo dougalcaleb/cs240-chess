@@ -47,6 +47,7 @@ public class InGameRepl extends BaseRepl {
                 yield "";
             case "l":
             case "legal":
+                verifyArgCount(commandArgs, 1);
                 ChessPosition pos = convertPosition(commandArgs[0]);
                 WsHandler.highlightMoves(pos);
                 yield "";
@@ -71,10 +72,7 @@ public class InGameRepl extends BaseRepl {
                 yield INDENT + result.message();
             }
             case "move":
-                if (commandArgs.length != 2)
-                {
-                    throw new RuntimeException("Invalid arguments: expected 2, got " + commandArgs.length);
-                }
+                verifyArgCount(commandArgs, 2);
                 WsHandler.makeMove(constructMove(commandArgs[0], commandArgs[1]));
                 yield "";
             default: yield printHelpText();
@@ -92,28 +90,5 @@ public class InGameRepl extends BaseRepl {
         ChessPosition endPos = convertPosition(end);
 
         return new ChessMove(startPos, endPos);
-    }
-
-    private ChessPosition convertPosition(String position)
-    {
-        Map<String, Integer> cols = Map.of(
-            "a", 1,
-            "b", 2,
-            "c", 3,
-            "d", 4,
-            "e", 5,
-            "f", 6,
-            "g", 7,
-            "h", 8
-        );
-
-        String[] parts = position.split("");
-
-        if (parts.length != 2)
-        {
-            throw new RuntimeException("Invalid position '" + position + "'. Position should be in the format [column letter][row number] with no other characters. (ex. 'a2')");
-        }
-
-        return new ChessPosition(Integer.parseInt(parts[1]), cols.get(parts[0]));
     }
 }

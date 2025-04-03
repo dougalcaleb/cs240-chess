@@ -70,8 +70,12 @@ public class ServerWebsocketHandler {
         }
 
         sessions.get(data.getGameID()).addObserver(session);
-        notifyAll(data.getGameID(), data.username + " is observing the game");
         notifyAllExcept(session, data.getGameID(), data.username + " is observing the game");
+
+        // hijack move message to send the game data to the observer before the game has been broadcast
+        GameData gameData = BaseService.gameAccess.getGame(data.getGameID());
+        GameMoveMessage msgObj = new GameMoveMessage(null, gameData);
+        safeSend(session, data.getGameID(), msgObj.serialize());
     }
 
     private void removePlayer(Session session, LeaveGameCommand data) throws IOException, DoesNotExistException {

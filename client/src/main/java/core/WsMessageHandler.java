@@ -1,5 +1,6 @@
 package core;
 
+import chess.ChessGame;
 import repl.BaseRepl;
 import websocket.messages.GameMoveMessage;
 import websocket.messages.LegalMovesMessage;
@@ -20,9 +21,21 @@ public class WsMessageHandler {
 
     public static void handleGameMove(GameMoveMessage message)
     {
-        logMessage(message);
+        if (message.getServerMessageContent() != null && !message.getServerMessageContent().isEmpty())
+        {
+            logMessage(message);
+        }
         BaseRepl.game = message.gameData.game;
-        System.out.print("\n" + BaseRepl.printChessboard() + "\n");
+        BaseRepl.gameName = message.gameData.gameName;
+        if (BaseRepl.color == null)
+        {
+            System.out.print("\n" + BaseRepl.printChessboard(ChessGame.TeamColor.WHITE) + "\n");
+        }
+        else
+        {
+            System.out.print("\n" + BaseRepl.printChessboard() + "\n");
+        }
+
         BaseRepl.printPrompt();
     }
 
