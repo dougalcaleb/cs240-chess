@@ -60,7 +60,7 @@ public class ServerWebsocketHandler {
         }
 
         sessions.get(data.getGameID()).addPlayer(session, data.color);
-        notifyAll(data.getGameID(), data.username + " joined the game as " + data.color.toString().toLowerCase());
+        notifyAllExcept(session, data.getGameID(), data.username + " joined the game as " + data.color.toString().toLowerCase());
     }
 
     private void addObserver(Session session, ObserveGameCommand data) throws IOException {
@@ -71,22 +71,23 @@ public class ServerWebsocketHandler {
 
         sessions.get(data.getGameID()).addObserver(session);
         notifyAll(data.getGameID(), data.username + " is observing the game");
+        notifyAllExcept(session, data.getGameID(), data.username + " is observing the game");
     }
 
     private void removePlayer(Session session, LeaveGameCommand data) throws IOException, DoesNotExistException {
-        notifyAll(data.getGameID(), data.username + " left the game");
+        notifyAllExcept(session, data.getGameID(), data.username + " left the game");
         sessions.get(data.getGameID()).removePlayer(data.color);
 
         Server.gameAccess.leaveGame(data.getGameID(), data.username, data.color);
     }
 
     private void removeObserver(Session session, StopObserveCommand data) throws IOException {
-        notifyAll(data.getGameID(), data.username + " is no longer observing the game");
+        notifyAllExcept(session, data.getGameID(), data.username + " is no longer observing the game");
         sessions.get(data.getGameID()).removeObserver(session);
     }
 
     private void resignPlayer(Session session, ResignGameCommand data) throws IOException {
-        notifyAll(data.getGameID(), data.username + " resigned from the game");
+        notifyAllExcept(session, data.getGameID(), data.username + " resigned from the game");
         sessions.get(data.getGameID()).removePlayer(data.color);
     }
 
@@ -106,6 +107,10 @@ public class ServerWebsocketHandler {
 
             for (Session gameSession : sessions.get(data.getGameID()).getParticipants())
             {
+                if (gameSession.equals(session))
+                {
+                    continue;
+                }
                 GameMoveMessage msgObj = new GameMoveMessage(data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString(), updated);
                 safeSend(gameSession, data.getGameID(), msgObj.serialize());
             }
@@ -142,16 +147,20 @@ public class ServerWebsocketHandler {
         safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
     }
 
-    private void notifyAll(Integer gameID, String message, ServerMessage.ServerMessageType msgType) throws IOException {
+    private void notifyAllExcept(Session exclude, Integer gameID, String message, ServerMessage.ServerMessageType msgType) throws IOException {
         for (Session gameSession : sessions.get(gameID).getParticipants())
         {
+            if (gameSession.equals(exclude)) {
+                continue;
+            }
+
             ServerMessage msgObj = new ServerMessage(msgType, message);
             safeSend(gameSession, gameID, new Gson().toJson(msgObj));
         }
     }
 
-    private void notifyAll(Integer gameID, String message) throws IOException {
-        notifyAll(gameID, message, ServerMessage.ServerMessageType.NOTIFICATION);
+    private void notifyAllExcept(Session exclude, Integer gameID, String message) throws IOException {
+        notifyAllExcept(exclude, gameID, message, ServerMessage.ServerMessageType.NOTIFICATION);
     }
 
     private void safeSend(Session session, Integer gameID, String message) throws IOException {
