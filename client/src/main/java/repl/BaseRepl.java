@@ -114,10 +114,9 @@ public abstract class BaseRepl {
         BaseRepl.game = game;
     }
 
-    public static String printChessboard(ChessGame.TeamColor player, boolean flip)
+    public static String printChessboard(ChessGame.TeamColor player)
     {
         ChessPiece[][] initialBoard = game.getBoard().getBoardAsArray();
-//        ChessPiece[][] finalBoard = new ChessPiece[8][8];
         ChessPiece[][] printBase = new ChessPiece[8][8];
         String[] colNames = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
         String[] rowNames = new String[] { "1", "2", "3", "4", "5", "6", "7", "8" };
@@ -274,7 +273,7 @@ public abstract class BaseRepl {
 
     public static String printChessboard()
     {
-        return printChessboard(color, true);
+        return printChessboard(color);
     }
 
 }

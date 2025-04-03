@@ -1,5 +1,6 @@
 package repl;
 
+import chess.ChessGame;
 import clientmodel.FacadeResult;
 import core.ServerFacade;
 
@@ -54,7 +55,7 @@ public class ObservingRepl extends BaseRepl {
                 yield printHelpText();
             case "p":
             case "print":
-                yield printChessboard();
+                yield printChessboard(ChessGame.TeamColor.WHITE);
             case "quit":
                 running = false;
                 yield "";
