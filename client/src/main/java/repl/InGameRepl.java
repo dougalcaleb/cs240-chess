@@ -47,6 +47,8 @@ public class InGameRepl extends BaseRepl {
                 yield "";
             case "l":
             case "legal":
+                ChessPosition pos = convertPosition(commandArgs[0]);
+                WsHandler.highlightMoves(pos);
                 yield "";
             case "help":
                 if (args.length > 1)

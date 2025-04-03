@@ -1,10 +1,12 @@
 package core;
 
 import chess.ChessMove;
+import chess.ChessPosition;
 import com.google.gson.Gson;
 import repl.BaseRepl;
 import websocket.commands.*;
 import websocket.messages.GameMoveMessage;
+import websocket.messages.LegalMovesMessage;
 import websocket.messages.ServerMessage;
 
 import javax.websocket.*;
@@ -49,6 +51,7 @@ public class WebsocketHandler extends Endpoint {
                         switch (msgBase.getServerMessageType())
                         {
                             case ServerMessage.ServerMessageType.GAME_MOVE -> WsMessageHandler.handleGameMove(new Gson().fromJson(message, GameMoveMessage.class));
+                            case ServerMessage.ServerMessageType.LEGAL_MOVES -> WsMessageHandler.handleLegalMoves(new Gson().fromJson(message, LegalMovesMessage.class));
                             default -> WsMessageHandler.logMessage(new Gson().fromJson(message, ServerMessage.class));
                         }
                     } catch (Exception e) {
@@ -123,6 +126,17 @@ public class WebsocketHandler extends Endpoint {
         try
         {
             MakeMoveCommand cmd = new MakeMoveCommand(BaseRepl.authToken, BaseRepl.trueGameId, BaseRepl.username, BaseRepl.color, move);
+            session.getBasicRemote().sendText(new Gson().toJson(cmd));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void highlightMoves(ChessPosition position)
+    {
+        try
+        {
+            HighlightMovesCommand cmd = new HighlightMovesCommand(BaseRepl.authToken, BaseRepl.trueGameId, position);
             session.getBasicRemote().sendText(new Gson().toJson(cmd));
         } catch (IOException e) {
             throw new RuntimeException(e);

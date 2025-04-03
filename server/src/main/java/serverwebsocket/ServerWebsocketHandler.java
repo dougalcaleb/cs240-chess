@@ -1,6 +1,8 @@
 package serverwebsocket;
 
+import chess.ChessMove;
 import chess.ChessPiece;
+import chess.ChessPosition;
 import com.google.gson.Gson;
 import exceptions.DoesNotExistException;
 import org.eclipse.jetty.websocket.api.Session;
@@ -12,10 +14,13 @@ import service.BaseService;
 import sharedmodel.GameData;
 import websocket.commands.*;
 import websocket.messages.GameMoveMessage;
+import websocket.messages.LegalMovesMessage;
 import websocket.messages.ServerMessage;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @WebSocket
 public class ServerWebsocketHandler {
@@ -41,6 +46,7 @@ public class ServerWebsocketHandler {
                 case UserGameCommand.CommandType.STOP_OBSERVE -> removeObserver(session, new Gson().fromJson(message, StopObserveCommand.class));
                 case UserGameCommand.CommandType.RESIGN -> resignPlayer(session, new Gson().fromJson(message, ResignGameCommand.class));
                 case UserGameCommand.CommandType.MAKE_MOVE -> makeMove(session, new Gson().fromJson(message, MakeMoveCommand.class));
+                case UserGameCommand.CommandType.SHOW_MOVES -> getLegalMoves(session, new Gson().fromJson(message, HighlightMovesCommand.class));
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -96,7 +102,6 @@ public class ServerWebsocketHandler {
 
         if (pieceMoved != null)
         {
-//            notifyAll(data.getGameID(), data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString(), ServerMessage.ServerMessageType.GAME_MOVE);
             GameData updated = BaseService.gameAccess.getGame(data.getGameID());
 
             for (Session gameSession : sessions.get(data.getGameID()).getParticipants())
@@ -111,6 +116,30 @@ public class ServerWebsocketHandler {
             ServerMessage msgObj = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, error.getMessage());
             safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
         }
+    }
+
+    private void getLegalMoves(Session session, HighlightMovesCommand data) throws IOException {
+        GameData gameData = BaseService.gameAccess.getGame(data.getGameID());
+        List<ChessMove> moves = (List<ChessMove>) gameData.game.validMoves(data.pieceAtPosition);
+        List<ChessPosition> moveEnds = new ArrayList<>();
+        String message = null;
+
+        if (moves == null)
+        {
+            moveEnds = null;
+            message = "Invalid input: no piece at position " + data.pieceAtPosition;
+        }
+        else
+        {
+            for (ChessMove move : moves)
+            {
+                moveEnds.add(move.getEndPosition());
+            }
+        }
+
+        LegalMovesMessage msgObj = new LegalMovesMessage(message, moveEnds);
+
+        safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
     }
 
     private void notifyAll(Integer gameID, String message, ServerMessage.ServerMessageType msgType) throws IOException {

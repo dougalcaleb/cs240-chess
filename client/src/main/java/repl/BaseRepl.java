@@ -2,6 +2,7 @@ package repl;
 
 import chess.ChessGame;
 import chess.ChessPiece;
+import chess.ChessPosition;
 import clientmodel.RgbColor;
 import core.WebsocketHandler;
 import sharedmodel.GameData;
@@ -35,6 +36,8 @@ public abstract class BaseRepl {
     private static final RgbColor DARK_FG = new RgbColor(15, 15, 15);
     private static final RgbColor BORDER_BG = new RgbColor(0, 23, 7);
     private static final RgbColor BORDER_FG = new RgbColor(26, 71, 39);
+    private static final RgbColor LIGHT_BG_HIGHLIGHT = new RgbColor(194, 199, 115);
+    private static final RgbColor DARG_BG_HIGHLIGHT = new RgbColor(135, 158, 51);
 
     public abstract String getPrompt();
     public abstract String evaluate(String[] args);
@@ -114,7 +117,7 @@ public abstract class BaseRepl {
         BaseRepl.game = game;
     }
 
-    public static String printChessboard(ChessGame.TeamColor player)
+    public static String printChessboard(ChessGame.TeamColor player, List<ChessPosition> highlighted)
     {
         ChessPiece[][] initialBoard = game.getBoard().getBoardAsArray();
         ChessPiece[][] printBase = new ChessPiece[8][8];
@@ -175,7 +178,7 @@ public abstract class BaseRepl {
 
         boardRepr.append("\n");
 
-        addChessboard(boardRepr, finalBoard, rowNames);
+        addChessboard(boardRepr, finalBoard, rowNames, highlighted, color);
 
 
         boardRepr.append(getColorEsc(false, BORDER_BG.red(), BORDER_BG.green(), BORDER_BG.blue()));
@@ -201,7 +204,7 @@ public abstract class BaseRepl {
         return boardRepr.toString();
     }
 
-    private static void addChessboard(StringBuilder boardRepr, ChessPiece[][] finalBoard, String[] rowNames)
+    private static void addChessboard(StringBuilder boardRepr, ChessPiece[][] finalBoard, String[] rowNames, List<ChessPosition> highlighted, ChessGame.TeamColor color)
     {
         int rowIdx = 0;
         boolean isLight = true;
@@ -213,9 +216,24 @@ public abstract class BaseRepl {
             boardRepr.append(rowNames[rowIdx]);
             boardRepr.append(" ");
 
+            int colIdx = 0;
             for (ChessPiece piece : row)
             {
-                RgbColor bg = isLight ? LIGHT_BG : DARK_BG;
+                ChessPosition renderPos = null;
+                if (color == ChessGame.TeamColor.WHITE) {
+                    renderPos = new ChessPosition(9 - (rowIdx + 1), colIdx + 1);
+                } else {
+                    renderPos = new ChessPosition(rowIdx + 1, 9 - (colIdx + 1));
+                }
+
+                RgbColor bg = isLight
+                        ? highlighted.contains(renderPos)
+                            ? LIGHT_BG_HIGHLIGHT
+                            : LIGHT_BG
+                        : highlighted.contains(renderPos)
+                            ? DARG_BG_HIGHLIGHT
+                            : DARK_BG;
+
                 boardRepr.append(getColorEsc(false, bg.red(), bg.green(), bg.blue()));
                 if (piece != null)
                 {
@@ -231,6 +249,8 @@ public abstract class BaseRepl {
                 boardRepr.append(RESET_BG_COLOR);
                 boardRepr.append(RESET_TEXT_COLOR);
                 isLight = !isLight;
+
+                colIdx++;
             }
 
             boardRepr.append(getColorEsc(false, BORDER_BG.red(), BORDER_BG.green(), BORDER_BG.blue()));
@@ -273,7 +293,17 @@ public abstract class BaseRepl {
 
     public static String printChessboard()
     {
-        return printChessboard(color);
+        return printChessboard(color, new ArrayList<>());
+    }
+
+    public static String printChessboard(ChessGame.TeamColor homeColor)
+    {
+        return printChessboard(homeColor, new ArrayList<>());
+    }
+
+    public static String printChessboard(List<ChessPosition> highlightedSquares)
+    {
+        return printChessboard(color, highlightedSquares);
     }
 
 }

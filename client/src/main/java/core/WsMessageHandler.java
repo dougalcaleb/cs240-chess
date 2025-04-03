@@ -2,6 +2,7 @@ package core;
 
 import repl.BaseRepl;
 import websocket.messages.GameMoveMessage;
+import websocket.messages.LegalMovesMessage;
 import websocket.messages.ServerMessage;
 
 import static ui.EscapeSequences.*;
@@ -22,6 +23,17 @@ public class WsMessageHandler {
         logMessage(message);
         BaseRepl.game = message.gameData.game;
         System.out.print("\n" + BaseRepl.printChessboard() + "\n");
+        BaseRepl.printPrompt();
+    }
+
+    public static void handleLegalMoves(LegalMovesMessage message)
+    {
+        if (message.positions == null)
+        {
+            logMessage(message);
+        } else {
+            System.out.print("\n" + BaseRepl.printChessboard(message.positions) + "\n");
+        }
         BaseRepl.printPrompt();
     }
 }

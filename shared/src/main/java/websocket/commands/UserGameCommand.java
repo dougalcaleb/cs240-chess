@@ -26,6 +26,7 @@ public class UserGameCommand {
         CONNECT,
         OBSERVE,
         STOP_OBSERVE,
+        SHOW_MOVES,
         MAKE_MOVE,
         LEAVE,
         RESIGN

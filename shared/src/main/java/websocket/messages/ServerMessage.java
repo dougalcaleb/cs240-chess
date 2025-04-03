@@ -20,7 +20,8 @@ public class ServerMessage {
         LOAD_GAME,
         ERROR,
         NOTIFICATION,
-        GAME_MOVE
+        GAME_MOVE,
+        LEGAL_MOVES
     }
 
     public ServerMessage(ServerMessageType type, String message) {
