@@ -226,31 +226,35 @@ public class ServerWebsocketHandler {
                 {
                     GameMoveMessage msgObj = new GameMoveMessage(null, updated);
                     safeSend(gameSession, data.getGameID(), msgObj.serialize());
-                    continue;
                 }
-                GameMoveMessage updateObj = new GameMoveMessage(null, updated);
-                safeSend(gameSession, data.getGameID(), updateObj.serialize());
+                else
+                {
+                    GameMoveMessage updateObj = new GameMoveMessage(null, updated);
+                    safeSend(gameSession, data.getGameID(), updateObj.serialize());
+
+                    ServerMessage textMsgObj =
+                            new ServerMessage(
+                                    ServerMessage.ServerMessageType.NOTIFICATION,
+                                    data.username + " moved " + moveResult.piece.toString() + ": " + data.move.toString()
+                            );
+                    safeSend(gameSession, data.getGameID(), new Gson().toJson(textMsgObj));
+                }
 
                 ChessGame.TeamColor checkedColor = data.color.equals(ChessGame.TeamColor.WHITE)
                         ? ChessGame.TeamColor.BLACK
                         : ChessGame.TeamColor.WHITE;
 
-                String checkmateAddon = "";
-                if (moveResult.resultedInCheckmate)
-                {
-                    checkmateAddon = ", resulting in " + checkedColor.name() + " being checkmated";
+                if (moveResult.resultedInCheckmate) {
+                    ServerMessage textMsgObj =
+                            new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, checkedColor.name() + " was checkmated");
+                    safeSend(gameSession, data.getGameID(), new Gson().toJson(textMsgObj));
                 } else if (moveResult.resultedInCheck)
                 {
-                    checkmateAddon = ", resulting in " + checkedColor.name() + " being checked";
+                    ServerMessage textMsgObj =
+                            new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, checkedColor.name() + " is in check");
+                    safeSend(gameSession, data.getGameID(), new Gson().toJson(textMsgObj));
                 }
 
-                ServerMessage textMsgObj =
-                        new ServerMessage(
-                                ServerMessage.ServerMessageType.NOTIFICATION,
-                                data.username + " moved " + moveResult.piece.toString() + ": " + data.move.toString()
-                                + checkmateAddon
-                        );
-                safeSend(gameSession, data.getGameID(), new Gson().toJson(textMsgObj));
             }
         }
         else

@@ -72,7 +72,16 @@ public class GameService extends BaseService {
         ChessPiece pieceAffected = null;
 
         String username = BaseService.authAccess.getUsernameByToken(userToken);
-        ChessGame.TeamColor pieceColor = gameData.game.getBoard().getPiece(move.getStartPosition()).getTeamColor();
+        ChessGame.TeamColor pieceColor = null;
+
+        if (gameData.game.getBoard().getPiece(move.getStartPosition()) == null)
+        {
+            throw new RuntimeException("Invalid move: no piece at position " + move.getStartPosition());
+        }
+        else
+        {
+            pieceColor = gameData.game.getBoard().getPiece(move.getStartPosition()).getTeamColor();
+        }
 
         if (
             (gameData.blackUsername.equals(username) && pieceColor != ChessGame.TeamColor.BLACK) ||
@@ -89,7 +98,7 @@ public class GameService extends BaseService {
         try {
             pieceAffected = gameData.game.makeMove(move);
         } catch (InvalidMoveException e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException(e.getMessage());
         }
 
         gameAccess.updateGame(gameData);
