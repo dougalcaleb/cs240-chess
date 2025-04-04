@@ -27,7 +27,12 @@ public class ServerFacade {
 
     public static void setServerURL(String url)
     {
-        serverURL = "http://" + url;
+        if (url.contains("http"))
+        {
+            serverURL = url;
+        } else {
+            serverURL = "http://" + url;
+        }
     }
 
     public static FacadeResult register(String[] args)
