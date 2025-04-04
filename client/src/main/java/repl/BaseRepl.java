@@ -204,7 +204,13 @@ public abstract class BaseRepl {
         return boardRepr.toString();
     }
 
-    private static void addChessboard(StringBuilder boardRepr, ChessPiece[][] finalBoard, String[] rowNames, List<ChessPosition> highlighted, ChessGame.TeamColor color)
+    private static void addChessboard(
+            StringBuilder boardRepr,
+            ChessPiece[][] finalBoard,
+            String[] rowNames,
+            List<ChessPosition> highlighted,
+            ChessGame.TeamColor color
+    )
     {
         int rowIdx = 0;
         boolean isLight = true;
@@ -328,7 +334,10 @@ public abstract class BaseRepl {
 
         if (parts.length != 2)
         {
-            throw new RuntimeException("Invalid position '" + position + "'. Position should be in the format [column letter][row number] with no other characters. (ex. 'a2')");
+            throw new RuntimeException(
+                "Invalid position '" + position +
+                "'. Position should be in the format [column letter][row number] with no other characters. (ex. 'a2')"
+            );
         }
 
         if (!cols.containsKey(parts[0]))

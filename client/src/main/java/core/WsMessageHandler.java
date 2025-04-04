@@ -41,24 +41,9 @@ public class WsMessageHandler {
         BaseRepl.printPrompt();
     }
 
-    public static void handleGameMove(GameMoveMessage message)
+    public static void handleGameLoad(GameMoveMessage message)
     {
-        if (message.getServerMessageContent() != null && !message.getServerMessageContent().isEmpty())
-        {
-            logMessage(message);
-        }
-        BaseRepl.game = message.game.game;
-        BaseRepl.gameName = message.game.gameName;
-        if (BaseRepl.color == null)
-        {
-            System.out.print("\n" + BaseRepl.printChessboard(ChessGame.TeamColor.WHITE) + "\n");
-        }
-        else
-        {
-            System.out.print("\n" + BaseRepl.printChessboard() + "\n");
-        }
-
-        BaseRepl.printPrompt();
+        handleGameLoad(new JoinedGameMessage(message.message, message.game));
     }
 
     public static void handleGameLoad(JoinedGameMessage message)

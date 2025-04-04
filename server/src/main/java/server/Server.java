@@ -13,14 +13,14 @@ public class Server {
     public static UserService userAccess;
     public static AuthService authAccess;
     public static GameService gameAccess;
-    public static ServerWebsocketHandler WsHandler;
+    public static ServerWebsocketHandler wsHandler;
 
     public Server()
     {
         userAccess = new UserService();
         authAccess = new AuthService();
         gameAccess = new GameService();
-        WsHandler = new ServerWebsocketHandler();
+        wsHandler = new ServerWebsocketHandler();
     }
 
     public int run(int desiredPort) {
@@ -28,7 +28,7 @@ public class Server {
 
         Spark.staticFiles.location("web");
 
-        Spark.webSocket("/ws", Server.WsHandler);
+        Spark.webSocket("/ws", Server.wsHandler);
 
         // Endpoints
         Spark.get("/db", (req, res) -> new DumpHandler(req, res).handleRequest() );

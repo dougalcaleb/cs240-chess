@@ -219,7 +219,11 @@ public class ServerWebsocketHandler {
                 GameMoveMessage updateObj = new GameMoveMessage(null, updated);
                 safeSend(gameSession, data.getGameID(), updateObj.serialize());
 
-                ServerMessage textMsgObj = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString());
+                ServerMessage textMsgObj =
+                        new ServerMessage(
+                                ServerMessage.ServerMessageType.NOTIFICATION,
+                                data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString()
+                        );
                 safeSend(gameSession, data.getGameID(), new Gson().toJson(textMsgObj));
             }
         }
@@ -258,7 +262,9 @@ public class ServerWebsocketHandler {
         safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
     }
 
-    private void notifyAllExcept(Session exclude, Integer gameID, String message, ServerMessage.ServerMessageType msgType) throws IOException {
+    private void notifyAllExcept(
+            Session exclude, Integer gameID, String message, ServerMessage.ServerMessageType msgType
+    ) throws IOException {
         for (Session gameSession : sessions.get(gameID).getParticipants())
         {
             if (gameSession.equals(exclude)) {

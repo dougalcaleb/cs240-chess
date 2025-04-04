@@ -36,16 +36,6 @@ public class GameSockets {
         observers.removeIf((obs) -> obs.equals(session));
     }
 
-    public Session getPlayerSession(ChessGame.TeamColor color)
-    {
-        return players.get(color);
-    }
-
-    public List<Session> getObservers()
-    {
-        return observers;
-    }
-
     public void removeParticipant(Session session)
     {
         if (observers.contains(session))
@@ -79,10 +69,5 @@ public class GameSockets {
         participants.addAll(observers);
         participants.addAll(players.values());
         return  participants;
-    }
-
-    public List<Session> getPlayers()
-    {
-        return (List<Session>) players.values();
     }
 }

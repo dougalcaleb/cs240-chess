@@ -48,11 +48,16 @@ public class WebsocketHandler extends Endpoint {
                     {
                         switch (msgBase.getServerMessageType())
                         {
-                            case ServerMessage.ServerMessageType.LOAD_GAME -> WsMessageHandler.handleGameLoad(new Gson().fromJson(message, JoinedGameMessage.class));
-                            case ServerMessage.ServerMessageType.GAME_MOVE -> WsMessageHandler.handleGameMove(new Gson().fromJson(message, GameMoveMessage.class));
-                            case ServerMessage.ServerMessageType.LEGAL_MOVES -> WsMessageHandler.handleLegalMoves(new Gson().fromJson(message, LegalMovesMessage.class));
-                            case ServerMessage.ServerMessageType.ERROR -> WsMessageHandler.logError(new Gson().fromJson(message, ServerErrorMessage.class));
-                            default -> WsMessageHandler.logMessage(new Gson().fromJson(message, ServerMessage.class));
+                            case ServerMessage.ServerMessageType.LOAD_GAME ->
+                                    WsMessageHandler.handleGameLoad(new Gson().fromJson(message, JoinedGameMessage.class));
+                            case ServerMessage.ServerMessageType.GAME_MOVE ->
+                                    WsMessageHandler.handleGameLoad(new Gson().fromJson(message, GameMoveMessage.class));
+                            case ServerMessage.ServerMessageType.LEGAL_MOVES ->
+                                    WsMessageHandler.handleLegalMoves(new Gson().fromJson(message, LegalMovesMessage.class));
+                            case ServerMessage.ServerMessageType.ERROR ->
+                                    WsMessageHandler.logError(new Gson().fromJson(message, ServerErrorMessage.class));
+                            default ->
+                                    WsMessageHandler.logMessage(new Gson().fromJson(message, ServerMessage.class));
                         }
                     } catch (Exception e) {
                         throw new RuntimeException(e);
