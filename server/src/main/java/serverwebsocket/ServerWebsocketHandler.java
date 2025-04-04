@@ -43,7 +43,9 @@ public class ServerWebsocketHandler {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+            return;
         }
+
         try
         {
             switch (command.getCommandType())
@@ -138,7 +140,7 @@ public class ServerWebsocketHandler {
         ChessPiece pieceMoved = null;
         Exception error = null;
         try {
-            pieceMoved = Server.gameAccess.makeMove(data.getGameID(), data.move);
+            pieceMoved = Server.gameAccess.makeMove(data.getAuthToken(), data.getGameID(), data.move);
         } catch (Exception e) {
             // pieceMoved remains null
             error = e;
@@ -152,16 +154,24 @@ public class ServerWebsocketHandler {
             {
                 if (gameSession.equals(session))
                 {
+                    GameMoveMessage msgObj = new GameMoveMessage(null, updated);
+                    safeSend(gameSession, data.getGameID(), msgObj.serialize());
                     continue;
                 }
-                GameMoveMessage msgObj = new GameMoveMessage(data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString(), updated);
-                safeSend(gameSession, data.getGameID(), msgObj.serialize());
+                GameMoveMessage updateObj = new GameMoveMessage(null, updated);
+                safeSend(gameSession, data.getGameID(), updateObj.serialize());
+
+                ServerMessage textMsgObj = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString());
+                safeSend(gameSession, data.getGameID(), new Gson().toJson(textMsgObj));
             }
         }
         else
         {
             assert error != null;
-            ServerMessage msgObj = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, error.getMessage());
+            String msg = (error.getMessage() != null && !error.getMessage().isEmpty())
+                ? error.getMessage()
+                : "Invalid Move";
+            ServerErrorMessage msgObj = new ServerErrorMessage(msg);
             safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
         }
     }

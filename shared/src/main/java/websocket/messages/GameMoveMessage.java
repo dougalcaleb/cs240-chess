@@ -7,11 +7,15 @@ import sharedmodel.GameData;
 
 public class GameMoveMessage extends ServerMessage {
     @Expose
-    public GameData gameData;
+    public GameData game;
 
     public GameMoveMessage(String message, GameData gameData) {
-        super(ServerMessageType.GAME_MOVE, message);
-        this.gameData = gameData;
+        super(ServerMessageType.LOAD_GAME, message);
+        this.game = gameData;
+    }
+
+    public GameData getGame(){
+        return game;
     }
 
     public String serialize() {

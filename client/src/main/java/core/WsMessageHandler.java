@@ -34,8 +34,8 @@ public class WsMessageHandler {
         {
             logMessage(message);
         }
-        BaseRepl.game = message.gameData.game;
-        BaseRepl.gameName = message.gameData.gameName;
+        BaseRepl.game = message.game.game;
+        BaseRepl.gameName = message.game.gameName;
         if (BaseRepl.color == null)
         {
             System.out.print("\n" + BaseRepl.printChessboard(ChessGame.TeamColor.WHITE) + "\n");

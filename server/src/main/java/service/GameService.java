@@ -64,11 +64,27 @@ public class GameService extends BaseService {
         gameAccess.unsetPlayerColor(gameID, username, color.name());
     }
 
-    public ChessPiece makeMove(int gameID, ChessMove move)
+    public ChessPiece makeMove(String userToken, int gameID, ChessMove move)
     {
         GameData gameData = gameAccess.getGame(gameID);
         gameData.game.setup();
         ChessPiece pieceAffected = null;
+
+        String username = BaseService.authAccess.getUsernameByToken(userToken);
+        ChessGame.TeamColor pieceColor = gameData.game.getBoard().getPiece(move.getStartPosition()).getTeamColor();
+
+        if (
+            (gameData.blackUsername.equals(username) && pieceColor != ChessGame.TeamColor.BLACK) ||
+            (gameData.whiteUsername.equals(username) && pieceColor != ChessGame.TeamColor.WHITE)
+        ) {
+            throw new RuntimeException("Invalid move: cannot move opponent's piece");
+        }
+
+        if (!username.equals(gameData.blackUsername) && !username.equals(gameData.whiteUsername))
+        {
+            throw new RuntimeException("Cannot move pieces as an observer");
+        }
+
         try {
             pieceAffected = gameData.game.makeMove(move);
         } catch (InvalidMoveException e) {
