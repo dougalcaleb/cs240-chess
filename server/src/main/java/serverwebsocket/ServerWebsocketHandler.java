@@ -120,8 +120,31 @@ public class ServerWebsocketHandler {
     }
 
     private void removePlayer(Session session, LeaveGameCommand data) throws IOException, DoesNotExistException {
+        if (data.username == null)
+        {
+            data.username = BaseService.authAccess.getUsernameByToken(data.getAuthToken());
+        }
+
+        if (data.color == null)
+        {
+            GameData gameData = BaseService.gameAccess.getGame(data.getGameID());
+            if (gameData == null)
+            {
+                safeSend(session, data.getGameID(), new Gson().toJson(new ServerErrorMessage("Game does not exist")));
+                return;
+            }
+            if (gameData.whiteUsername != null && gameData.whiteUsername.equals(data.username))
+            {
+                data.color = ChessGame.TeamColor.WHITE;
+            }
+            else
+            {
+                data.color = ChessGame.TeamColor.BLACK;
+            }
+        }
+
         notifyAllExcept(session, data.getGameID(), data.username + " left the game");
-        sessions.get(data.getGameID()).removePlayer(data.color);
+        sessions.get(data.getGameID()).removeParticipant(session);
 
         Server.gameAccess.leaveGame(data.getGameID(), data.username, data.color);
     }
@@ -132,13 +155,46 @@ public class ServerWebsocketHandler {
     }
 
     private void resignPlayer(Session session, ResignGameCommand data) throws IOException {
+        GameData preCheck = BaseService.gameAccess.getGame(data.getGameID());
+
+        if (data.username == null)
+        {
+            data.username = BaseService.authAccess.getUsernameByToken(data.getAuthToken());
+        }
+
+        if (preCheck.whiteUsername != null && preCheck.blackUsername != null && sessions.get(data.getGameID()).isEmpty())
+        {
+            ServerErrorMessage msgObj = new ServerErrorMessage("Game is over, cannot resign again");
+            safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
+            return;
+        }
+
+        if (!preCheck.whiteUsername.equals(data.username) && !preCheck.blackUsername.equals(data.username))
+        {
+            ServerErrorMessage msgObj = new ServerErrorMessage("Cannot resign as an observer");
+            safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
+            return;
+        }
+
+        ServerMessage textMsgObj = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION, "Game over");
+        safeSend(session, data.getGameID(), new Gson().toJson(textMsgObj));
         notifyAllExcept(session, data.getGameID(), data.username + " resigned from the game");
-        sessions.get(data.getGameID()).removePlayer(data.color);
+        sessions.get(data.getGameID()).removeAll();
     }
 
     private void makeMove(Session session, MakeMoveCommand data) throws IOException {
         ChessPiece pieceMoved = null;
         Exception error = null;
+
+        GameData preCheck = BaseService.gameAccess.getGame(data.getGameID());
+
+        if (preCheck.whiteUsername != null && preCheck.blackUsername != null && sessions.get(data.getGameID()).isEmpty())
+        {
+            ServerErrorMessage msgObj = new ServerErrorMessage("Game is over, cannot move");
+            safeSend(session, data.getGameID(), new Gson().toJson(msgObj));
+            return;
+        }
+
         try {
             pieceMoved = Server.gameAccess.makeMove(data.getAuthToken(), data.getGameID(), data.move);
         } catch (Exception e) {

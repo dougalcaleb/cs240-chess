@@ -62,6 +62,17 @@ public class GameSockets {
         }
     }
 
+    public void removeAll()
+    {
+        observers.clear();
+        players.clear();
+    }
+
+    public boolean isEmpty()
+    {
+        return observers.isEmpty() && players.isEmpty();
+    }
+
     public List<Session> getParticipants()
     {
         List<Session> participants = new ArrayList<>();
