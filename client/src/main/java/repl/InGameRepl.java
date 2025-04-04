@@ -38,18 +38,18 @@ public class InGameRepl extends BaseRepl {
         return switch (args[0])
         {
             case "leave":
-                WsHandler.leaveGame();
+                wsHandler.leaveGame();
                 newRepl = new LoggedInRepl();
                 yield "";
             case "resign":
-                WsHandler.resignGame();
+                wsHandler.resignGame();
                 newRepl = new LoggedInRepl();
                 yield "";
             case "l":
             case "legal":
                 verifyArgCount(commandArgs, 1);
                 ChessPosition pos = convertPosition(commandArgs[0]);
-                WsHandler.highlightMoves(pos);
+                wsHandler.highlightMoves(pos);
                 yield "";
             case "help":
                 if (args.length > 1)
@@ -73,7 +73,7 @@ public class InGameRepl extends BaseRepl {
             }
             case "move":
                 verifyArgCount(commandArgs, 2);
-                WsHandler.makeMove(constructMove(commandArgs[0], commandArgs[1]));
+                wsHandler.makeMove(constructMove(commandArgs[0], commandArgs[1]));
                 yield "";
             default: yield printHelpText();
         };

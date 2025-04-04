@@ -61,8 +61,8 @@ public class LoggedInRepl extends BaseRepl {
                 if (result.success())
                 {
                     newRepl = new InGameRepl();
-                    WsHandler.safeConnect();
-                    WsHandler.joinGame();
+                    wsHandler.safeConnect();
+                    wsHandler.joinGame();
 //                    yield INDENT + result.message() + "\n" + printChessboard();
                     yield "";
                 }
@@ -77,10 +77,10 @@ public class LoggedInRepl extends BaseRepl {
                 {
                     throw new RuntimeException("Invalid game ID");
                 }
-                WsHandler.safeConnect();
+                wsHandler.safeConnect();
                 BaseRepl.observingGame = BaseRepl.listedGames.get(idx).gameID;
                 BaseRepl.color = null;
-                WsHandler.observeGame();
+                wsHandler.observeGame();
                 newRepl = new ObservingRepl();
                 yield "";
             }

@@ -26,7 +26,7 @@ public abstract class BaseRepl {
     public static ChessGame.TeamColor color = null;
     public static BaseRepl activeRepl;
 
-    public static WebsocketHandler WsHandler = new WebsocketHandler();
+    public static WebsocketHandler wsHandler = new WebsocketHandler();
 
     public static ArrayList<GameData> listedGames = new ArrayList<>();
 

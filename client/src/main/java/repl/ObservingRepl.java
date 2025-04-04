@@ -44,10 +44,10 @@ public class ObservingRepl extends BaseRepl {
             case "legal":
                 verifyArgCount(commandArgs, 1);
                 ChessPosition pos = convertPosition(commandArgs[0]);
-                WsHandler.highlightMoves(pos);
+                wsHandler.highlightMoves(pos);
                 yield "";
             case "leave":
-                WsHandler.stopObserveGame();
+                wsHandler.stopObserveGame();
                 BaseRepl.observingGame = -1;
                 newRepl = new LoggedInRepl();
                 yield "";

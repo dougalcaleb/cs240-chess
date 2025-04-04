@@ -11,12 +11,15 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class SQLGameDAO extends BaseSQLDAO implements GameDAO {
     @Override
     public void setDB(Map<Integer, GameData> value) {
-        for (var entry : value.entrySet())
-        {
+        // Ensure the map is sorted by key in ascending order
+        Map<Integer, GameData> sortedMap = new TreeMap<>(value);
+
+        for (var entry : sortedMap.entrySet()) {
             String gameData = entry.getValue().game == null ? "null" : "'"+serialize(entry.getValue().game)+"'";
             String bName = entry.getValue().blackUsername == null ? "null" : "'"+entry.getValue().blackUsername+"'";
             String wName = entry.getValue().whiteUsername == null ? "null" : "'"+entry.getValue().whiteUsername+"'";
