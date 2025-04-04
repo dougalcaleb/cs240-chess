@@ -4,6 +4,7 @@ import chess.ChessGame;
 import clientmodel.RgbColor;
 import repl.BaseRepl;
 import websocket.messages.GameMoveMessage;
+import websocket.messages.JoinedGameMessage;
 import websocket.messages.LegalMovesMessage;
 import websocket.messages.ServerMessage;
 
@@ -14,6 +15,11 @@ public class WsMessageHandler {
 
     public static void logMessage(ServerMessage message)
     {
+        if (message.getMessage() == null)
+        {
+            return;
+        }
+
         System.out.print(
             "\n" + getColorEsc(false, notifColor.red(), notifColor.green(), notifColor.blue()) + SET_TEXT_COLOR_WHITE + " > " +
             message.getServerMessageContent() +
@@ -36,6 +42,23 @@ public class WsMessageHandler {
         }
         else
         {
+            System.out.print("\n" + BaseRepl.printChessboard() + "\n");
+        }
+
+        BaseRepl.printPrompt();
+    }
+
+    public static void handleGameLoad(JoinedGameMessage message)
+    {
+        if (message.getServerMessageContent() != null && !message.getServerMessageContent().isEmpty())
+        {
+            logMessage(message);
+        }
+        BaseRepl.game = message.game.game;
+        BaseRepl.gameName = message.game.gameName;
+        if (BaseRepl.color == null) {
+            System.out.print("\n" + BaseRepl.printChessboard(ChessGame.TeamColor.WHITE) + "\n");
+        } else {
             System.out.print("\n" + BaseRepl.printChessboard() + "\n");
         }
 

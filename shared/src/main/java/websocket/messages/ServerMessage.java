@@ -14,7 +14,9 @@ public class ServerMessage {
     @Expose
     ServerMessageType serverMessageType;
     @Expose
-    private final String serverMessageContent;
+    public String message = "";
+    @Expose
+    public String errorMessage = null;
 
     public enum ServerMessageType {
         LOAD_GAME,
@@ -26,7 +28,12 @@ public class ServerMessage {
 
     public ServerMessage(ServerMessageType type, String message) {
         this.serverMessageType = type;
-        serverMessageContent = message;
+        this.message = message;
+    }
+
+    public ServerMessage(ServerMessageType type)
+    {
+        this.serverMessageType = type;
     }
 
     public ServerMessageType getServerMessageType() {
@@ -34,7 +41,13 @@ public class ServerMessage {
     }
 
     public String getServerMessageContent() {
-        return serverMessageContent;
+        return message;
+    }
+
+    public String getMessage() { return message; }
+
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     @Override

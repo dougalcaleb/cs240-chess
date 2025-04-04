@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import repl.BaseRepl;
 import websocket.commands.*;
 import websocket.messages.GameMoveMessage;
+import websocket.messages.JoinedGameMessage;
 import websocket.messages.LegalMovesMessage;
 import websocket.messages.ServerMessage;
 
@@ -50,6 +51,7 @@ public class WebsocketHandler extends Endpoint {
                     {
                         switch (msgBase.getServerMessageType())
                         {
+                            case ServerMessage.ServerMessageType.LOAD_GAME -> WsMessageHandler.handleGameLoad(new Gson().fromJson(message, JoinedGameMessage.class));
                             case ServerMessage.ServerMessageType.GAME_MOVE -> WsMessageHandler.handleGameMove(new Gson().fromJson(message, GameMoveMessage.class));
                             case ServerMessage.ServerMessageType.LEGAL_MOVES -> WsMessageHandler.handleLegalMoves(new Gson().fromJson(message, LegalMovesMessage.class));
                             default -> WsMessageHandler.logMessage(new Gson().fromJson(message, ServerMessage.class));

@@ -1,5 +1,6 @@
 package serverwebsocket;
 
+import chess.ChessGame;
 import chess.ChessMove;
 import chess.ChessPiece;
 import chess.ChessPosition;
@@ -13,9 +14,7 @@ import servermodel.GameSockets;
 import service.BaseService;
 import sharedmodel.GameData;
 import websocket.commands.*;
-import websocket.messages.GameMoveMessage;
-import websocket.messages.LegalMovesMessage;
-import websocket.messages.ServerMessage;
+import websocket.messages.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -36,6 +35,15 @@ public class ServerWebsocketHandler {
     public void onMessage(Session session, String message)
     {
         UserGameCommand command = new Gson().fromJson(message, UserGameCommand.class);
+        boolean authenticated = BaseService.authAccess.tokenExists(command.getAuthToken());
+        if (!authenticated)
+        {
+            try {
+                safeSend(session, command.getGameID(), new Gson().toJson(new ServerErrorMessage("Unauthorized")));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
         try
         {
             switch (command.getCommandType())
@@ -59,8 +67,39 @@ public class ServerWebsocketHandler {
             sessions.put(data.getGameID(), new GameSockets());
         }
 
+        if (data.username == null)
+        {
+            data.username = BaseService.authAccess.getUsernameByToken(data.getAuthToken());
+        }
+
+        GameData gameData = null;
+        if (data.color == null)
+        {
+            gameData = BaseService.gameAccess.getGame(data.getGameID());
+            if (gameData == null)
+            {
+                safeSend(session, data.getGameID(), new Gson().toJson(new ServerErrorMessage("Game does not exist")));
+            }
+            if (gameData.whiteUsername.equals(data.username))
+            {
+                data.color = ChessGame.TeamColor.WHITE;
+            }
+            else
+            {
+                data.color = ChessGame.TeamColor.BLACK;
+            }
+        }
+
+        if (gameData.whiteUsername != null && gameData.blackUsername != null)
+        {
+            addObserver(session, new ObserveGameCommand(data.getAuthToken(), data.getGameID(), data.username));
+            return;
+        }
+
         sessions.get(data.getGameID()).addPlayer(session, data.color);
         notifyAllExcept(session, data.getGameID(), data.username + " joined the game as " + data.color.toString().toLowerCase());
+        JoinedGameMessage msgObj = new JoinedGameMessage(null, gameData);
+        safeSend(session, data.getGameID(), msgObj.serialize());
     }
 
     private void addObserver(Session session, ObserveGameCommand data) throws IOException {
@@ -74,7 +113,7 @@ public class ServerWebsocketHandler {
 
         // hijack move message to send the game data to the observer before the game has been broadcast
         GameData gameData = BaseService.gameAccess.getGame(data.getGameID());
-        GameMoveMessage msgObj = new GameMoveMessage(null, gameData);
+        JoinedGameMessage msgObj = new JoinedGameMessage(null, gameData);
         safeSend(session, data.getGameID(), msgObj.serialize());
     }
 

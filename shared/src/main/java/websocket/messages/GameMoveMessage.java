@@ -15,12 +15,10 @@ public class GameMoveMessage extends ServerMessage {
     }
 
     public String serialize() {
-        // Create a Gson instance that respects @Expose annotations
         Gson serializer = new GsonBuilder()
             .excludeFieldsWithoutExposeAnnotation()
             .create();
 
-        // Serialize the entire GameMoveMessage object
         return serializer.toJson(this);
     }
 }
