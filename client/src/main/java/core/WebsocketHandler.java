@@ -5,10 +5,7 @@ import chess.ChessPosition;
 import com.google.gson.Gson;
 import repl.BaseRepl;
 import websocket.commands.*;
-import websocket.messages.GameMoveMessage;
-import websocket.messages.JoinedGameMessage;
-import websocket.messages.LegalMovesMessage;
-import websocket.messages.ServerMessage;
+import websocket.messages.*;
 
 import javax.websocket.*;
 import java.io.IOException;
@@ -54,6 +51,7 @@ public class WebsocketHandler extends Endpoint {
                             case ServerMessage.ServerMessageType.LOAD_GAME -> WsMessageHandler.handleGameLoad(new Gson().fromJson(message, JoinedGameMessage.class));
                             case ServerMessage.ServerMessageType.GAME_MOVE -> WsMessageHandler.handleGameMove(new Gson().fromJson(message, GameMoveMessage.class));
                             case ServerMessage.ServerMessageType.LEGAL_MOVES -> WsMessageHandler.handleLegalMoves(new Gson().fromJson(message, LegalMovesMessage.class));
+                            case ServerMessage.ServerMessageType.ERROR -> WsMessageHandler.logError(new Gson().fromJson(message, ServerErrorMessage.class));
                             default -> WsMessageHandler.logMessage(new Gson().fromJson(message, ServerMessage.class));
                         }
                     } catch (Exception e) {
@@ -138,7 +136,21 @@ public class WebsocketHandler extends Endpoint {
     {
         try
         {
-            HighlightMovesCommand cmd = new HighlightMovesCommand(BaseRepl.authToken, BaseRepl.trueGameId, position);
+            int gID = -1;
+            if (BaseRepl.trueGameId != -1)
+            {
+                gID = BaseRepl.trueGameId;
+            }
+            else if (BaseRepl.observingGame != -1)
+            {
+                gID = BaseRepl.observingGame;
+            }
+            else
+            {
+                throw new RuntimeException("No game ID stored to identify game");
+            }
+
+            HighlightMovesCommand cmd = new HighlightMovesCommand(BaseRepl.authToken, gID, position);
             session.getBasicRemote().sendText(new Gson().toJson(cmd));
         } catch (IOException e) {
             throw new RuntimeException(e);

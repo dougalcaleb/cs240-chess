@@ -3,15 +3,13 @@ package core;
 import chess.ChessGame;
 import clientmodel.RgbColor;
 import repl.BaseRepl;
-import websocket.messages.GameMoveMessage;
-import websocket.messages.JoinedGameMessage;
-import websocket.messages.LegalMovesMessage;
-import websocket.messages.ServerMessage;
+import websocket.messages.*;
 
 import static ui.EscapeSequences.*;
 
 public class WsMessageHandler {
     public static RgbColor notifColor = new RgbColor(1, 90, 138);
+    public static RgbColor errorColor = new RgbColor(110, 13, 7);
 
     public static void logMessage(ServerMessage message)
     {
@@ -24,6 +22,21 @@ public class WsMessageHandler {
             "\n" + getColorEsc(false, notifColor.red(), notifColor.green(), notifColor.blue()) + SET_TEXT_COLOR_WHITE + " > " +
             message.getServerMessageContent() +
             " " + RESET_TEXT_COLOR + RESET_BG_COLOR
+        );
+        BaseRepl.printPrompt();
+    }
+
+    public static void logError(ServerErrorMessage message)
+    {
+        if (message.getErrorMessage() == null)
+        {
+            return;
+        }
+
+        System.out.print(
+                "\n" + getColorEsc(false, errorColor.red(), errorColor.green(), errorColor.blue()) + SET_TEXT_COLOR_WHITE + " > " +
+                        message.getErrorMessage() +
+                        " " + RESET_TEXT_COLOR + RESET_BG_COLOR
         );
         BaseRepl.printPrompt();
     }

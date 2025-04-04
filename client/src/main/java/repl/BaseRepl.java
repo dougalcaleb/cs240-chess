@@ -178,7 +178,7 @@ public abstract class BaseRepl {
 
         boardRepr.append("\n");
 
-        addChessboard(boardRepr, finalBoard, rowNames, highlighted, color);
+        addChessboard(boardRepr, finalBoard, rowNames, highlighted, player);
 
 
         boardRepr.append(getColorEsc(false, BORDER_BG.red(), BORDER_BG.green(), BORDER_BG.blue()));
@@ -303,7 +303,12 @@ public abstract class BaseRepl {
 
     public static String printChessboard(List<ChessPosition> highlightedSquares)
     {
-        return printChessboard(color, highlightedSquares);
+        ChessGame.TeamColor printAs = ChessGame.TeamColor.WHITE;
+        if (color != null)
+        {
+            printAs = color;
+        }
+        return printChessboard(printAs, highlightedSquares);
     }
 
     protected ChessPosition convertPosition(String position)
@@ -324,6 +329,24 @@ public abstract class BaseRepl {
         if (parts.length != 2)
         {
             throw new RuntimeException("Invalid position '" + position + "'. Position should be in the format [column letter][row number] with no other characters. (ex. 'a2')");
+        }
+
+        if (!cols.containsKey(parts[0]))
+        {
+            throw new RuntimeException("Invalid position '" + position + "'. Column name must be 'a' through 'h'.");
+        }
+
+        Integer parsedRow;
+
+        try {
+            parsedRow = Integer.parseInt(parts[1]);
+        } catch (NumberFormatException e) {
+            throw new RuntimeException("Invalid position '" + position + "'. Row must be a number from 1 to 8 inclusive.");
+        }
+
+        if (parsedRow < 1 || parsedRow > 8)
+        {
+            throw new RuntimeException("Invalid position '" + position + "'. Row must be a number from 1 to 8 inclusive.");
         }
 
         return new ChessPosition(Integer.parseInt(parts[1]), cols.get(parts[0]));

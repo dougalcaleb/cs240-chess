@@ -63,15 +63,22 @@ public class LoggedInRepl extends BaseRepl {
                     newRepl = new InGameRepl();
                     WsHandler.safeConnect();
                     WsHandler.joinGame();
-                    yield INDENT + result.message() + "\n" + printChessboard();
+//                    yield INDENT + result.message() + "\n" + printChessboard();
+                    yield "";
                 }
                 else {
                     yield INDENT + result.message();
                 }
             }
             case "observe": {
+                verifyArgCount(commandArgs, 1);
+                Integer idx = Integer.parseInt(commandArgs[0]) - 1;
+                if (idx < 0 || idx >= BaseRepl.listedGames.size())
+                {
+                    throw new RuntimeException("Invalid game ID");
+                }
                 WsHandler.safeConnect();
-                BaseRepl.observingGame = BaseRepl.listedGames.get(Integer.parseInt(commandArgs[0]) - 1).gameID;
+                BaseRepl.observingGame = BaseRepl.listedGames.get(idx).gameID;
                 BaseRepl.color = null;
                 WsHandler.observeGame();
                 newRepl = new ObservingRepl();

@@ -64,20 +64,14 @@ public class ServerWebsocketHandler {
     }
 
     private void addPlayer(Session session, JoinGameCommand data) throws IOException {
-        if (!sessions.containsKey(data.getGameID()))
-        {
-            sessions.put(data.getGameID(), new GameSockets());
-        }
-
         if (data.username == null)
         {
             data.username = BaseService.authAccess.getUsernameByToken(data.getAuthToken());
         }
 
-        GameData gameData = null;
+        GameData gameData = BaseService.gameAccess.getGame(data.getGameID());
         if (data.color == null)
         {
-            gameData = BaseService.gameAccess.getGame(data.getGameID());
             if (gameData == null)
             {
                 safeSend(session, data.getGameID(), new Gson().toJson(new ServerErrorMessage("Game does not exist")));
@@ -92,10 +86,18 @@ public class ServerWebsocketHandler {
             }
         }
 
-        if (gameData.whiteUsername != null && gameData.blackUsername != null)
+        if (
+            gameData.whiteUsername != null && gameData.blackUsername != null &&
+            !data.username.equals(gameData.whiteUsername) && !data.username.equals(gameData.blackUsername)
+        )
         {
             addObserver(session, new ObserveGameCommand(data.getAuthToken(), data.getGameID(), data.username));
             return;
+        }
+
+        if (!sessions.containsKey(data.getGameID()))
+        {
+            sessions.put(data.getGameID(), new GameSockets());
         }
 
         sessions.get(data.getGameID()).addPlayer(session, data.color);

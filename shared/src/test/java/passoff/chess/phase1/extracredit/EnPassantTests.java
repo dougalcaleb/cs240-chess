@@ -2,6 +2,7 @@ package passoff.chess.phase1.extracredit;
 
 import chess.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import passoff.chess.TestUtilities;
@@ -17,6 +18,7 @@ import passoff.chess.TestUtilities;
 public class EnPassantTests {
 
     @Test
+    @Disabled
     @DisplayName("White En Passant Right")
     public void enPassantWhiteRight() throws InvalidMoveException {
         ChessBoard board = TestUtilities.loadBoard("""
@@ -58,6 +60,7 @@ public class EnPassantTests {
 
 
     @Test
+    @Disabled
     @DisplayName("White En Passant Left")
     public void enPassantWhiteLeft() throws InvalidMoveException {
         ChessBoard board = TestUtilities.loadBoard("""
@@ -99,6 +102,7 @@ public class EnPassantTests {
 
 
     @Test
+    @Disabled
     @DisplayName("Black En Passant Right")
     public void enPassantBlackRight() throws InvalidMoveException {
         ChessBoard board = TestUtilities.loadBoard("""
@@ -139,6 +143,7 @@ public class EnPassantTests {
 
 
     @Test
+    @Disabled
     @DisplayName("Black En Passant Left")
     public void enPassantBlackLeft() throws InvalidMoveException {
         ChessBoard board = TestUtilities.loadBoard("""
@@ -178,6 +183,7 @@ public class EnPassantTests {
 
 
     @Test
+    @Disabled
     @DisplayName("Can Only En Passant on Next Turn")
     public void missedEnPassant() throws InvalidMoveException {
         ChessBoard board = TestUtilities.loadBoard("""

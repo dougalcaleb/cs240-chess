@@ -154,7 +154,7 @@ public class ChessPiece {
         {
             position = " " + getCurrentPosition().toString();
         }
-        return teamColor.name() + " " + type.name() + position + (hasBeenMoved ? "" : " [OPOS]");
+        return teamColor.name() + " " + type.name();
     }
 
     @Override

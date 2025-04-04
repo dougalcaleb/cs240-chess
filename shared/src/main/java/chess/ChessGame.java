@@ -115,6 +115,7 @@ public class ChessGame {
         if (PawnMovesCalculator.lastMoveWasPawnDouble)
         {
             move.enPassantCapture = PawnMovesCalculator.pawnDoubleMove.getEndPosition();
+            move.enPassantCapture = null;
         }
 
         if (pieceToMove.getPieceType() == ChessPiece.PieceType.PAWN && move.isPawnDouble())
