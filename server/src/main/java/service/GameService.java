@@ -7,6 +7,7 @@ import chess.InvalidMoveException;
 import exceptions.DoesNotExistException;
 import exceptions.GameTakenException;
 import sharedmodel.GameData;
+import sharedmodel.MoveMadeResult;
 
 import java.util.Collection;
 
@@ -64,7 +65,7 @@ public class GameService extends BaseService {
         gameAccess.unsetPlayerColor(gameID, username, color.name());
     }
 
-    public ChessPiece makeMove(String userToken, int gameID, ChessMove move)
+    public MoveMadeResult makeMove(String userToken, int gameID, ChessMove move)
     {
         GameData gameData = gameAccess.getGame(gameID);
         gameData.game.setup();
@@ -93,7 +94,12 @@ public class GameService extends BaseService {
 
         gameAccess.updateGame(gameData);
 
-        return pieceAffected;
+        boolean didCheck = gameData.game.isInCheck(ChessGame.TeamColor.WHITE) ||
+                gameData.game.isInCheck(ChessGame.TeamColor.BLACK);
+        boolean didCheckmate = gameData.game.isInCheckmate(ChessGame.TeamColor.WHITE) ||
+                gameData.game.isInCheckmate(ChessGame.TeamColor.BLACK);
+
+        return new MoveMadeResult(pieceAffected, didCheck, didCheckmate);
     }
 
     public Collection<GameData> getAll()

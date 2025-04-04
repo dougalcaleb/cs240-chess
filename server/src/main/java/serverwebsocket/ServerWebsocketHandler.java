@@ -2,7 +2,6 @@ package serverwebsocket;
 
 import chess.ChessGame;
 import chess.ChessMove;
-import chess.ChessPiece;
 import chess.ChessPosition;
 import com.google.gson.Gson;
 import exceptions.DoesNotExistException;
@@ -13,6 +12,7 @@ import server.Server;
 import servermodel.GameSockets;
 import service.BaseService;
 import sharedmodel.GameData;
+import sharedmodel.MoveMadeResult;
 import websocket.commands.*;
 import websocket.messages.*;
 
@@ -115,7 +115,6 @@ public class ServerWebsocketHandler {
         sessions.get(data.getGameID()).addObserver(session);
         notifyAllExcept(session, data.getGameID(), data.username + " is observing the game");
 
-        // hijack move message to send the game data to the observer before the game has been broadcast
         GameData gameData = BaseService.gameAccess.getGame(data.getGameID());
         JoinedGameMessage msgObj = new JoinedGameMessage(null, gameData);
         safeSend(session, data.getGameID(), msgObj.serialize());
@@ -185,7 +184,7 @@ public class ServerWebsocketHandler {
     }
 
     private void makeMove(Session session, MakeMoveCommand data) throws IOException {
-        ChessPiece pieceMoved = null;
+        MoveMadeResult moveResult = null;
         Exception error = null;
 
         GameData preCheck = BaseService.gameAccess.getGame(data.getGameID());
@@ -198,13 +197,26 @@ public class ServerWebsocketHandler {
         }
 
         try {
-            pieceMoved = Server.gameAccess.makeMove(data.getAuthToken(), data.getGameID(), data.move);
+            moveResult = Server.gameAccess.makeMove(data.getAuthToken(), data.getGameID(), data.move);
         } catch (Exception e) {
             // pieceMoved remains null
             error = e;
         }
 
-        if (pieceMoved != null)
+        if (data.color == null) {
+            GameData gameData = BaseService.gameAccess.getGame(data.getGameID());
+            if (gameData == null) {
+                safeSend(session, data.getGameID(), new Gson().toJson(new ServerErrorMessage("Game does not exist")));
+                return;
+            }
+            if (gameData.whiteUsername != null && gameData.whiteUsername.equals(data.username)) {
+                data.color = ChessGame.TeamColor.WHITE;
+            } else {
+                data.color = ChessGame.TeamColor.BLACK;
+            }
+        }
+
+        if (moveResult != null)
         {
             GameData updated = BaseService.gameAccess.getGame(data.getGameID());
 
@@ -219,10 +231,24 @@ public class ServerWebsocketHandler {
                 GameMoveMessage updateObj = new GameMoveMessage(null, updated);
                 safeSend(gameSession, data.getGameID(), updateObj.serialize());
 
+                ChessGame.TeamColor checkedColor = data.color.equals(ChessGame.TeamColor.WHITE)
+                        ? ChessGame.TeamColor.BLACK
+                        : ChessGame.TeamColor.WHITE;
+
+                String checkmateAddon = "";
+                if (moveResult.resultedInCheckmate)
+                {
+                    checkmateAddon = ", resulting in " + checkedColor.name() + " being checkmated";
+                } else if (moveResult.resultedInCheck)
+                {
+                    checkmateAddon = ", resulting in " + checkedColor.name() + " being checked";
+                }
+
                 ServerMessage textMsgObj =
                         new ServerMessage(
                                 ServerMessage.ServerMessageType.NOTIFICATION,
-                                data.username + " moved " + pieceMoved.toString() + ": " + data.move.toString()
+                                data.username + " moved " + moveResult.piece.toString() + ": " + data.move.toString()
+                                + checkmateAddon
                         );
                 safeSend(gameSession, data.getGameID(), new Gson().toJson(textMsgObj));
             }
